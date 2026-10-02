@@ -12,6 +12,49 @@ def test_as_token_ids_unwraps_batch_encoding() -> None:
     assert as_token_ids([[4, 5]]) == [4, 5]
 
 
+def test_extract_json_strips_fences() -> None:
+    from pillclerk.infer import _extract_json
+
+    raw = '```json\n{"drug": "Glycomet"}\n```'
+    assert _extract_json(raw) == '{"drug": "Glycomet"}'
+
+
+def test_set_dotenv_value_does_not_echo_secret(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:
+    env = tmp_path / ".env"
+    env.write_text("TINKER_API_KEY=\nPILLCLERK_TINKER_PATH=\n", encoding="utf-8")
+    from pillclerk.config import set_dotenv_value
+
+    set_dotenv_value("PILLCLERK_TINKER_PATH", "tinker://weights/sampler", path=env)
+    text = env.read_text(encoding="utf-8")
+    assert "PILLCLERK_TINKER_PATH=tinker://weights/sampler" in text
+    assert "TINKER_API_KEY=" in text
+
+
+def test_apply_tinker_checkpoint(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from pillclerk import config
+
+    ck = tmp_path / "checkpoint_v1.json"
+    ck.write_text(
+        '{"sampler": "tinker://abc:train:0/sampler_weights/pillclerk-v1"}',
+        encoding="utf-8",
+    )
+    env = tmp_path / ".env"
+    env.write_text("PILLCLERK_TINKER_PATH=\n", encoding="utf-8")
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    assert config.apply_tinker_checkpoint(ck) is True
+    assert config._get("PILLCLERK_TINKER_PATH").startswith("tinker://")
+
+
+def test_tinker_parser_ready(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TINKER_API_KEY", "x")
+    monkeypatch.setenv("PILLCLERK_TINKER_PATH", "")
+    from pillclerk.config import tinker_parser_ready
+
+    assert tinker_parser_ready() is False
+    monkeypatch.setenv("PILLCLERK_TINKER_PATH", "tinker://x")
+    assert tinker_parser_ready() is True
+
+
 def test_key_status_never_returns_secrets(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("TINKER_API_KEY", "secret-should-not-leak")
     status = config.key_status()

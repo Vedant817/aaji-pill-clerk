@@ -99,3 +99,22 @@ def get_parser() -> ParseFn:
         return lambda line: parse_ollama(line)
     path = config._get("PILLCLERK_TINKER_PATH") or None
     return make_tinker_parser(path)
+
+
+def main() -> None:
+    import argparse
+
+    ap = argparse.ArgumentParser(description="Parse one prescription line via Tinker.")
+    ap.add_argument("--line", required=True)
+    ap.add_argument("--path", default="", help="tinker:// sampler path; default is PILLCLERK_TINKER_PATH")
+    args = ap.parse_args()
+    path = args.path.strip() or config._get("PILLCLERK_TINKER_PATH") or None
+    pred = make_tinker_parser(path)(args.line)
+    if pred is None:
+        print("PARSE_FAILED")
+        raise SystemExit(1)
+    print(pred.model_dump_json(indent=2))
+
+
+if __name__ == "__main__":
+    main()

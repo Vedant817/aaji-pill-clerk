@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from typing import Literal
@@ -80,6 +81,44 @@ def key_status() -> dict[str, bool]:
         "DO_MODEL_ACCESS_KEY": bool(_get("DO_MODEL_ACCESS_KEY")),
         "BACKBOARD_API_KEY": bool(_get("BACKBOARD_API_KEY")),
     }
+
+
+def tinker_parser_ready() -> bool:
+    return bool(_get("TINKER_API_KEY") and _get("PILLCLERK_TINKER_PATH"))
+
+
+def set_dotenv_value(name: str, value: str, path: Path | None = None) -> Path:
+    """Set KEY=value in a .env file. Does not print the value."""
+    env_path = path or ROOT / ".env"
+    lines = env_path.read_text(encoding="utf-8").splitlines() if env_path.is_file() else []
+    prefix = f"{name}="
+    written = False
+    out: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith(prefix) and not stripped.startswith("#"):
+            out.append(f"{name}={value}")
+            written = True
+        else:
+            out.append(line)
+    if not written:
+        out.append(f"{name}={value}")
+    env_path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    os.environ[name] = value
+    return env_path
+
+
+def apply_tinker_checkpoint(checkpoint: Path | None = None) -> bool:
+    """Copy sampler path from checkpoint JSON into .env and os.environ."""
+    ck = checkpoint or ROOT / "train" / "checkpoint_v1.json"
+    if not ck.is_file():
+        return False
+    data = json.loads(ck.read_text(encoding="utf-8"))
+    sampler = str(data.get("sampler") or "").strip()
+    if not sampler.startswith("tinker://"):
+        return False
+    set_dotenv_value("PILLCLERK_TINKER_PATH", sampler)
+    return True
 
 
 DO_BASE_URL = _get("DO_BASE_URL", "https://inference.do-ai.run/v1")

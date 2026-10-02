@@ -34,15 +34,27 @@ def norm(v):
     return v.lower().replace(" ", "").replace(".", "") if isinstance(v, str) else v
 
 
-def dump(v):
-    return json.dumps(v, default=lambda m: m.model_dump(), sort_keys=True)
+def canon(v):
+    """0 and 0.0 compare equal; nested Dose/taper dicts are compared by value."""
+    if v is None:
+        return None
+    if hasattr(v, "model_dump"):
+        return canon(v.model_dump())
+    if isinstance(v, dict):
+        return {k: canon(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [canon(x) for x in v]
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, (int, float)):
+        return float(v)
+    if isinstance(v, str):
+        return norm(v)
+    return v
 
 
 def field_eq(p: MedLine, g: MedLine, f: str) -> bool:
-    a, b = getattr(p, f), getattr(g, f)
-    if hasattr(a, "model_dump") or hasattr(b, "model_dump") or isinstance(a, list):
-        return dump(a) == dump(b)
-    return norm(a) == norm(b)
+    return canon(getattr(p, f)) == canon(getattr(g, f))
 
 
 def score(pred: MedLine | None, gold: MedLine) -> dict:
@@ -70,41 +82,72 @@ def get_parser(system: str):
     }[system]()
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--system", required=True)
-    ap.add_argument("--set", required=True)
-    a = ap.parse_args()
-    parse = get_parser(a.system)
-    rows = [json.loads(l) for l in open(a.set, encoding="utf-8")]
-    scores, lat, preds = [], [], []
-    for r in rows:
-        t0 = time.time()
-        p = parse(r["line"])
-        lat.append(time.time() - t0)
-        gold = MedLine.model_validate(r["gold"])
-        scores.append(score(p, gold))
-        preds.append({"line": r["line"], "pred": p.model_dump() if p else None, **scores[-1]})
+def summarize(system: str, set_path: str, scores: list[dict], lat: list[float] | None) -> dict:
     mean = lambda k: sum(s[k] for s in scores) / len(scores)
     out = {
-        "system": a.system,
-        "set": a.set,
-        "n": len(rows),
+        "system": system,
+        "set": set_path,
+        "n": len(scores),
         "json_valid": mean("valid"),
         "exact": mean("exact"),
         "exact_ci95": bootstrap_ci([s["exact"] for s in scores]),
         "danger": mean("danger"),
         "per_field": {f: mean(f) for f in FIELDS},
-        "p50_s": median(lat),
-        "p95_s": sorted(lat)[max(0, int(0.95 * len(lat)) - 1)],
     }
-    print(json.dumps(out, indent=2))
-    tag = Path(a.set).name.removesuffix(".jsonl")
+    if lat:
+        out["p50_s"] = median(lat)
+        out["p95_s"] = sorted(lat)[max(0, int(0.95 * len(lat)) - 1)]
+    return out
+
+
+def write_out(out: dict, preds: list[dict], set_path: str, system: str) -> None:
+    tag = Path(set_path).name.removesuffix(".jsonl")
     out_dir = ROOT / "eval" / "out"
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / f"{a.system}_{tag}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
-    with (out_dir / f"{a.system}_{tag}_preds.jsonl").open("w", encoding="utf-8") as fh:
+    (out_dir / f"{system}_{tag}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    with (out_dir / f"{system}_{tag}_preds.jsonl").open("w", encoding="utf-8") as fh:
         fh.writelines(json.dumps(x, ensure_ascii=False) + "\n" for x in preds)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--system", required=True)
+    ap.add_argument("--set", required=True)
+    ap.add_argument("--limit", type=int, default=0, help="cap rows (0 = all)")
+    ap.add_argument("--preds", default="", help="rescore an existing preds jsonl; skip Tinker")
+    a = ap.parse_args()
+    gold_rows = [json.loads(l) for l in open(a.set, encoding="utf-8")]
+    if a.limit:
+        gold_rows = gold_rows[: a.limit]
+    scores, lat, preds = [], [], []
+    if a.preds:
+        pred_rows = [json.loads(l) for l in open(a.preds, encoding="utf-8")]
+        if a.limit:
+            pred_rows = pred_rows[: a.limit]
+        for r, pr in zip(gold_rows, pred_rows, strict=True):
+            gold = MedLine.model_validate(r["gold"])
+            p = MedLine.model_validate(pr["pred"]) if pr.get("pred") else None
+            s = score(p, gold)
+            scores.append(s)
+            preds.append({"line": r["line"], "pred": pr.get("pred"), **s})
+        prev = json.loads((ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").read_text(encoding="utf-8")) if (ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").is_file() else {}
+        out = summarize(a.system, a.set, scores, None)
+        if "p50_s" in prev:
+            out["p50_s"] = prev["p50_s"]
+            out["p95_s"] = prev["p95_s"]
+            out["rescored_from_preds"] = True
+    else:
+        parse = get_parser(a.system)
+        for r in gold_rows:
+            t0 = time.time()
+            p = parse(r["line"])
+            lat.append(time.time() - t0)
+            gold = MedLine.model_validate(r["gold"])
+            scores.append(score(p, gold))
+            preds.append({"line": r["line"], "pred": p.model_dump() if p else None, **scores[-1]})
+        out = summarize(a.system, a.set, scores, lat)
+    print(json.dumps(out, indent=2))
+    write_out(out, preds, a.set, a.system)
 
 
 if __name__ == "__main__":
