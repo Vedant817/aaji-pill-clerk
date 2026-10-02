@@ -1,9 +1,61 @@
-# Weights match IDEA.md §7. Filled out with the sampler implementation.
+# Weights from IDEA.md §7.
 schedules:
-  - pattern: [1, 0, 1]
+  - pattern: [1.0, 0.0, 1.0]
     weight: 25
+  - pattern: [1.0, 0.0, 0.0]
+    weight: 20
+  - pattern: [0.0, 0.0, 1.0]
+    weight: 15
+  - pattern: [1.0, 1.0, 1.0]
+    weight: 10
+  - pattern: [0.5, 0.0, 0.5]
+    weight: 3
+  - pattern: [1.0, 0.0, 0.5]
+    weight: 2
+  - pattern: [0.5, 0.0, 0.0]
+    weight: 2
+  - pattern: [0.0, 1.0, 0.0]
+    weight: 2
+  - pattern: [2.0, 0.0, 2.0]
+    weight: 1
+
+kind_weights:
+  daily: 85
+  prn: 8
+  taper: 7
+
+durations: [3, 5, 7, 10, 15, 30, 60, 90, null]
+
+food_weights:
+  after: 40
+  before: 20
+  any: 25
+  empty_stomach: 10
+  with: 5
+
+every_n_days_weights:
+  1: 95
+  7: 5
+
 styles:
   clinic_print: 25
+  doctor_short: 25
+  hinglish_wa: 20
+  hindi: 10
+  marathi: 10
+  mixed: 10
+
 hard_negative_rate: 0.05
 llm_render_rate: 0.70
 template_render_rate: 0.30
+held_out_drug_fraction: 0.20
+
+unit_scale:
+  ml: 5
+  drop: 2
+  unit: 10
+  puff: 2
+  sachet: 1
+  apply: 1
+  tab: 1
+  cap: 1

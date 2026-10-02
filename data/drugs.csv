@@ -1,2 +1,194 @@
 name,form,strengths,generic
-Glycomet,tab,"500 mg|850 mg|1000 mg",Metformin
+Glycomet,tab,500 mg|850 mg|1000 mg,Metformin
+Glycomet SR,tab,500 mg|1000 mg,Metformin
+Glyciphage,tab,500 mg|850 mg|1000 mg,Metformin
+Glycomet GP1,tab,500 mg/1 mg,Metformin+Glimepiride
+Glycomet GP2,tab,500 mg/2 mg,Metformin+Glimepiride
+Amaryl,tab,1 mg|2 mg|4 mg,Glimepiride
+Diamicron XR,tab,30 mg|60 mg,Gliclazide
+Glucobay,tab,25 mg|50 mg,Acarbose
+Pioglar,tab,15 mg|30 mg,Pioglitazone
+Januvia,tab,50 mg|100 mg,Sitagliptin
+Janumet,tab,50 mg/500 mg|50 mg/1000 mg,Sitagliptin+Metformin
+Istamet,tab,50 mg/500 mg,Sitagliptin+Metformin
+Galvus,tab,50 mg,Vildagliptin
+Galvus Met,tab,50 mg/500 mg|50 mg/1000 mg,Vildagliptin+Metformin
+Tenlimac,tab,20 mg,Teneligliptin
+Forxiga,tab,5 mg|10 mg,Dapagliflozin
+Jardiance,tab,10 mg|25 mg,Empagliflozin
+Trajenta,tab,5 mg,Linagliptin
+Mixtard,injection,30/70 40 IU/ml,Biphasic Insulin
+Lantus,injection,100 IU/ml,Insulin Glargine
+Novorapid,injection,100 IU/ml,Insulin Aspart
+Huminsulin,injection,40 IU/ml,Human Insulin
+Ecosprin,tab,75 mg|150 mg,Aspirin
+Ecosprin AV,cap,75 mg/10 mg|75 mg/20 mg,Aspirin+Atorvastatin
+Clopitab,tab,75 mg,Clopidogrel
+Deplatt,tab,75 mg,Clopidogrel
+Atorva,tab,10 mg|20 mg|40 mg,Atorvastatin
+Storvas,tab,10 mg|20 mg|40 mg,Atorvastatin
+Rosuvas,tab,5 mg|10 mg|20 mg,Rosuvastatin
+Rozavel,tab,5 mg|10 mg|20 mg,Rosuvastatin
+Telma,tab,20 mg|40 mg|80 mg,Telmisartan
+Telma AM,tab,40 mg/5 mg,Telmisartan+Amlodipine
+Amlong,tab,2.5 mg|5 mg|10 mg,Amlodipine
+Amlodac,tab,5 mg|10 mg,Amlodipine
+Cilacar,tab,5 mg|10 mg|20 mg,Cilnidipine
+Losar,tab,25 mg|50 mg,Losartan
+Envas,tab,2.5 mg|5 mg|10 mg,Enalapril
+Cardace,tab,2.5 mg|5 mg|10 mg,Ramipril
+Metolar,tab,25 mg|50 mg,Metoprolol
+Met XL,tab,25 mg|50 mg,Metoprolol
+Concor,tab,2.5 mg|5 mg,Bisoprolol
+Carca,tab,3.125 mg|6.25 mg|12.5 mg,Carvedilol
+Lasix,tab,40 mg,Furosemide
+Dytor,tab,5 mg|10 mg|20 mg,Torsemide
+Dytor Plus,tab,10 mg/50 mg,Torsemide+Spironolactone
+Aldactone,tab,25 mg|50 mg,Spironolactone
+Nicorandil,tab,5 mg|10 mg,Nicorandil
+Sorbitrate,tab,5 mg|10 mg,Isosorbide Dinitrate
+Arkamin,tab,100 mcg,Clonidine
+Minipress XL,tab,2.5 mg|5 mg,Prazosin
+Flavedon MR,tab,35 mg,Trimetazidine
+Ivabrad,tab,5 mg,Ivabradine
+Xarelto,tab,10 mg|15 mg|20 mg,Rivaroxaban
+Eliquis,tab,2.5 mg|5 mg,Apixaban
+Acitrom,tab,1 mg|2 mg|3 mg|4 mg,Acenocoumarol
+Brilinta,tab,90 mg,Ticagrelor
+Olmesar,tab,20 mg|40 mg,Olmesartan
+Nebicard,tab,2.5 mg|5 mg,Nebivolol
+Natstar,tab,1.5 mg,Indapamide
+Digoxin,tab,0.25 mg,Digoxin
+Warf,tab,1 mg|2 mg|5 mg,Warfarin
+Pan,tab,40 mg,Pantoprazole
+Pan D,cap,40 mg/30 mg,Pantoprazole+Domperidone
+Rablet,tab,20 mg,Rabeprazole
+Sompraz,tab,40 mg,Esomeprazole
+Nexpro,tab,40 mg,Esomeprazole
+Rantac,tab,150 mg|300 mg,Ranitidine
+Domstal,tab,10 mg,Domperidone
+Ondem,tab,4 mg|8 mg,Ondansetron
+Econorm,sachet,250 mg,Saccharomyces boulardii
+Vizylac,cap,,Lactic acid bacillus
+Cremaffin,syrup,,Liquid paraffin
+Duphalac,syrup,,Lactulose
+Mucaine,syrup,,Oxetacaine
+Sucral,tab,1 g,Sucralfate
+Mesacol,tab,400 mg|800 mg,Mesalamine
+Dolo,tab,650 mg,Paracetamol
+Crocin,tab,500 mg|650 mg,Paracetamol
+Combiflam,tab,400 mg/325 mg,Ibuprofen+Paracetamol
+Voveran,tab,50 mg,Diclofenac
+Zerodol P,tab,100 mg/325 mg,Aceclofenac+Paracetamol
+Zerodol SP,tab,100 mg/325 mg,Aceclofenac+Paracetamol+Serratiopeptidase
+Etoshine,tab,60 mg|90 mg,Etoricoxib
+Hifenac,tab,100 mg,Aceclofenac
+Hifenac TH,tab,100 mg/4 mg,Aceclofenac+Thiocolchicoside
+Myoril,cap,4 mg|8 mg,Thiocolchicoside
+Ultracet,tab,37.5 mg/325 mg,Tramadol+Paracetamol
+Nucoxia,tab,60 mg|90 mg,Etoricoxib
+Shelcal,tab,500 mg,Calcium
+Shelcal XT,tab,,Calcium+Vitamin D3
+Uprise D3,cap,60K IU,Cholecalciferol
+Calcirol,sachet,60K IU,Cholecalciferol
+Evion,cap,400 mg,Vitamin E
+Neurobion Forte,tab,,Vitamin B1+B6+B12
+Pregaba,cap,75 mg,Pregabalin
+Gabapin,tab,100 mg|300 mg,Gabapentin
+Wysolone,tab,5 mg|10 mg|20 mg,Prednisolone
+Omnacortil,tab,5 mg|10 mg|20 mg,Prednisolone
+Thyronorm,tab,25 mcg|50 mcg|75 mcg|100 mcg,Levothyroxine
+Eltroxin,tab,50 mcg|100 mcg,Levothyroxine
+Folvite,tab,5 mg,Folic acid
+Autrin,cap,,Iron+Folic acid+B12
+Orofer XT,tab,,Iron+Folic acid
+Livogen,tab,,Iron+Folic acid
+Supradyn,tab,,Multivitamin
+Zincovit,syrup,,Multivitamin+Zinc
+Becosules,cap,,B-complex
+Methycobal,tab,500 mcg|1500 mcg,Methylcobalamin
+Nurokind,tab,500 mcg,Methylcobalamin
+Rejunex,tab,1500 mcg,Methylcobalamin
+Foracort,inhaler,200 mcg,Budesonide+Formoterol
+Asthalin,inhaler,100 mcg,Salbutamol
+Duolin,inhaler,,Levosalbutamol+Ipratropium
+Montair,tab,10 mg,Montelukast
+Montair LC,tab,10 mg/5 mg,Montelukast+Levocetirizine
+Allegra,tab,120 mg|180 mg,Fexofenadine
+Cetzine,tab,10 mg,Cetirizine
+Levocet,tab,5 mg,Levocetirizine
+Ambrolite,syrup,30 mg/5 ml,Ambroxol
+Ascoril LS,syrup,,Levosalbutamol+Ambroxol
+Deriphyllin,tab,150 mg,Etofylline+Theophylline
+AB Phylline,cap,100 mg,Acebrophylline
+Seroflo,inhaler,250 mcg,Fluticasone+Salmeterol
+Budecort,inhaler,200 mcg,Budesonide
+Telekast,tab,10 mg,Montelukast
+Augmentin,tab,625 mg,Amoxicillin+Clavulanate
+Azithral,tab,500 mg,Azithromycin
+Ciplox,tab,500 mg,Ciprofloxacin
+Oflox,tab,200 mg|400 mg,Ofloxacin
+Metrogyl,tab,400 mg,Metronidazole
+Taxim O,tab,200 mg,Cefixime
+Moxikind CV,tab,625 mg,Amoxicillin+Clavulanate
+Doxy,tab,100 mg,Doxycycline
+Norflox,tab,400 mg,Norfloxacin
+Levoflox,tab,500 mg,Levofloxacin
+Nitrofurantoin,cap,100 mg,Nitrofurantoin
+Albendazole,tab,400 mg,Albendazole
+Ivermectol,tab,12 mg,Ivermectin
+Fluconazole,tab,150 mg,Fluconazole
+Septran,tab,800 mg/160 mg,Sulfamethoxazole+Trimethoprim
+Syndopa,tab,110 mg|275 mg,Levodopa+Carbidopa
+Parkitane,tab,2 mg,Trihexyphenidyl
+Pacitane,tab,2 mg,Trihexyphenidyl
+Donep,tab,5 mg|10 mg,Donepezil
+Vertin,tab,8 mg|16 mg|24 mg,Betahistine
+Stugeron,tab,25 mg,Cinnarizine
+Sibelium,tab,5 mg|10 mg,Flunarizine
+Topamac,tab,25 mg|50 mg,Topiramate
+Levipil,tab,500 mg,Levetiracetam
+Valprol CR,tab,200 mg|500 mg,Valproate
+Tegrital,tab,200 mg,Carbamazepine
+Lonazep,tab,0.25 mg|0.5 mg,Clonazepam
+Nexito,tab,5 mg|10 mg,Escitalopram
+Tryptomer,tab,10 mg|25 mg,Amitriptyline
+Zolfresh,tab,5 mg|10 mg,Zolpidem
+Chymoral Forte,tab,,Trypsin-Chymotrypsin
+Enzoflam,tab,,Diclofenac+Paracetamol+Serratiopeptidase
+Myospaz,tab,,Paracetamol+Chlorzoxazone
+Flexon,tab,,Ibuprofen+Paracetamol
+Volini,cream,,Diclofenac
+Betnovate,cream,,Betamethasone
+Candid,cream,,Clotrimazole
+Refresh Tears,drops,,Carboxymethylcellulose
+Ciplox D,drops,,Ciprofloxacin+Dexamethasone
+Moxiflox,drops,0.5 %,Moxifloxacin
+Timolol,drops,0.5 %,Timolol
+Xalatan,drops,0.005 %,Latanoprost
+CCM,tab,,Calcium citrate malate
+Ostocalcium,tab,,Calcium+Vitamin D
+Gemcal,cap,,Calcitriol+Calcium
+Macalvit,tab,,Calcium
+Liv 52,tab,,Ayurvedic liver tonic
+Crocin Drops,drops,100 mg/ml,Paracetamol
+Zincovit Drops,drops,,Multivitamin
+Novamox,cap,250 mg|500 mg,Amoxicillin
+Meftal Spas,tab,250 mg,Mefenamic acid+Dicyclomine
+Buscopan,tab,10 mg,Hyoscine
+Erythrocin,tab,250 mg|500 mg,Erythromycin
+Monocef O,tab,200 mg,Cefpodoxime
+Phexin,cap,250 mg|500 mg,Cephalexin
+Ceftum,tab,250 mg|500 mg,Cefuroxime
+Azee,tab,250 mg|500 mg,Azithromycin
+Clavam,tab,625 mg,Amoxicillin+Clavulanate
+Metformin,tab,500 mg|1000 mg,Metformin
+Glimepiride,tab,1 mg|2 mg,Glimepiride
+Amlodipine,tab,5 mg|10 mg,Amlodipine
+Telmisartan,tab,40 mg|80 mg,Telmisartan
+Atorvastatin,tab,10 mg|20 mg,Atorvastatin
+Pantoprazole,tab,40 mg,Pantoprazole
+Thyroxine,tab,50 mcg|100 mcg,Levothyroxine
+Paracetamol,tab,500 mg|650 mg,Paracetamol
+Calcium,tab,500 mg,Calcium
+Vitamin D3,cap,60K IU,Cholecalciferol
