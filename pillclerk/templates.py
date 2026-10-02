@@ -62,6 +62,17 @@ _FORM_EN = {
     "sachet": "SACHET",
     "other": "",
 }
+_FORM_SHORT = {
+    "tab": "Tab",
+    "cap": "Cap",
+    "syrup": "Syr",
+    "drops": "Drops",
+    "inhaler": "Inh",
+    "injection": "Inj",
+    "cream": "Cream",
+    "sachet": "Sachet",
+    "other": "Tab",
+}
 
 
 def dose_code(dose: Dose) -> str:
@@ -160,11 +171,12 @@ def render_hard_negative(gold: MedLine, style: str) -> str:
     name = gold.drug or "[?]"
     strength = gold.strength or ""
     note = gold.note or ""
+    form = _FORM_SHORT.get(gold.form, "Tab")
     if "illegible" in note or gold.drug is None:
-        return f"Tab {name} {strength} 1-[?]-[?] { _dur(gold.duration_days, 'doctor_short')}".strip()
+        return f"{form} {name} {strength} 1-[?]-[?] { _dur(gold.duration_days, 'doctor_short')}".strip()
     if "as directed" in note:
-        return f"Tab {name} {strength} as directed".strip()
-    return f"Tab {name} {strength} x {gold.duration_days or 5}d".strip()
+        return f"{form} {name} {strength} as directed".strip()
+    return f"{form} {name} {strength} x {gold.duration_days or 5}d".strip()
 
 
 def render_template(gold: MedLine, style: str, rng: random.Random | None = None) -> str:
@@ -175,17 +187,18 @@ def render_template(gold: MedLine, style: str, rng: random.Random | None = None)
     name = gold.drug or "ASK"
     strength = gold.strength or ""
     form = _FORM_EN.get(gold.form, "TAB.")
+    form_short = _FORM_SHORT.get(gold.form, "Tab")
 
     if gold.kind == "prn":
         maxd = f" max {gold.prn_max_per_day}/d" if gold.prn_max_per_day else ""
         if style == "doctor_short":
-            line = f"Tab {name} {strength} SOS{maxd} {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} SOS{maxd} {_dur(gold.duration_days, style)}".strip()
         elif style == "hinglish_wa":
-            line = f"{name} {strength} zarurat pe {maxd} {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} zarurat pe {maxd} {_dur(gold.duration_days, style)}".strip()
         elif style == "hindi":
-            line = f"{name} {strength} जरूरत पर {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} जरूरत पर {_dur(gold.duration_days, style)}".strip()
         elif style == "marathi":
-            line = f"{name} {strength} गरजेनुसार {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} गरजेनुसार {_dur(gold.duration_days, style)}".strip()
         else:
             line = f"{form} {name} {strength}  SOS / PRN{maxd}  {_dur(gold.duration_days, 'clinic_print')}".strip()
         return _noise(line, rng)
@@ -206,16 +219,16 @@ def render_template(gold: MedLine, style: str, rng: random.Random | None = None)
         line = f"{form} {name} {strength}  {dose_code(gold.dose)}  {food}  {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
     elif style == "doctor_short":
         food = _FOOD_SHORT[gold.food]
-        line = f"Tab {name} {strength} {latin_abbrev(gold.dose)} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
+        line = f"{form_short} {name} {strength} {latin_abbrev(gold.dose)} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
     elif style == "hinglish_wa":
         food = _FOOD_HINGLISH[gold.food]
-        line = f"{name} {strength} {_slot_line(gold, 'hinglish')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
+        line = f"{form_short} {name} {strength} {_slot_line(gold, 'hinglish')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
     elif style == "hindi":
         food = _FOOD_HI[gold.food]
-        line = f"{name} {strength} {_slot_line(gold, 'hi')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
+        line = f"{form_short} {name} {strength} {_slot_line(gold, 'hi')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
     elif style == "marathi":
         food = _FOOD_MR[gold.food]
-        line = f"{name} {strength} {_slot_line(gold, 'mr')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
+        line = f"{form_short} {name} {strength} {_slot_line(gold, 'mr')} {food} {_dur(gold.duration_days, style, omit=omit_dur)}{weekly}"
     else:  # mixed
         food = _FOOD_HINGLISH[gold.food]
         line = (

@@ -8,6 +8,7 @@ from collections.abc import Callable
 from typing import Any
 
 from pillclerk import config
+from pillclerk.copy_explicit import copy_explicit
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 from pillclerk.validate import extra_rules
 
@@ -15,6 +16,8 @@ ParseFn = Callable[[str], MedLine | None]
 
 
 def _extract_json(text: str) -> str:
+    text = re.sub(r"<think>[\s\S]*?</think>", "", text)
+    text = text.replace("<think>", "").replace("</think>", "")
     text = text.strip()
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text).strip()
     start, end = text.find("{"), text.rfind("}")
@@ -37,7 +40,8 @@ def parse_ollama(line: str, model: str | None = None) -> MedLine | None:
         ],
     )
     try:
-        return extra_rules(MedLine.model_validate_json(r.message.content))
+        med = extra_rules(MedLine.model_validate_json(r.message.content))
+        return extra_rules(copy_explicit(med, line))
     except Exception:
         return None
 
@@ -86,7 +90,8 @@ def make_tinker_parser(
         res = sc.sample(prompt=model_input, num_samples=1, sampling_params=params).result()
         text = tokenizer.decode(res.sequences[0].tokens)
         try:
-            return extra_rules(MedLine.model_validate_json(_extract_json(text)))
+            med = extra_rules(MedLine.model_validate_json(_extract_json(text)))
+            return extra_rules(copy_explicit(med, line))
         except Exception:
             return None
 

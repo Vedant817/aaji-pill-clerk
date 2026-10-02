@@ -1,0 +1,6 @@
+{
+  "state": "tinker://10188476-87b0-5abc-ba8c-83e164944f9e:train:0/weights/pillclerk-v2",
+  "sampler": "tinker://10188476-87b0-5abc-ba8c-83e164944f9e:train:0/sampler_weights/pillclerk-v2",
+  "model": "Qwen/Qwen3-8B",
+  "name": "pillclerk-v2"
+}

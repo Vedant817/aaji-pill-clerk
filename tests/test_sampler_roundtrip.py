@@ -8,10 +8,10 @@ import pytest
 
 from pillclerk.filters import drug_present, rule_ok
 from pillclerk.render import to_chat_row
-from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_line
+from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_line, sample_prn
 from pillclerk.schema import MedLine
 from pillclerk.templates import STYLES, dose_code, render_template
-from train.build_dataset import generate_pairs, main as build_main
+from train.build_dataset import generate_pairs, generate_targeted, main as build_main
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -195,6 +195,29 @@ def test_rule_ok_rejects_dropped_facts() -> None:
     assert not rule_ok("TAB. Glycomet 1-0-1 AFTER FOOD x 30 DAYS", gold)
     assert not rule_ok("TAB. Glycomet 500MG 1-0-1 AFTER FOOD", gold)
     assert rule_ok("Tab Glycomet 500mg BD PC 1/12", gold)
+
+
+def test_prn_gold_food_is_any() -> None:
+    drugs = load_drugs()
+    patterns = load_patterns()
+    rng = random.Random(9)
+    for _ in range(20):
+        gold = sample_prn(rng, rng.choice(drugs), patterns)
+        assert gold.food == "any"
+        line = render_template(gold, "doctor_short", rng)
+        assert "AC" not in line and "PC" not in line and "WF" not in line and "ES" not in line
+
+
+def test_generate_targeted_covers_ft1_buckets() -> None:
+    drugs = load_drugs()
+    patterns = load_patterns()
+    rows = generate_targeted(40, drugs=drugs, patterns=patterns, seed=11)
+    assert len(rows) == 40
+    buckets = {r["targeted"] for r in rows}
+    assert {"form", "food", "half", "taper", "hard", "prn"} <= buckets
+    foods = [r for r in rows if r["targeted"] == "food"]
+    assert foods
+    assert all(r["gold"]["food"] != "any" for r in foods)
 
 
 def test_rule_ok_taper_uses_step_days() -> None:

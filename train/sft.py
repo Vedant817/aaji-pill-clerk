@@ -13,7 +13,7 @@ from pathlib import Path
 
 import tinker
 
-from pillclerk.config import BASE_MODEL, ROOT, load_dotenv, require_env
+from pillclerk.config import BASE_MODEL, ROOT, apply_tinker_checkpoint, load_dotenv, require_env
 from pillclerk.infer import as_token_ids
 
 load_dotenv()
@@ -85,10 +85,11 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=EPOCHS)
     ap.add_argument("--batch", type=int, default=BATCH)
     ap.add_argument("--name", default="pillclerk-v1")
+    ap.add_argument("--train", default="", help="override train jsonl path")
     args = ap.parse_args()
 
     require_env("TINKER_API_KEY")
-    train_path = ROOT / "data" / "synth" / "train.jsonl"
+    train_path = Path(args.train) if args.train else ROOT / "data" / "synth" / "train.jsonl"
     val_path = ROOT / "data" / "synth" / "val.jsonl"
     if not train_path.is_file():
         raise SystemExit("missing data/synth/train.jsonl — run: uv run python -m train.build_dataset --split")
@@ -149,10 +150,17 @@ def main() -> None:
 
     state = tc.save_state(args.name).result().path
     sampler = tc.save_weights_for_sampler(args.name).result().path
-    ck_name = "checkpoint_v1.json" if args.name == "pillclerk-v1" else f"checkpoint_{args.name}.json"
+    if args.name in ("pillclerk-v1", "v1"):
+        ck_name = "checkpoint_v1.json"
+    elif args.name in ("pillclerk-v2", "v2"):
+        ck_name = "checkpoint_v2.json"
+    else:
+        ck_name = f"checkpoint_{args.name}.json"
     ck = ROOT / "train" / ck_name
     ck.write_text(json.dumps({"state": state, "sampler": sampler, "model": BASE_MODEL, "name": args.name}, indent=2), encoding="utf-8")
+    apply_tinker_checkpoint(ck)
     print("saved", sampler)
+    print("wrote", ck)
 
 
 if __name__ == "__main__":

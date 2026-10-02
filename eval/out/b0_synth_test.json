@@ -1,0 +1,38 @@
+{
+  "system": "b0",
+  "set": "data/synth/synth_test.jsonl",
+  "n": 400,
+  "json_valid": 0.0,
+  "exact": 0.0,
+  "exact_ci95": [
+    0.0,
+    0.0
+  ],
+  "danger": 1.0,
+  "per_field": {
+    "drug": 0.0,
+    "strength": 0.0,
+    "form": 0.0,
+    "kind": 0.0,
+    "dose": 0.0,
+    "every_n_days": 0.0,
+    "taper": 0.0,
+    "food": 0.0,
+    "duration_days": 0.0,
+    "prn_max_per_day": 0.0
+  },
+  "p50_s": 2.1511815786361694,
+  "p95_s": 3.152283191680908,
+  "error_fields": {
+    "drug": 400,
+    "strength": 400,
+    "form": 400,
+    "kind": 400,
+    "dose": 400,
+    "every_n_days": 400,
+    "taper": 400,
+    "food": 400,
+    "duration_days": 400,
+    "prn_max_per_day": 400
+  }
+}

@@ -10,7 +10,17 @@ from pathlib import Path
 
 from pillclerk.filters import normalised_text, rule_ok
 from pillclerk.render import to_chat_row
-from pillclerk.sampler import holdout_split, load_drugs, load_patterns, sample_line
+from pillclerk.sampler import (
+    FORM_TO_UNIT,
+    holdout_split,
+    load_drugs,
+    load_patterns,
+    sample_daily_slots,
+    sample_hard_negative,
+    sample_line,
+    sample_prn,
+    sample_taper,
+)
 from pillclerk.templates import render_template
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -74,11 +84,82 @@ def write_jsonl(path: Path, rows: list[dict]) -> None:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def generate_targeted(
+    n: int,
+    *,
+    drugs,
+    patterns,
+    seed: int = 99,
+) -> list[dict]:
+    """FT2 extras for FT1 error buckets: form/unit, food cues, half-tab, taper, ASK."""
+    rng = random.Random(seed)
+    special = [d for d in drugs if d.get("form") not in ("tab", "other", "")]
+    pool = special or drugs
+    styles_form = ["clinic_print", "doctor_short", "hinglish_wa", "hindi", "marathi", "mixed"]
+    seen: set[str] = set()
+    out: list[dict] = []
+    attempts = 0
+    while len(out) < n and attempts < n * 40:
+        attempts += 1
+        bucket = rng.choice(["form", "form", "food", "half", "taper", "hard", "prn"])
+        drug = rng.choice(pool if bucket == "form" else drugs)
+        unit = FORM_TO_UNIT.get(drug["form"], "tab")
+        if bucket == "hard":
+            gold = sample_hard_negative(rng, drug, patterns)
+            style = rng.choice(styles_form)
+        elif bucket == "taper":
+            gold = sample_taper(rng, drug, patterns, unit)
+            style = "clinic_print"
+        elif bucket == "prn":
+            gold = sample_prn(rng, drug, patterns)
+            style = rng.choice(["doctor_short", "clinic_print", "hinglish_wa"])
+        elif bucket == "half":
+            tabs = [d for d in drugs if d.get("form") in ("tab", "cap")] or drugs
+            drug = rng.choice(tabs)
+            unit = FORM_TO_UNIT.get(drug["form"], "tab")
+            gold = sample_daily_slots(rng, drug, patterns, unit, (0.5, 0.0, 0.5))
+            style = rng.choice(["clinic_print", "hinglish_wa", "marathi"])
+        elif bucket == "food":
+            gold = sample_daily_slots(rng, drug, patterns, unit, (1.0, 0.0, 1.0))
+            food = rng.choice(["before", "after", "with", "empty_stomach"])
+            gold = gold.model_copy(update={"food": food})
+            style = rng.choice(["clinic_print", "doctor_short", "hindi"])
+        else:
+            gold = sample_daily_slots(
+                rng, drug, patterns, unit, rng.choice([(1.0, 0.0, 1.0), (1.0, 0.0, 0.0), (0.0, 0.0, 1.0)])
+            )
+            style = rng.choice(styles_form)
+        line = render_template(gold, style, rng)
+        if not rule_ok(line, gold) and not gold.needs_check:
+            continue
+        key = normalised_text(line)
+        if key in seen:
+            continue
+        seen.add(key)
+        row = to_chat_row(line, gold)
+        row.update(
+            {
+                "line": line,
+                "gold": json.loads(gold.model_dump_json()),
+                "style": style,
+                "renderer": "template",
+                "drug": drug["name"],
+                "synthetic": True,
+                "targeted": bucket,
+            }
+        )
+        out.append(row)
+    if len(out) < n:
+        raise RuntimeError(f"targeted only produced {len(out)}/{n}")
+    return out
+
+
 def write_splits(
     *,
     n_train: int = 2000,
     n_val: int = 250,
     n_test: int = 400,
+    n_targeted: int = 500,
     seed: int = 42,
 ) -> dict[str, int]:
     patterns = load_patterns()
@@ -89,13 +170,16 @@ def write_splits(
     train = generate_pairs(n_train, seed=seed, drugs=train_drugs, patterns=patterns)
     val = generate_pairs(n_val, seed=seed + 1, drugs=train_drugs, patterns=patterns)
     test = generate_pairs(n_test, seed=seed + 2, drugs=test_drugs, patterns=patterns)
-    write_jsonl(SYNTH / "train.jsonl", train)
+    extra = generate_targeted(n_targeted, drugs=train_drugs, patterns=patterns, seed=seed + 7) if n_targeted else []
+    write_jsonl(SYNTH / "train.jsonl", train + extra)
     write_jsonl(SYNTH / "val.jsonl", val)
     write_jsonl(SYNTH / "synth_test.jsonl", test)
+    write_jsonl(SYNTH / "targeted_v2.jsonl", extra)
     return {
-        "train": len(train),
+        "train": len(train) + len(extra),
         "val": len(val),
         "synth_test": len(test),
+        "targeted": len(extra),
         "train_drugs": len({d["name"] for d in train_drugs}),
         "held_out_drugs": len({d["name"] for d in test_drugs}),
     }
@@ -113,6 +197,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--n-train", type=int, default=2000)
     ap.add_argument("--n-val", type=int, default=250)
     ap.add_argument("--n-test", type=int, default=400)
+    ap.add_argument("--n-targeted", type=int, default=500, help="FT2 extras mixed into train.jsonl")
     args = ap.parse_args(argv)
 
     if args.renderer == "llm":
@@ -120,7 +205,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if args.split:
-        stats = write_splits(n_train=args.n_train, n_val=args.n_val, n_test=args.n_test, seed=args.seed)
+        stats = write_splits(
+            n_train=args.n_train,
+            n_val=args.n_val,
+            n_test=args.n_test,
+            n_targeted=args.n_targeted,
+            seed=args.seed,
+        )
         print(json.dumps(stats, indent=2))
         return 0
 

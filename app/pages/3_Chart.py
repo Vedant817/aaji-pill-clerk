@@ -8,7 +8,7 @@ from pillclerk.ics import to_ics
 from pillclerk.schedule import expand, prn_meds, refill_date
 from pillclerk.schema import MedLine
 from pillclerk.store import save_meds
-from pillclerk.validate import all_confirmed
+from pillclerk.validate import all_confirmed, schedule_conflicts
 
 apply_theme()
 import streamlit as st
@@ -30,6 +30,14 @@ if not all(d.get("confirmed") for d in drafts) or not all_confirmed(meds):
     )
     st.page_link("pages/2_Review.py", label="← Back to Review")
     st.stop()
+
+conflicts = schedule_conflicts(meds)
+if conflicts:
+    st.markdown(
+        '<div class="pc-ask">Two lines name the same drug with different dose or kind. '
+        "The clerk copied both. Ask the doctor or pharmacist which one to follow.</div>",
+        unsafe_allow_html=True,
+    )
 
 c1, c2, c3 = st.columns(3)
 start = c1.date_input("Start date", value=date.today())

@@ -3,7 +3,7 @@
 from pillclerk.ui import apply_theme, stepper
 from pillclerk.config import tinker_parser_ready
 from pillclerk.schema import CheckField, Dose, Food, Form, Kind, MedLine, Unit
-from pillclerk.validate import extra_rules
+from pillclerk.validate import extra_rules, schedule_conflicts
 
 apply_theme()
 import streamlit as st
@@ -147,6 +147,20 @@ for i, draft in enumerate(drafts):
         )
 
 st.session_state["drafts"] = updated
+conflicts = schedule_conflicts([MedLine.model_validate(d["gold"]) for d in updated])
+if conflicts:
+    bits = []
+    for name, a, b in conflicts:
+        bits.append(
+            f"{name}: {a.kind}/{a.dose.model_dump() if a.dose else None} vs "
+            f"{b.kind}/{b.dose.model_dump() if b.dose else None}"
+        )
+    st.markdown(
+        '<div class="pc-ask">Same drug, different copy. Clerk keeps both; a human picks. '
+        + " · ".join(bits)
+        + "</div>",
+        unsafe_allow_html=True,
+    )
 if updated and all(d["confirmed"] for d in updated):
     st.markdown(
         '<div class="pc-ok">Every line is confirmed. Open Chart to print and download .ics.</div>',

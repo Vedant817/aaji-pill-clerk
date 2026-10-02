@@ -164,6 +164,6 @@ def to_chat_row(line: str, gold: MedLine) -> dict:
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": line},
-            {"role": "assistant", "content": gold.model_dump_json(exclude_defaults=True)},
+            {"role": "assistant", "content": gold.model_dump_json()},
         ]
     }

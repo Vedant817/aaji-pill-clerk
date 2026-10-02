@@ -104,8 +104,10 @@ def _base(rng: random.Random, drug: dict[str, Any], patterns: dict[str, Any]) ->
 
 
 def sample_prn(rng: random.Random, drug: dict[str, Any], patterns: dict[str, Any]) -> MedLine:
+    base = _base(rng, drug, patterns)
+    base["food"] = "any"
     return MedLine(
-        **_base(rng, drug, patterns),
+        **base,
         kind="prn",
         prn_max_per_day=rng.choice([2, 3, None]),
         duration_days=rng.choice([3, 5, 7, None]),

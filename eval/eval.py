@@ -9,6 +9,7 @@ import argparse
 import json
 import random
 import time
+from collections import Counter
 from pathlib import Path
 from statistics import median
 
@@ -97,6 +98,14 @@ def summarize(system: str, set_path: str, scores: list[dict], lat: list[float] |
     if lat:
         out["p50_s"] = median(lat)
         out["p95_s"] = sorted(lat)[max(0, int(0.95 * len(lat)) - 1)]
+    misses = Counter()
+    for s in scores:
+        if s["exact"]:
+            continue
+        for f in FIELDS:
+            if not s[f]:
+                misses[f] += 1
+    out["error_fields"] = dict(misses)
     return out
 
 
