@@ -42,6 +42,16 @@ def parse_ollama(line: str, model: str | None = None) -> MedLine | None:
         return None
 
 
+def as_token_ids(ids: Any) -> list[int]:
+    if isinstance(ids, dict):
+        ids = ids.get("input_ids", ids)
+    if hasattr(ids, "input_ids"):
+        ids = ids.input_ids
+    if ids and isinstance(ids, (list, tuple)) and isinstance(ids[0], (list, tuple)):
+        ids = ids[0]
+    return [int(x) for x in list(ids)]
+
+
 def _qwen_prompt(tokenizer: Any, line: str) -> list[int]:
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -49,9 +59,10 @@ def _qwen_prompt(tokenizer: Any, line: str) -> list[int]:
     ]
     kwargs: dict[str, Any] = {"tokenize": True, "add_generation_prompt": True}
     try:
-        return tokenizer.apply_chat_template(messages, enable_thinking=False, **kwargs)
+        ids = tokenizer.apply_chat_template(messages, enable_thinking=False, **kwargs)
     except TypeError:
-        return tokenizer.apply_chat_template(messages, **kwargs)
+        ids = tokenizer.apply_chat_template(messages, **kwargs)
+    return as_token_ids(ids)
 
 
 def make_tinker_parser(

@@ -14,6 +14,7 @@ from pathlib import Path
 import tinker
 
 from pillclerk.config import BASE_MODEL, ROOT, load_dotenv, require_env
+from pillclerk.infer import as_token_ids
 
 load_dotenv()
 
@@ -39,11 +40,7 @@ def _conversation_ids(tokenizer, messages: list[dict]) -> tuple[list[int], list[
         add_generation_prompt=False,
         enable_thinking=False,
     )
-    if isinstance(prompt, dict):
-        prompt = prompt["input_ids"]
-    if isinstance(full, dict):
-        full = full["input_ids"]
-    return list(prompt), list(full)
+    return as_token_ids(prompt), as_token_ids(full)
 
 
 def to_datum(tokenizer, row: dict) -> tinker.Datum:
@@ -107,11 +104,14 @@ def main() -> None:
         try:
             return to_datum(tokenizer, row)
         except TypeError:
-            prompt, full = tokenizer.apply_chat_template(
-                row["messages"][:-1], tokenize=True, add_generation_prompt=True
-            ), tokenizer.apply_chat_template(row["messages"], tokenize=True, add_generation_prompt=False)
-            row = dict(row)
-            # rebuild without enable_thinking
+            prompt = as_token_ids(
+                tokenizer.apply_chat_template(
+                    row["messages"][:-1], tokenize=True, add_generation_prompt=True
+                )
+            )
+            full = as_token_ids(
+                tokenizer.apply_chat_template(row["messages"], tokenize=True, add_generation_prompt=False)
+            )
             n_prefix = max(0, len(prompt) - 1)
             n_targets = len(full) - 1
             weights = ([0.0] * n_prefix + [1.0] * max(0, n_targets - n_prefix))[:n_targets]

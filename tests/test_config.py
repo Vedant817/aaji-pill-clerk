@@ -5,6 +5,13 @@ import pytest
 from pillclerk import config
 
 
+def test_as_token_ids_unwraps_batch_encoding() -> None:
+    from pillclerk.infer import as_token_ids
+
+    assert as_token_ids({"input_ids": [1, 2, 3]}) == [1, 2, 3]
+    assert as_token_ids([[4, 5]]) == [4, 5]
+
+
 def test_key_status_never_returns_secrets(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("TINKER_API_KEY", "secret-should-not-leak")
     status = config.key_status()
