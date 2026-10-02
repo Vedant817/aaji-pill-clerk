@@ -8,16 +8,20 @@ to eval/out/sent_payload_log.jsonl.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import threading
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
 from pillclerk.config import ROOT
 
 LOG = ROOT / "eval" / "out" / "sent_payload_log.jsonl"
+SUMMARY = ROOT / "eval" / "out" / "payload_summary.json"
 _LOG_LOCK = threading.Lock()
+_KEY_IN_URL = re.compile(r"([?&]key=)[^&\s\"']+", re.I)
 
 ALLOWED_GEMINI_SETS = {
     (ROOT / "data" / "synth" / "synth_test.jsonl").resolve(),
@@ -41,6 +45,48 @@ PATIENT = re.compile(
 
 class PrivacyError(RuntimeError):
     pass
+
+
+def redact_secret(exc: object, secret: str | None) -> str:
+    """Stringify an error without ever echoing an API key (URL, header, or body)."""
+    text = "" if exc is None else f"{type(exc).__name__}: {exc}" if isinstance(exc, BaseException) else str(exc)
+    text = _KEY_IN_URL.sub(r"\1[REDACTED]", text)
+    if secret:
+        text = text.replace(secret, "[REDACTED]")
+    return text
+
+
+def write_payload_summary(log_path: Path | None = None, dest: Path | None = None) -> dict:
+    """Per-run summary: count, sets, model, sha256 of payloads. No secrets."""
+    path = log_path or LOG
+    dest = dest or SUMMARY
+    rows: list[dict] = []
+    if path.is_file():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                rows.append(json.loads(line))
+    hasher = hashlib.sha256()
+    sets: Counter[str] = Counter()
+    models: Counter[str] = Counter()
+    systems: Counter[str] = Counter()
+    for row in rows:
+        payload = row.get("payload") or row.get("messages") or []
+        hasher.update(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8"))
+        set_name = Path(str(row.get("set") or "")).name or str(row.get("set") or "")
+        sets[set_name] += 1
+        models[str(row.get("model") or "")] += 1
+        systems[str(row.get("system") or "")] += 1
+    out = {
+        "count": len(rows),
+        "sets": dict(sets),
+        "models": dict(models),
+        "systems": dict(systems),
+        "sha256": hasher.hexdigest() if rows else None,
+        "log": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
+    }
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(out, indent=2), encoding="utf-8")
+    return out
 
 
 def _under(path: Path, root: Path) -> bool:

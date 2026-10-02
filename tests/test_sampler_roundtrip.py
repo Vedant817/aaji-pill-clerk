@@ -162,6 +162,13 @@ def test_to_chat_row_is_tinker_conversation_shape() -> None:
     assert parsed.drug == "Pan"
 
 
+def test_train_jsonl_is_3096_template_rows() -> None:
+    path = ROOT / "data" / "synth" / "train.jsonl"
+    rows = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    assert len(rows) == 3096
+    assert {r.get("renderer") for r in rows} == {"template"}
+
+
 def test_generate_ten_pairs_is_deterministic() -> None:
     a = generate_pairs(10, seed=42)
     b = generate_pairs(10, seed=42)

@@ -144,6 +144,11 @@ def test_render_yaml_uses_port_and_free_plan() -> None:
     assert "plan: free" in text
     assert "LLM_BACKEND" in text
     assert "digitalocean" not in text.lower()
+    assert not Path(".do/app.yaml").exists()
+    arch = Path("docs/architecture.md").read_text(encoding="utf-8")
+    readme = Path("README.md").read_text(encoding="utf-8")
+    assert "render.yaml provided; not deployed" in arch
+    assert "render.yaml provided; not deployed" in readme
 
 
 def test_gemini_key_status_presence_only(monkeypatch: pytest.MonkeyPatch) -> None:

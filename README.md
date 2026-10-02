@@ -20,12 +20,13 @@ This is a DEV Hacktoberfest 2026 Weekend Challenge entry ("Build for a Friend").
 |---|---|---|
 | Public HMR-100 / BD-200 images (`data/public/`, gitignored) | **No** | Local Ollama `gemma4:e4b`, or you type the line |
 | Photographed family files (`data/real/`, unused this weekend) | **No** | Local Ollama or type |
-| Public gold text (`data/public_labels/*.jsonl`) | Yes, after PII strip, once labelled | Gemma 4 31B teacher (`gemma-4-31b-it`), logged in `eval/out/sent_payload_log.jsonl` |
-| Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Same 31B teacher log |
-| Synthetic eval/train text | Yes, after PII strip | Same 31B teacher log; Tinker SFT/sampling for the clerk |
+| Synthetic **training** text (`data/synth/train.jsonl`, all 3096 rows `renderer=template`) | Yes | Tinker SFT only. This text never went to Gemini. |
+| Synthetic eval lines (`data/synth/synth_test.jsonl`) | Yes, after PII strip | Tinker (FT eval). Gemma 4 31B teacher only when we run `--system gemma31` |
+| Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Tinker (FT eval); 31B teacher on the same allowlist |
+| Public gold text (`data/public_labels/*.jsonl`, once labelled) | Yes, after PII strip | Tinker (FT eval) and 31B teacher. Logged in `eval/out/sent_payload_log.jsonl` |
 | Confirmed clerk parse in the app | Yes, the medicine line only | Tinker hosted LoRA (`PARSER_BACKEND=tinker`) |
 
-GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl`, `data/heldout/handwritten_realistic.jsonl`, and de-identified public gold jsonl. Images never leave the laptop. The code refuses `data/real/*` and `data/public/*` image paths.
+GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl`, `data/heldout/handwritten_realistic.jsonl`, and de-identified public gold jsonl. Images never leave the laptop. The code refuses `data/real/*` and `data/public/*` image paths. Synthetic training text was rendered with the Python template backend; it never went to Gemini.
 
 ## MVP line
 
@@ -45,7 +46,7 @@ Every model call sits behind an env switch:
 | `EXTRACT_BACKEND` | `manual` | Paste/type lines. Optional: `ollama` local `gemma4:e4b`. Photos never leave the laptop. |
 | `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
-DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. The public demo is Render free (`render.yaml`, `$PORT`, synthetic data only).
+DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. The public demo is Render free: **render.yaml provided; not deployed** (`$PORT`, synthetic data only).
 
 ## Setup
 
@@ -84,19 +85,19 @@ uv run python -m eval.eval --system ft2 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/heldout/handwritten_realistic.jsonl
 ```
 
-SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train. A later append added 396 unique form/dose/food stress rows (`train.jsonl` n=2896); those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`.
+SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train and was trained on the **2500-row** `train.jsonl` at git `5619cee`. Later appends added 396 unique form/dose/food stress rows then 200 drug/strength rows; **`data/synth/train.jsonl` is 3096 rows**, all `renderer=template`. Those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`.
 
 ## Results
 
 Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=102)** (never trained, not photographed). **Public real-world set: HMR-100 (India), n=…** is scored after labelling; numbers stay TODO until `eval/out/` has a run. Full table and file paths in `eval/results.md`. Public images stay gitignored in `data/public/`.
 
-| System | Exact SYNTH [95% CI] | Danger SYNTH | Exact hand-written realistic [95% CI] | Danger hand-written realistic | p50 s/line | Files |
+| System | Exact SYNTH n=397 [95% CI] | Danger_v1 SYNTH | Exact hand-written realistic [95% CI] | Danger_v1 hand-written realistic | p50 s/line | Files |
 |---|---|---|---|---|---|---|
-| B0-fair Qwen3-8B | 0.475 [0.428, 0.525] | 0.38 | 0.353 [0.255, 0.451] | 0.451 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
-| FT1 LoRA v1 | 0.91 [0.88, 0.94] | 0.065 | 0.647 [0.559, 0.745] | 0.147 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
-| FT2 LoRA v2 | 0.945 [0.92, 0.97] | 0.0025 | 0.863 [0.794, 0.931] | 0.049 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
+| B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3529 [0.2549, 0.4510] | 0.4510 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
+| FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.6471 [0.5588, 0.7451] | 0.1471 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
+| FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.8627 [0.7941, 0.9314] | 0.0490 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
 
-FT2 vs FT1 on the same 400 SYNTH lines: 14 exact-match fixes, 0 regressions. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions; danger 15 → 5. Form/kind/taper/every_n_days/strength are 1.0 on new SYNTH after v2. Hand-written realistic food is 0.990, form 0.971, dose 0.951. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
+Corrected SYNTH: gold aligned to the written line; 3 exact train duplicates dropped (n=397). Old n=400 scores live in `eval/out/*_synth_test_gold_v1.json`. FT2 vs FT1 on the same 397 SYNTH lines: 22 exact-match fixes, 0 regressions, McNemar p = 4.76837158203125e-07. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions, p = 2.744048833847046e-05. Full table, danger_v2, ASK metrics, and exact_norm in `eval/results.md`. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
 
 ## What is real
 

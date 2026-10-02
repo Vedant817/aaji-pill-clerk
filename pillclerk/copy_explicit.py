@@ -29,6 +29,55 @@ _FOOD_CUES: list[tuple[re.Pattern[str], str]] = [
 
 _MONTH = re.compile(r"\b1/12\b")
 _PRN = re.compile(r"\b(sos|prn|zarurat|जरूरत|गरजेनुसार)\b", re.I)
+_MAX_N = re.compile(r"\bmax\s*(\d+)\b", re.I)
+_DUR_X = re.compile(r"\bx\s*(\d+)\s*d(?:ays?)?\b", re.I)
+_DUR_DIN = re.compile(r"\b(\d+)\s*(?:din|दिन|दिवस)\b", re.I)
+_CONTINUE = re.compile(r"\b(?:continue|cont)\b", re.I)
+
+
+def line_has_food_word(line: str) -> bool:
+    return any(pat.search(line) for pat, _ in _FOOD_CUES)
+
+
+def duration_from_line(line: str) -> int | None | str:
+    """Return written duration, None if continue/absent, or 'ambiguous'."""
+    if _MONTH.search(line):
+        return 30
+    found = [int(m.group(1)) for m in _DUR_X.finditer(line)]
+    found += [int(m.group(1)) for m in _DUR_DIN.finditer(line)]
+    if len(set(found)) == 1:
+        return found[0]
+    if len(set(found)) > 1:
+        return "ambiguous"
+    if _CONTINUE.search(line):
+        return None
+    return None
+
+
+def prn_max_from_line(line: str) -> int | None:
+    m = _MAX_N.search(line)
+    return int(m.group(1)) if m else None
+
+
+def align_gold(med: MedLine, line: str) -> MedLine:
+    """Make gold match tokens that are actually written on the line.
+
+    - food is any when the line has no food word
+    - duration_days matches x Nd / N din / 1/12; None if none is written
+      (taper lines keep the sum of steps)
+    - prn_max_per_day only when "max N" is written
+    """
+    updates: dict = {}
+    if not line_has_food_word(line):
+        updates["food"] = "any"
+    if med.kind != "taper":
+        written = duration_from_line(line)
+        if written != "ambiguous":
+            updates["duration_days"] = written
+    updates["prn_max_per_day"] = prn_max_from_line(line)
+    if not updates:
+        return med
+    return med.model_copy(update=updates)
 
 
 def copy_explicit(med: MedLine, line: str) -> MedLine:

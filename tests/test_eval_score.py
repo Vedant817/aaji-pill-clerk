@@ -5,6 +5,104 @@ from pillclerk.schema import MedLine
 from eval.eval import field_eq, score
 
 
+def test_danger_v2_is_field_specific_not_blank_needs_check() -> None:
+    gold = MedLine(drug="Glycomet", strength="500mg", dose={"morning": 1.0, "night": 1.0})
+    pred = MedLine(
+        drug="Glycomet",
+        strength="500mg",
+        dose={"morning": 1.0, "afternoon": 0.0, "night": 2.0, "unit": "tab"},
+        needs_check=["dose"],
+    )
+    s = score(pred, gold)
+    assert s["danger_v1"] == 0
+    assert s["danger"] == 0
+    assert s["danger_v2"] == 0
+    pred2 = pred.model_copy(update={"needs_check": ["food"]})
+    s2 = score(pred2, gold)
+    assert s2["danger_v1"] == 0
+    assert s2["danger_v2"] == 1
+
+
+def test_parse_fail_is_separate_from_danger_v2() -> None:
+    gold = MedLine(drug="Glycomet", dose={"morning": 1.0, "unit": "tab"})
+    s = score(None, gold)
+    assert s["parse_fail"] == 1
+    assert s["valid"] == 0
+    assert s["danger_v1"] == 1
+    assert s["danger"] == 1
+    assert s["danger_v2"] == 0
+
+
+def test_ask_recall_and_false_ask_in_summarize() -> None:
+    from eval.eval import summarize
+
+    gold_ask = MedLine(drug=None, kind="daily", dose=None, needs_check=["drug", "dose", "schedule"])
+    gold_ok = MedLine(drug="Glycomet", dose={"morning": 1.0, "unit": "tab"})
+    pred_ask = gold_ask
+    pred_ok = gold_ok
+    pred_false_ask = gold_ok.model_copy(update={"needs_check": ["food"]})
+    scores = [
+        score(pred_ask, gold_ask),
+        score(pred_ok, gold_ok),
+        score(pred_false_ask, gold_ok),
+        score(pred_ok, gold_ask),
+    ]
+    out = summarize("t", "x", scores, None)
+    assert out["n_gold_ask"] == 2
+    assert out["ask_recall"] == 0.5
+    assert out["false_ask_rate"] == 0.5
+
+
+def test_strength_and_devanagari_norm() -> None:
+    from pillclerk.normalize import drug_eq, strength_eq
+
+    assert strength_eq("500MG", "500 mg")
+    assert strength_eq("40mg/5mg", "40 mg / 5 mg")
+    assert not strength_eq("500mg", "250mg")
+    assert drug_eq("टेलमा", "Telma")
+    gold = MedLine(drug="Telma", strength="40", dose={"morning": 1.0, "unit": "tab"})
+    pred = MedLine(drug="टेलमा", strength="40 mg", dose={"morning": 1.0, "afternoon": 0.0, "night": 0.0, "unit": "tab"})
+    s = score(pred, gold)
+    assert s["drug"] == 0
+    assert s["strength"] == 0
+    assert s["exact"] == 0
+    assert s["exact_norm"] == 1
+
+
+def test_drop_train_duplicates() -> None:
+    from eval.eval import drop_train_duplicates, train_lines
+
+    banned = train_lines()
+    assert len(banned) >= 3000
+    gold = [{"line": next(iter(banned)), "gold": {}}, {"line": "unique-eval-line-xyz", "gold": {}}]
+    preds = [{"pred": None}, {"pred": None}]
+    g, p, n = drop_train_duplicates(gold, preds)
+    assert n == 1
+    assert g[0]["line"] == "unique-eval-line-xyz"
+
+
+def test_align_gold_food_duration_prn() -> None:
+    from pillclerk.copy_explicit import align_gold
+
+    gold = MedLine(
+        drug="Dolo",
+        strength="650MG",
+        kind="prn",
+        food="after",
+        duration_days=None,
+        prn_max_per_day=3,
+    )
+    line = "TAB. Dolo 650MG SOS / PRN max 2/d x 5d"
+    fixed = align_gold(gold, line)
+    assert fixed.food == "any"
+    assert fixed.duration_days == 5
+    assert fixed.prn_max_per_day == 2
+    bare = align_gold(gold, "Tab Dolo 650 SOS")
+    assert bare.food == "any"
+    assert bare.duration_days is None
+    assert bare.prn_max_per_day is None
+
+
 def test_dose_int_zero_matches_float_zero() -> None:
     gold = MedLine(drug="Glycomet", strength="500MG", dose={"morning": 1.0, "afternoon": 0.0, "night": 1.0})
     pred = MedLine.model_validate(
@@ -39,6 +137,11 @@ def test_mcnemar_counts_discordant_pairs() -> None:
     m = mcnemar_exact(a, b)
     assert m["n01_b_fixes"] == 1
     assert m["n10_b_regresses"] == 0
+    assert m["p_two_sided"] == 1.0
+    from eval.report import mcnemar_p_two_sided
+
+    assert mcnemar_p_two_sided(14, 0) < 0.001
+    assert mcnemar_p_two_sided(0, 0) == 1.0
     assert public_set_name(100) == "Public real-world set: HMR-100 (India), n=100"
     assert 8 <= ci_width_points(100) <= 10
 
@@ -62,7 +165,8 @@ def test_parse_medline_blob_skips_inner_dose_object() -> None:
 def test_b0_fair_saved_run_beats_schema_fail_b0() -> None:
     fair = json.loads(Path("eval/out/b0_fair_synth_test.json").read_text(encoding="utf-8"))
     old = json.loads(Path("eval/out/b0_synth_test.json").read_text(encoding="utf-8"))
-    assert fair["n"] == 400
+    assert fair["n"] == 397
+    assert fair.get("dropped_train_duplicates") == 3
     assert fair["json_valid"] > 0.5
     assert fair["json_valid"] > old["json_valid"]
     hw = json.loads(Path("eval/out/b0_fair_handwritten_realistic.json").read_text(encoding="utf-8"))

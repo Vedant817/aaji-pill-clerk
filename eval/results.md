@@ -11,59 +11,82 @@ FT1 error buckets on the **old** synth_test (n=400, exact 0.80, danger 0.105): f
 Fixes in the product and in v2 data:
 - Every template style writes a form token; PRN gold.food is `any`.
 - `copy_explicit` copies unique form/food/1/12 tokens from the line after Tinker parse. It never invents dose slots.
-- 500 targeted train rows (form/unit, food, half-tab, taper, PRN, ASK) mixed into 2000 mix rows → `data/synth/train.jsonl` n=2500.
+- 500 targeted train rows (form/unit, food, half-tab, taper, PRN, ASK) mixed into 2000 mix rows → `data/synth/train.jsonl` n=2500 at git `5619cee` (this is what FT2 trained on). Later appends brought train to **3096** rows, all `renderer=template`.
 
 **Comparability:** train/val/synth_test were regenerated with form-in-line. B0 / FT1 / FT2 below are scored on this **new** held-out synth_test (n=400, 38 held-out drugs). The old FT1 row (exact 0.80 on the old test) is a footnote, not the headline.
 
-**Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, never used in training. Gold is typed against the written line. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions.
+**Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, authored by Vedant, never used in training. Gold is typed against the written line. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions. The set was created **after** FT2 was trained (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl` (counted from those files).
 
 **Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`). Scores stay TODO until a saved `eval/out/` run exists. Gemma 4 31B may see de-identified gold *text* only — never the images. B1 (local Gemma E4B) stays TODO without a local pull.
 
-JSON-valid in the headline table is SYNTH. Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
+JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
 
-| System | JSON valid | Exact match (hand-written realistic) [95% CI] | Dangerous errors (hand-written realistic) | Exact match (SYNTH) [95% CI] | Dangerous errors (SYNTH) | p50 s/line (Tinker) | Files |
-|---|---|---|---|---|---|---|---|
-| B0-fair Qwen3-8B base | 0.8025 | 0.353 [0.255, 0.451] | 0.451 | 0.475 [0.428, 0.525] | 0.38 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
-| B1 Gemma 4 E4B | TODO | TODO | TODO | TODO | TODO | TODO | — |
-| FT1 Qwen3-8B + LoRA v1 | 0.97 | 0.647 [0.559, 0.745] | 0.147 | 0.91 [0.88, 0.9375] | 0.065 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
-| FT2 Qwen3-8B + LoRA v2 | 1.0 | 0.863 [0.794, 0.931] | 0.049 | 0.945 [0.9225, 0.9675] | 0.0025 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
-| T Gemma 4 31B (AI Studio) | TODO | TODO | TODO | TODO | TODO | n/a (API) | — |
+**Scoring rules (every system):** `danger_v1` kept for continuity (dose/taper/duration/every_n_days/kind wrong **and** `needs_check` empty). `danger_v2` counts a line dangerous when drug, strength, dose, taper, duration_days, every_n_days or kind is wrong **and that field is not in `needs_check`** (`kind`/`taper`/`every_n_days` map to `schedule`). Invalid JSON is `parse_fail`, not `danger_v2`. **Normalisation** (reported next to strict exact): strength compared by number+unit; Devanagari→Latin `BRAND_ALIASES` in `pillclerk/normalize.py`.
 
-## SYNTH per-field (n=400, new held-out test)
+**Gold correction (B2):** 14/`400` synth_test gold rows were aligned to the written line (food=`any` if no food word; duration matches `x Nd`; `prn_max` only if `max N` is written). Same lines. Backup: `data/synth/synth_test_gold_v1.jsonl`. Old scores: `eval/out/*_synth_test_gold_v1.json`. **3** exact train/synth_test duplicates dropped from scoring (`eval/out/overlap.json`, exact=3 unique lines).
 
-Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `eval/out/ft2_synth_test.json`.
+`eval/out/payload_summary.json` is the committed per-run summary (count, sets, model, sha256) of the gitignored `eval/out/sent_payload_log.jsonl`. It is not the official Gemma 31B T-row.
 
-| Field | B0-fair | FT1 | FT2 |
+| System | JSON valid | Exact HW [95% CI] | Danger_v1 HW | Exact SYNTH corrected n=397 [95% CI] | Danger_v1 SYNTH | Danger_v2 SYNTH | p50 s/line | Files |
+|---|---|---|---|---|---|---|---|---|
+| B0-fair Qwen3-8B base | 0.8060 | 0.3529 [0.2549, 0.4510] | 0.4510 | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3073 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
+| B1 Gemma 4 E4B | TODO | TODO | TODO | TODO | TODO | TODO | TODO | — |
+| FT1 Qwen3-8B + LoRA v1 | 0.9748 | 0.6471 [0.5588, 0.7451] | 0.1471 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.0504 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
+| FT2 Qwen3-8B + LoRA v2 | 1.0 | 0.8627 [0.7941, 0.9314] | 0.0490 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
+| T Gemma 4 31B (AI Studio) | TODO | TODO | TODO | TODO | TODO | TODO | n/a (API) | — |
+
+## SYNTH old vs corrected
+
+Old gold, n=400, including 3 train duplicates. Sources: `eval/out/b0_fair_synth_test_gold_v1.json`, `eval/out/ft1_synth_test_gold_v1.json`, `eval/out/ft2_synth_test_gold_v1.json`.
+
+| Field | B0-fair old | FT1 old | FT2 old |
 |---|---|---|---|
 | json_valid | 0.8025 | 0.97 | 1.0 |
 | exact | 0.475 | 0.91 | 0.945 |
-| danger | 0.38 | 0.065 | 0.0025 |
-| drug | 0.7775 | 0.9525 | 0.98 |
-| strength | 0.72 | 0.97 | 1.0 |
-| form | 0.8025 | 0.97 | 1.0 |
-| kind | 0.7875 | 0.9625 | 1.0 |
-| dose | 0.575 | 0.9675 | 0.9975 |
-| every_n_days | 0.7925 | 0.97 | 1.0 |
-| taper | 0.7875 | 0.97 | 1.0 |
+| exact_ci95 | [0.4275, 0.525] | [0.88, 0.9375] | [0.9225, 0.9675] |
+| danger_v1 | 0.38 | 0.065 | 0.0025 |
 | food | 0.785 | 0.96 | 0.97 |
-| duration_days | 0.7725 | 0.9375 | 0.9975 |
-| prn_max_per_day | 0.7975 | 0.9625 | 0.995 |
 
-p95 s/line: B0-fair 3.30 · FT1 3.18 · FT2 3.91.
+Corrected gold, n=397 (3 exact train dups dropped). Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `eval/out/ft2_synth_test.json`. Strict exact and exact_norm are the same on this set.
 
-## Paired FT1 vs FT2 (same 400 SYNTH lines)
+| Field | B0-fair | FT1 | FT2 |
+|---|---|---|---|
+| json_valid | 0.8060 | 0.9748 | 1.0 |
+| parse_fail | 0.1940 | 0.0252 | 0.0 |
+| exact | 0.4937 | 0.9244 | 0.9798 |
+| exact_ci95 | [0.4458, 0.5416] | [0.8967, 0.9496] | [0.9647, 0.9924] |
+| exact_norm | 0.4937 | 0.9244 | 0.9798 |
+| danger_v1 | 0.3778 | 0.0605 | 0.0025 |
+| danger_v2 | 0.3073 | 0.0504 | 0.0202 |
+| ask_recall | 0.5294 | 0.0588 | 0.7059 |
+| false_ask_rate | 0.1737 | 0.0 | 0.0 |
+| n_gold_ask | 17 | 17 | 17 |
+| drug | 0.7834 | 0.9572 | 0.9798 |
+| strength | 0.7254 | 0.9748 | 1.0 |
+| form | 0.8060 | 0.9748 | 1.0 |
+| kind | 0.7909 | 0.9673 | 1.0 |
+| dose | 0.5793 | 0.9723 | 0.9975 |
+| every_n_days | 0.7960 | 0.9748 | 1.0 |
+| taper | 0.7909 | 0.9748 | 1.0 |
+| food | 0.8060 | 0.9748 | 1.0 |
+| duration_days | 0.7783 | 0.9446 | 1.0 |
+| prn_max_per_day | 0.8060 | 0.9723 | 1.0 |
 
-McNemar discordant pairs on exact match: **14** lines FT2-correct / FT1-wrong, **0** lines FT1-correct / FT2-wrong. Dangerous errors: 26 → 1. Sources: `eval/out/ft1_synth_test_preds.jsonl`, `eval/out/ft2_synth_test_preds.jsonl`.
+p50/p95 s/line (from the original Tinker run, copied on rescore): B0-fair 3.20 / 3.30 · FT1 2.18 / 3.18 · FT2 3.16 / 3.91.
+
+## Paired FT1 vs FT2 (corrected SYNTH, n=397)
+
+McNemar on exact: **22** FT2-correct / FT1-wrong, **0** FT1-correct / FT2-wrong, exact two-sided p = 4.76837158203125e-07 (`eval/report.py` `mcnemar_p_two_sided`). Sources: `eval/out/ft1_synth_test_preds.jsonl`, `eval/out/ft2_synth_test_preds.jsonl`.
 
 ## B0 footnote (why the old baseline scored 0.0)
 
 The original B0 used SYSTEM_PROMPT + the line, no few-shot, no enum/dose-object reminder. It **does** emit JSON-shaped text (spot-check: Glycomet line, 165 chars) and fails `MedLine` on every line: `form="TAB"`, `dose="1-0-1"` as a string, `food="AFTER FOOD"`, `kind="regular"`. `json_valid` 0.0 is schema validity, not empty output. Sources: `eval/out/b0_synth_test.json`, `eval/out/b0_handwritten_realistic.json`.
 
-**B0-fair** keeps the same Tinker base Qwen3-8B and the same `_extract_json` + `copy_explicit` parser, and adds (1) the FT2 system prompt, (2) JSON-only / enum / dose-object instructions, (3) 3 few-shot gold pairs from train, none of which appear in either eval set. SYNTH json_valid 0.8025, exact 0.475. Hand-written realistic json_valid 0.755, exact 0.353. Remaining misses are mostly dose (object slots) and strength. The LoRA still lifts exact match 0.475 → 0.945 on SYNTH and 0.353 → 0.863 on hand-written realistic.
+**B0-fair** keeps the same Tinker base Qwen3-8B and the same `_extract_json` + `copy_explicit` parser, and adds (1) the FT2 system prompt, (2) JSON-only / enum / dose-object instructions, (3) 3 few-shot gold pairs from train, none of which appear in either eval set. Corrected SYNTH json_valid 0.8060, exact 0.4937 (`eval/out/b0_fair_synth_test.json`). Hand-written realistic json_valid 0.7549, exact 0.3529. Remaining misses are mostly dose (object slots) and strength. The LoRA lifts exact match 0.4937 → 0.9798 on corrected SYNTH and 0.3529 → 0.8627 on hand-written realistic.
 
-## FT2 remaining SYNTH misses
+## FT2 remaining SYNTH misses (corrected, n=397)
 
-22 inexact lines. 12 are `food` on ASK/hard-negative slips with no food token (gold still carried a random food; clerk copies `any`). 8 are the held-out combo brand **Telma AM**. 1 dangerous error (dose or duration wrong and `needs_check` empty). Source: `eval/out/ft2_synth_test.json`.
+8 inexact lines, all `drug` (held-out combo brand **Telma AM**). 1 dose miss. Food is 1.0 after gold alignment (the previous 12 food misses were gold bugs: no food word on the line, gold still carried a random food). danger_v1 = 0.0025 (1 line). danger_v2 = 0.0202 because unflagged wrong `drug` now counts. Source: `eval/out/ft2_synth_test.json`.
 
 ## Footnote: old synth_test (pre form-in-line)
 
@@ -75,23 +98,31 @@ Scored with `eval/eval.py` on `data/heldout/handwritten_realistic.jsonl`. Source
 
 | Field | B0-fair | FT1 | FT2 |
 |---|---|---|---|
-| json_valid | 0.755 | 0.941 | 0.990 |
-| exact | 0.353 | 0.647 | 0.863 |
-| danger | 0.451 | 0.147 | 0.049 |
-| drug | 0.725 | 0.882 | 0.931 |
-| strength | 0.559 | 0.725 | 0.922 |
-| form | 0.725 | 0.922 | 0.971 |
-| kind | 0.755 | 0.941 | 0.990 |
-| dose | 0.529 | 0.912 | 0.951 |
-| every_n_days | 0.745 | 0.922 | 0.990 |
-| taper | 0.755 | 0.941 | 0.990 |
-| food | 0.755 | 0.941 | 0.990 |
-| duration_days | 0.725 | 0.873 | 0.990 |
-| prn_max_per_day | 0.745 | 0.922 | 0.990 |
+| json_valid | 0.7549 | 0.9412 | 0.9902 |
+| parse_fail | 0.2451 | 0.0588 | 0.0098 |
+| exact | 0.3529 | 0.6471 | 0.8627 |
+| exact_norm | 0.4118 | 0.8039 | 0.9020 |
+| danger_v1 | 0.4510 | 0.1471 | 0.0490 |
+| danger_v2 | 0.4020 | 0.2843 | 0.1275 |
+| ask_recall | 0.6 | 0.2 | 0.8 |
+| false_ask_rate | 0.1546 | 0.0 | 0.0 |
+| n_gold_ask | 5 | 5 | 5 |
+| drug | 0.7255 | 0.8824 | 0.9314 |
+| strength | 0.5588 | 0.7255 | 0.9216 |
+| form | 0.7255 | 0.9216 | 0.9706 |
+| kind | 0.7549 | 0.9412 | 0.9902 |
+| dose | 0.5294 | 0.9118 | 0.9510 |
+| every_n_days | 0.7451 | 0.9216 | 0.9902 |
+| taper | 0.7549 | 0.9412 | 0.9902 |
+| food | 0.7549 | 0.9412 | 0.9902 |
+| duration_days | 0.7255 | 0.8725 | 0.9902 |
+| prn_max_per_day | 0.7451 | 0.9216 | 0.9902 |
 
 p50 s/line: B0-fair 3.13 · FT1 2.22 · FT2 3.20. p95: B0-fair 3.32 · FT1 3.48 · FT2 4.22.
 
-Paired FT2 vs FT1 on the same 102 lines: **25** exact-match fixes, **3** regressions (McNemar n01=25, n10=3). Dangerous errors: 15 → 5. Sources: `eval/out/ft1_handwritten_realistic_preds.jsonl`, `eval/out/ft2_handwritten_realistic_preds.jsonl`.
+Paired FT2 vs FT1 on the same 102 lines: **25** exact-match fixes, **3** regressions, exact two-sided McNemar p = 2.744048833847046e-05. Dangerous errors (v1): 15 → 5. Sources: `eval/out/ft1_handwritten_realistic_preds.jsonl`, `eval/out/ft2_handwritten_realistic_preds.jsonl`.
+
+**Authorship:** Vedant typed gold against each written line. Created after FT2 (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl`.
 
 FT2 remaining misses: 14 inexact lines. Error-field counts: strength 8, drug 7, dose 5, form 3. Hindi/Marathi Devanagari brand names vs Latin gold, combo brands, and insulin units are the main buckets. Food is 0.990 (1 miss).
 
@@ -112,7 +143,7 @@ FT3 is kept only if it beats FT2 on exact match without raising danger (McNemar)
 
 At n≈100, only report model differences larger than the 95% CI (about ±8–9 points).
 
-Extra synthetic form/dose/food stress: 400 rows in `data/synth/targeted_form_dose_food.jsonl`, 396 unique lines appended to `train.jsonl` (now 2896). FT2 weights were trained on the 2500-row mix; the extra 396 are for a later v3 run.
+Extra synthetic form/dose/food stress: 400 rows in `data/synth/targeted_form_dose_food.jsonl`, 396 unique lines appended, then 200 drug/strength rows. **`train.jsonl` n=3096** (`data/synth/train.jsonl`). FT2 weights were trained on the 2500-row mix at `5619cee`.
 
 ```mermaid
 xychart-beta
@@ -132,16 +163,16 @@ xychart-beta
 
 ```mermaid
 xychart-beta
-    title "Whole-line exact match on SYNTH held-out drugs (%)"
+    title "Whole-line exact match on corrected SYNTH n=397 (%)"
     x-axis ["B0-fair", "FT1", "FT2"]
     y-axis "Exact match (%)" 0 --> 100
-    bar [47.5, 91, 94.5]
+    bar [49.37, 92.44, 97.98]
 ```
 
 ```mermaid
 xychart-beta
-    title "Dangerous-error rate on SYNTH (%), lower is better"
+    title "danger_v1 on corrected SYNTH n=397 (%), lower is better"
     x-axis ["B0-fair", "FT1", "FT2"]
     y-axis "Dangerous errors (%)" 0 --> 100
-    bar [38, 6.5, 0.25]
+    bar [37.78, 6.05, 0.25]
 ```

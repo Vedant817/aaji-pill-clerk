@@ -44,12 +44,12 @@
 
 - **Gemma 4 E4B** (open weights, Apache 2.0) runs **locally via Ollama** and reads the prescription photo into raw text lines.
 - **A small open model, Qwen3-8B, fine-tuned with Tinker** (LoRA SFT) turns each messy line ("Tab Glycomet GP1 1-0-1 PC x 30d", "सकाळी एक, रात्री अर्धी") into **strict JSON**. When it isn't sure, it says **"ASK"** instead of guessing.
-- **DigitalOcean Serverless Inference (Gemma 4 31B)** writes the training data using a trick that makes the labels **correct by construction**: code generates the answer (JSON) first, then Gemma 31B writes the messy human version of it. Gemma 31B is also the zero-shot "teacher ceiling" in the eval. DO App Platform hosts a public demo that uses only synthetic prescriptions.
-- **The headline result** is a measured table on **real, held-out prescription lines from your family**: base Qwen3-8B vs **fine-tuned Qwen3-8B** vs Gemma 4 E4B vs Gemma 4 31B. It reports exact match, **dangerous-error rate**, and latency/cost on the laptop. This is precisely what the Tinker category asks for: *"show a clear improvement in performance, latency, or cost over a baseline."*
+- **Training data is template-rendered, correct by construction:** code samples the gold JSON first, then a Python template writes the messy line. All **3096** `train.jsonl` rows have `renderer=template`. Gemma 4 31B (`gemma-4-31b-it` on Google AI Studio) is the eval teacher ceiling only; it did **not** write the training set. Public demo: **`render.yaml` provided; not deployed**.
+- **The headline result** is a measured table on held-out synthetic lines plus **Public real-world set: HMR-100 (India)** once labelled: base Qwen3-8B vs **fine-tuned Qwen3-8B** vs Gemma 4 31B. It reports exact match, **dangerous-error rate**, and latency. This is what the Tinker category asks for: *"show a clear improvement in performance, latency, or cost over a baseline."*
 - **A human signs off on every line.** The tool copies what the doctor wrote. It never advises on doses.
 
-**Categories entered:** Best Use of **Tinker** (featured, $200, core), Best Use of **Gemma** (featured, $200), Best Use of **Render** (featured, $200; free-tier demo), plus the **overall** prize ($250 + DEV++). DigitalOcean is not entered.
-**Cost:** ≈ **$2–6 total** (DO tokens ≈ $0.50, Tinker training ≈ $1, App Platform ≈ $1–2, and a little extra for a v2 run).
+**Categories entered:** Best Use of **Tinker** (featured, $200, core), Best Use of **Gemma** (featured, $200), Best Use of **Render** (featured, $200; `render.yaml` provided, not deployed until we say so), plus the **overall** prize ($250 + DEV++). DigitalOcean is not entered.
+**Cost:** Tinker SFT + sampling; Gemini 31B eval only on de-identified allowlisted text after you approve the key.
 **Why this idea over the forecasting one:** it needs **no historical data from the friend**. The family already has everything required: a file of prescriptions.
 
 ---
@@ -85,7 +85,7 @@
 | **Relevance to prompt & theme** | One real person, a real handover. Open-source AI **is** the product: an open model is fine-tuned and **runs on the family laptop with the internet off**, and prescriptions never leave the house. |
 | **Creativity** | A fresh take on a familiar problem. It isn't a reminder app with a chatbot: it's **distillation into a domain model for Indian prescription shorthand**, with correct-by-construction synthetic data, a *dangerous-error* metric, and abstention as a feature. |
 | **Technical execution** | Held-out **real** test set, four-way comparison, bootstrap confidence intervals, a v1 → v2 iteration driven by error analysis, a Tinker ↔ Ollama parity check, unit tests on the deterministic schedule builder and `.ics` output. |
-| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** local OCR plus the 31B teacher that writes every training example. **DigitalOcean:** serverless Gemma 31B generates the data and is the eval ceiling; App Platform hosts the demo. Each one is load-bearing. |
+| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** optional local OCR (`gemma4:e4b`) plus the 31B teacher as an eval ceiling on de-identified text. **Render:** `render.yaml` provided; not deployed. |
 
 ### 3.2 Competition read (snapshot of the #hf26challenge feed at ~12:10 PM IST Fri, 27 project posts)
 - **Topics already taken:** study buddy/quiz ×3, grandpa voice-memo recipe book ×2, meal planner, language tutor, sign-language translator, offline first aid, placement assistant, document Q&A, meeting copilot, a voice assistant that calls a grandmother, a guardrails layer, a finance coach for a bubble-tea shop. **Nobody is doing medication schedules or fine-tuning.**
@@ -151,25 +151,24 @@ flowchart LR
     end
 
     subgraph BUILD["Build time (synthetic data only)"]
-        SAMP["Gold JSON sampler<br/>drug list + schedules"] --> DO["DigitalOcean Serverless<br/>Gemma 4 31B<br/>renders messy text"]
-        DO --> FILT["Filters: rules + parse-back agreement<br/>+ 100 hand-checked"]
+        SAMP["Gold JSON sampler<br/>drug list + schedules"] --> TPL["Template renderer<br/>Python; all 3096 train rows"]
+        TPL --> FILT["Filters: rules + parse-back<br/>+ hand-check"]
         FILT --> TK["Tinker LoRA SFT<br/>Qwen/Qwen3-8B<br/>hosted; no local merge/GGUF"]
     end
 
     TK -.->|"hosted sampling API"| PC
 
     subgraph CLOUD["Public demo (synthetic prescriptions only)"]
-        APP["DO App Platform<br/>Streamlit"] --> TKS["Tinker sampling<br/>fine-tuned checkpoint"]
-        APP --> DOG["DO Gemma 4 31B<br/>comparison toggle"]
+        APP["render.yaml provided; not deployed<br/>Streamlit on Render free"] --> TKS["Tinker sampling<br/>fine-tuned checkpoint"]
     end
 ```
 
 **What leaves the laptop (put this table in the post):**
 | Data | Where it goes | Why |
 |---|---|---|
-| Real prescription photos, names, doctors, dates | **Nowhere.** They stay on the laptop | OCR and Pill Clerk run locally |
-| Synthetic prescriptions | DO Serverless, Tinker | Training-data generation and fine-tuning |
-| **De-identified** real test lines (drug + schedule text only; no names/dates/clinic), with consent | Tinker (base-model sampling) and DO (31B baseline), **eval only** | To measure baselines fairly. Say so in the post. If the family says no, skip the cloud baselines on the real set and report them on synthetic only. |
+| Real / public prescription photos | **Nowhere.** They stay on the laptop | OCR is local Ollama or typed |
+| Synthetic **training** text | Tinker SFT | Fine-tune. Never sent to Gemini. |
+| De-identified eval lines (synth_test, handwritten_realistic, public gold text) | Tinker (FT eval); Gemma 31B teacher only when approved | Measure baselines. Logged. |
 
 ### 5.1 Data-flow steps (runtime)
 1. **Capture.** The caregiver snaps a prescription, a strip, or pastes a WhatsApp line into the Streamlit app (`app/pages/1_Scan.py`).
@@ -231,9 +230,9 @@ sequenceDiagram
 
 **The core idea: generate the answer first, then the question.** If you ask a big model to *label* messy text, its mistakes become your labels. Instead:
 1. **Code samples the gold JSON** from a realistic distribution.
-2. **Gemma 4 31B writes the messy human text** for that JSON.
+2. **A Python template writes the messy human text** for that JSON (all 3096 train rows have `renderer=template`).
 
-The label is right by construction. The only remaining risk is that the *rendering* drops or changes information, and that risk is filtered (step 4).
+The label is right by construction. The only remaining risk is that the *rendering* drops or changes information, and that risk is filtered (step 4). Gemma 4 31B is the eval teacher, not the training-data writer.
 
 ```mermaid
 flowchart TD
@@ -243,11 +242,9 @@ flowchart TD
     SPLIT -->|"no"| R
     SPLIT -->|"yes"| RT["Synthetic TEST pool<br/>(unseen drugs)"]
     RT --> R
-    R{"Renderer"} -->|"30%"| T["Template renderer<br/>(pure Python, exact)"]
-    R -->|"70%"| L["Gemma 4 31B on DO Serverless<br/>style: doctor shorthand, clinic print,<br/>Hinglish WhatsApp, Marathi, Hindi,<br/>typos + abbreviations"]
-    T --> F1
-    L --> F1["Rule filter<br/>drug name fuzzy-present,<br/>strength digits present,<br/>duration digits present"]
-    F1 --> F2["Parse-back filter<br/>Gemma 31B at temp 0 parses text,<br/>keep only if it matches gold"]
+    R{"Renderer"} -->|"100% this weekend"| T["Template renderer<br/>(pure Python, exact)"]
+    T --> F1["Rule filter<br/>drug name fuzzy-present,<br/>strength digits present,<br/>duration digits present"]
+    F1 --> F2["Gold aligned to written tokens<br/>food/duration/prn_max"]
     F2 --> DD["Dedupe (normalised text)<br/>+ length caps"]
     DD --> HC["Hand-check 100 random pairs<br/>report label-noise rate"]
     HC --> OUT["train.jsonl ~2000<br/>val.jsonl ~150<br/>synth_test.jsonl ~300"]
@@ -307,31 +304,13 @@ flowchart TD
 | B1 Gemma 4 E4B | TODO | TODO | TODO | TODO | TODO | 0 |
 | FT1 Qwen3-8B + LoRA v1 | TODO | TODO | TODO | TODO | TODO | 0 (local) |
 | FT2 Qwen3-8B + LoRA v2 | TODO | TODO | TODO | TODO | TODO | 0 (local) |
-| T Gemma 4 31B (DO) | TODO | TODO | TODO | TODO | n/a (API) | TODO |
+| T Gemma 4 31B (AI Studio) | TODO | TODO | TODO | TODO | n/a (API) | TODO |
 
 **Per-field accuracy (REAL), FT2 vs B0:** drug `TODO` · strength `TODO` · dose `TODO` · food `TODO` · duration `TODO` · taper `TODO` · prn `TODO`.
 
-### 8.5 Chart placeholder
+### 8.5 Charts
 
-> ⚠️ **PLACEHOLDER: ALL VALUES BELOW ARE ZERO ON PURPOSE.** Replace the `bar [...]` arrays with the numbers from `eval/results.md` after Saturday's eval. **Never publish this chart with placeholder values.**
-
-```mermaid
-%% PLACEHOLDER: replace zeros with real exact-match % from eval/results.md
-xychart-beta
-    title "PLACEHOLDER - Whole-line exact match on REAL lines (%)"
-    x-axis ["B0 base", "B1 E4B", "FT1", "FT2", "T 31B"]
-    y-axis "Exact match (%)" 0 --> 100
-    bar [0, 0, 0, 0, 0]
-```
-
-```mermaid
-%% PLACEHOLDER: replace zeros with real dangerous-error % from eval/results.md
-xychart-beta
-    title "PLACEHOLDER - Dangerous-error rate on REAL lines (%), lower is better"
-    x-axis ["B0 base", "B1 E4B", "FT1", "FT2", "T 31B"]
-    y-axis "Dangerous errors (%)" 0 --> 50
-    bar [0, 0, 0, 0, 0]
-```
+Do not put placeholder zeros here. Copy mermaid charts from `eval/results.md` only after a saved `eval/out/` run. HMR-100 stays TODO until labelled.
 
 ### 8.6 Error analysis → v2 (this iteration is a story beat)
 After FT1:
@@ -791,11 +770,11 @@ tr{{border-bottom:4px solid #999}} footer{{font-size:16px;margin-top:20px}}</sty
 
 **This weekend:** the laptop has little free disk. **Do not** download the adapter, merge into Hugging Face weights, convert to GGUF, or `ollama create pillclerk`. `train/export.py` exits with that message.
 
-Set `PARSER_BACKEND=tinker` and `PILLCLERK_TINKER_PATH` to the `tinker://…/sampler_weights/…` path from `train/checkpoint_v1.json` (or v2). The Streamlit app and the DO demo both call Tinker sampling. App Platform has no GPU. Sampling is $0.60/M output tokens (cents for a demo).
+Set `PARSER_BACKEND=tinker` and `PILLCLERK_TINKER_PATH` to the `tinker://…/sampler_weights/…` path from `train/checkpoint_v1.json` (or v2). The Streamlit app calls Tinker sampling. Sampling is $0.60/M output tokens (cents for a demo). **`render.yaml` provided; not deployed.**
 
-Photo OCR: `EXTRACT_BACKEND=hosted` (DigitalOcean Gemma) by default. Switch to `EXTRACT_BACKEND=ollama` and `OLLAMA_EXTRACT_MODEL=gemma4:e4b` only if you later pull the local vision model.
+Photo OCR: `EXTRACT_BACKEND=manual` by default (paste/type). Optional `EXTRACT_BACKEND=ollama` and `OLLAMA_EXTRACT_MODEL=gemma4:e4b` if disk allows. Photos never leave the laptop.
 
-Big-model calls (synthetic render + teacher parse-back + 31B baseline): `LLM_BACKEND=digitalocean` with `DO_MODEL_ACCESS_KEY`. Optional `LLM_BACKEND=backboard` uses the same `ChatBackend` interface; do not depend on it.
+Big-model calls (31B eval teacher): `LLM_BACKEND=gemini` with `GEMINI_API_KEY`, key in the `x-goog-api-key` header. Optional `LLM_BACKEND=backboard` uses the same `ChatBackend` interface; do not depend on it. Training render is `LLM_BACKEND=template`.
 
 Honest line for the post: *"The fine-tune is trained and served on Tinker's hosted API. Local GGUF export is the next commit, once there is disk."*
 
@@ -933,15 +912,15 @@ Target **2:45**, screen recording + phone footage, captions on.
    - **I could fine-tune it at all** because the weights are open. A closed API wouldn't let me teach it Indian prescription shorthand and then *own* the result.
    - **It runs in her house with the internet off.** Prescriptions are some of the most private documents a family has; they never leave the laptop. Show the "what leaves the laptop" table.
    - **₹0 per month, forever.** No subscription for a 74-year-old, and no vendor can switch it off. Apache 2.0 for both Gemma 4 and Qwen3 means I can hand the family a copy.
-   - **Open models helped train open models.** Gemma 4 31B on DigitalOcean wrote the training data, and Apache 2.0 places no restriction on using its outputs.
+   - **Open models helped train open models.** Template-rendered gold trains an Apache-2.0 8B; Gemma 4 31B is the eval ceiling on the same schema.
    - **Swap, don't rewrite.** One env var moves between Ollama (laptop), Tinker (cloud sampling) and DO (31B).
    - **Where closed would have been better:** a frontier model probably reads bad handwriting better. Say so, and explain why the trade-off still favours open here.
 8. **What Aaji said.** Direct quotes (original Marathi/Hindi + English), what she disagreed with, what you changed, how many lines the caregiver had to correct.
 9. **My Agent Session** (optional): DevRelay embed or link.
 10. **Prize categories**, each with *what it does here* and *what breaks if you remove it*:
     - **Tinker:** the fine-tune; without it, exact match falls to the B0 number.
-    - **Gemma:** local OCR + the 31B teacher that wrote every training example.
-    - **DigitalOcean:** serverless Gemma 31B data generation + eval ceiling + hosted demo. **If the DO demo isn't live at submission, say so and don't enter DO.**
+    - **Gemma:** optional local OCR + the 31B teacher as an eval ceiling (not the training-data writer).
+    - **Render:** `render.yaml` provided; not deployed. Do not enter Render until the demo is live.
 11. **Credits:** Qwen3 (Apache 2.0), Gemma 4 (Apache 2.0), Tinker cookbook, llama.cpp, Ollama, icalendar.
 
 **Style:** plain first person, short sentences, concrete numbers, no hype. Past winners read like a human who checked everything.
@@ -956,8 +935,8 @@ pill-clerk/
 ├── NOTICE                   # Qwen3-8B (Apache-2.0), Gemma 4 (Apache-2.0), llama.cpp (MIT)
 ├── pyproject.toml / uv.lock
 ├── .env.example             # TINKER_API_KEY, DO_MODEL_ACCESS_KEY, LLM_BACKEND, EXTRACT_BACKEND, PARSER_BACKEND, optional BACKBOARD_API_KEY
-├── Dockerfile               # demo image (no torch; Tinker + DO backends only)
-├── .do/app.yaml             # App Platform spec: port 8080, apps-s-1vcpu-1gb-fixed, secrets
+├── Dockerfile               # demo image (no local GGUF; Tinker sampling)
+├── render.yaml              # provided; not deployed
 ├── data/
 │   ├── drugs.csv            # committed (public drug names, forms, strengths)
 │   ├── patterns.yaml

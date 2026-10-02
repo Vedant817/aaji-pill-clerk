@@ -3,12 +3,24 @@
   "set": "data/heldout/handwritten_realistic.jsonl",
   "n": 102,
   "json_valid": 0.9901960784313726,
+  "parse_fail": 0.00980392156862745,
   "exact": 0.8627450980392157,
   "exact_ci95": [
     0.7941176470588235,
     0.9313725490196079
   ],
+  "exact_norm": 0.9019607843137255,
+  "exact_norm_ci95": [
+    0.8431372549019608,
+    0.9509803921568627
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
   "danger": 0.049019607843137254,
+  "danger_v1": 0.049019607843137254,
+  "danger_v2": 0.12745098039215685,
+  "ask_recall": 0.8,
+  "false_ask_rate": 0.0,
+  "n_gold_ask": 5,
   "per_field": {
     "drug": 0.9313725490196079,
     "strength": 0.9215686274509803,
@@ -21,8 +33,6 @@
     "duration_days": 0.9901960784313726,
     "prn_max_per_day": 0.9901960784313726
   },
-  "p50_s": 3.2017425298690796,
-  "p95_s": 4.216115951538086,
   "error_fields": {
     "drug": 7,
     "strength": 8,
@@ -34,5 +44,9 @@
     "food": 1,
     "duration_days": 1,
     "prn_max_per_day": 1
-  }
+  },
+  "dropped_train_duplicates": 0,
+  "p50_s": 3.2017425298690796,
+  "p95_s": 4.216115951538086,
+  "rescored_from_preds": true
 }

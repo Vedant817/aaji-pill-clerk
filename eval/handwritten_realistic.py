@@ -1,8 +1,12 @@
 """Hand-written realistic held-out slips. Never used in training.
 
-These are de-identified typical clinic / caregiver lines (clinic print,
-doctor shorthand, WhatsApp), gold-typed against what is written. They are
-NOT photographed prescriptions.
+Authored by Vedant: typed gold against each written line. These are
+de-identified typical clinic / caregiver slips (clinic print, doctor
+shorthand, WhatsApp). They are NOT photographed prescriptions. The set
+was created after FT2 was trained on the 2500-row mix at git 5619cee.
+
+67 of 102 lines use drug names that also appear in data/synth/train.jsonl
+(counted from those files). Treat as a dev set, not a drug-held-out test.
 
 The photographed test set is Public real-world set: HMR-100 (India)
 (data/public/ + data/public_labels/hmr100_gold.jsonl). Never call it family data.
@@ -287,10 +291,8 @@ def rows() -> list[dict]:
 def write() -> dict[str, int]:
     data = rows()
     HELD.parent.mkdir(parents=True, exist_ok=True)
-    REAL.parent.mkdir(parents=True, exist_ok=True)
     blob = "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in data)
     HELD.write_text(blob, encoding="utf-8")
-    REAL.write_text(blob, encoding="utf-8")
     rx = {r["source"] for r in data}
     return {"n": len(data), "sources": len(rx), "whatsapp": sum(1 for r in data if r["source"].startswith("wa"))}
 

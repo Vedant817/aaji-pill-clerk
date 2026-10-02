@@ -29,12 +29,27 @@ def test_display_name_is_public_hmr() -> None:
 
 def test_download_script_and_gitignore() -> None:
     sh = Path("scripts/download_public.sh").read_text(encoding="utf-8")
+    py = Path("scripts/download_public.py").read_text(encoding="utf-8")
     assert "chaithanyakota/100-handwritten-medical-records" in sh
     assert "CC BY-ND" in sh
+    assert "https://data.mendeley.com/public-api/zip/k62rfd23kz/download/2" in py
+    assert "etag_timeout" in py
+    assert py.index("HMR_PARQUET") < py.index("hf_hub_download")
     gi = Path(".gitignore").read_text(encoding="utf-8")
     assert "data/public/" in gi
     assert Path("data/public_labels/hmr100_gold.jsonl").is_file()
-    assert Path("scripts/download_public.py").is_file()
+    notice = Path("NOTICE").read_text(encoding="utf-8")
+    assert "Chaithanya Kota" in notice and "Tavish Mankash" in notice
+    assert "Dipto Saha" in notice
+
+
+def test_refuse_daily_zero_without_ask() -> None:
+    from pillclerk.public_data import refuse_daily_zero_dose
+
+    assert refuse_daily_zero_dose(kind="daily", morning=0, afternoon=0, night=0, ask=False)
+    assert not refuse_daily_zero_dose(kind="daily", morning=0, afternoon=0, night=0, ask=True)
+    assert not refuse_daily_zero_dose(kind="daily", morning=1, afternoon=0, night=0, ask=False)
+    assert not refuse_daily_zero_dose(kind="prn", morning=0, afternoon=0, night=0, ask=False)
 
 
 def test_parse_medicine_name_and_near_dup() -> None:

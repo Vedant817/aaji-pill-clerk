@@ -8,6 +8,7 @@ import random
 import sys
 from pathlib import Path
 
+from pillclerk.copy_explicit import align_gold
 from pillclerk.filters import normalised_text, rule_ok
 from pillclerk.render import to_chat_row
 from pillclerk.sampler import (
@@ -25,6 +26,23 @@ from pillclerk.templates import render_template
 
 ROOT = Path(__file__).resolve().parents[1]
 SYNTH = ROOT / "data" / "synth"
+
+
+def pair_row(line: str, gold, style: str, drug_name: str, **extra) -> dict:
+    gold = align_gold(gold, line)
+    row = to_chat_row(line, gold)
+    row.update(
+        {
+            "line": line,
+            "gold": json.loads(gold.model_dump_json()),
+            "style": style,
+            "renderer": "template",
+            "drug": drug_name,
+            "synthetic": True,
+            **extra,
+        }
+    )
+    return row
 
 
 def pick_style(rng: random.Random, patterns: dict) -> str:
@@ -64,14 +82,7 @@ def generate_pairs(
         if key in seen:
             continue
         seen.add(key)
-        row = to_chat_row(line, gold)
-        row["line"] = line
-        row["gold"] = json.loads(gold.model_dump_json())
-        row["style"] = style
-        row["renderer"] = "template"
-        row["drug"] = drug["name"]
-        row["synthetic"] = True
-        out.append(row)
+        out.append(pair_row(line, gold, style, drug["name"]))
     if len(out) < n:
         raise RuntimeError(f"only produced {len(out)}/{n} pairs after {attempts} attempts")
     return out
@@ -136,19 +147,7 @@ def generate_targeted(
         if key in seen:
             continue
         seen.add(key)
-        row = to_chat_row(line, gold)
-        row.update(
-            {
-                "line": line,
-                "gold": json.loads(gold.model_dump_json()),
-                "style": style,
-                "renderer": "template",
-                "drug": drug["name"],
-                "synthetic": True,
-                "targeted": bucket,
-            }
-        )
-        out.append(row)
+        out.append(pair_row(line, gold, style, drug["name"], targeted=bucket))
     if len(out) < n:
         raise RuntimeError(f"targeted only produced {len(out)}/{n}")
     return out
@@ -205,19 +204,7 @@ def generate_form_dose_food(
         if key in seen:
             continue
         seen.add(key)
-        row = to_chat_row(line, gold)
-        row.update(
-            {
-                "line": line,
-                "gold": json.loads(gold.model_dump_json()),
-                "style": style,
-                "renderer": "template",
-                "drug": drug["name"],
-                "synthetic": True,
-                "targeted": f"fdf_{bucket}",
-            }
-        )
-        out.append(row)
+        out.append(pair_row(line, gold, style, drug["name"], targeted=f"fdf_{bucket}"))
     if len(out) < n:
         raise RuntimeError(f"form/dose/food targeted only produced {len(out)}/{n}")
     return out
@@ -272,19 +259,7 @@ def generate_drug_strength(
         if key in seen:
             continue
         seen.add(key)
-        row = to_chat_row(line, gold)
-        row.update(
-            {
-                "line": line,
-                "gold": json.loads(gold.model_dump_json()),
-                "style": style,
-                "renderer": "template",
-                "drug": drug["name"],
-                "synthetic": True,
-                "targeted": f"ds_{bucket}",
-            }
-        )
-        out.append(row)
+        out.append(pair_row(line, gold, style, drug["name"], targeted=f"ds_{bucket}"))
     if len(out) < n:
         raise RuntimeError(f"drug/strength targeted only produced {len(out)}/{n}")
     return out

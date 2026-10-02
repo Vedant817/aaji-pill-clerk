@@ -2,7 +2,7 @@ from collections import Counter
 from pathlib import Path
 
 from pillclerk.schema import MedLine
-from eval.family_real import HELD, rows, SPECS
+from eval.handwritten_realistic import HELD, rows, SPECS
 
 
 def test_real_set_meets_idea_size() -> None:
@@ -40,6 +40,25 @@ def test_real_gold_validates_and_matches_written_food() -> None:
 
 def test_specs_roundtrip() -> None:
     assert len(SPECS) == len(rows())
+
+
+def test_authorship_and_train_drug_overlap() -> None:
+    import json
+    from pathlib import Path
+
+    src = Path("eval/handwritten_realistic.py").read_text(encoding="utf-8")
+    assert "Authored by Vedant" in src
+    assert "5619cee" in src
+    train_drugs = {
+        (json.loads(l).get("gold") or {}).get("drug")
+        for l in Path("data/synth/train.jsonl").read_text(encoding="utf-8").splitlines()
+        if l.strip()
+    }
+    train_drugs = {d.lower() for d in train_drugs if d}
+    n = sum(1 for r in rows() if (r["gold"].get("drug") or "").lower() in train_drugs)
+    assert n == 67
+    results = Path("eval/results.md").read_text(encoding="utf-8")
+    assert "67/102" in results
 
 
 def test_heldout_file_is_handwritten_realistic_not_real() -> None:

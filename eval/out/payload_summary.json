@@ -1,0 +1,14 @@
+{
+  "count": 303,
+  "sets": {
+    "synth_test.jsonl": 303
+  },
+  "models": {
+    "gemma-4-31b-it": 303
+  },
+  "systems": {
+    "gemma31": 303
+  },
+  "sha256": "6d165c2d26a52251279118deec1ddd841d08ef70c60ab25c8343444e52101848",
+  "log": "eval\\out\\sent_payload_log.jsonl"
+}

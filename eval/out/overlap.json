@@ -1,0 +1,815 @@
+{
+  "near_threshold": 90,
+  "exact_train_synth_test": 3,
+  "pairs": [
+    {
+      "a": "train",
+      "b": "val",
+      "n_a": 3096,
+      "n_b": 250,
+      "exact": 6,
+      "exact_occurrences": 6,
+      "exact_normalized": 6,
+      "exact_lines": [
+        "Syr Cremaffin रात्री 5 30 दिवस",
+        "TAB Levocet 5 mg 1-0-0 सुबह एक khane se pehle x3d",
+        "TAB. Rantac 300 mg 1-0-1 EMPTY STOMACH x 7 DAYS",
+        "TAB. Stugeron 25 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "Tab [?] 40 mg 1-[?]-[?] cont",
+        "Tab [?] 50 mg 1-[?]-[?] cont"
+      ],
+      "near_ratio_gt_90": 122,
+      "near_pairs": [
+        {
+          "a": "Tab [?] 25mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "TAB. Oflox 400mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Norflox 400mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 96.36363636363636
+        },
+        {
+          "a": "Tab [?] 2 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "6. TAB. Tenlimac 20 mg 1-0-0 AFTER FOOD x 30 DAYS",
+          "b": "℞ TAB. Tenlimac 20 mg 1-0-1 AFTER FOOD x 3 DAYS",
+          "ratio": 93.75
+        },
+        {
+          "a": "Tab Hifenac TH 100 mg/4 mg BD x15d",
+          "b": "Tab Hifenac TH 100 mg/4 mg OD x15d",
+          "ratio": 97.05882352941177
+        },
+        {
+          "a": "Tab [?] 200 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 100 mg 1-[?]-[?] cont",
+          "ratio": 96.55172413793103
+        },
+        {
+          "a": "Tab [?] 500 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 98.24561403508771
+        },
+        {
+          "a": "Tab [?] 75 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB. Vertin 8 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Stugeron 25 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.09009009009009
+        },
+        {
+          "a": "TAB. Nurokind 500 mcg 1-1-1 x 60 DAYS",
+          "b": "TAB. Nurokind 500mcg 1-0-1 x 60 DAYS",
+          "ratio": 95.89041095890411
+        },
+        {
+          "a": "Tab Atorvastatin 20 mg HS PC 1/12",
+          "b": "Tab Atorvastatin 10 mg BD PC 1/12",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Deplatt 75 mg OD WF x10d",
+          "b": "Tab Deplatt 75mg BD WF x10d",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "Tab Istamet 50 mg/500 mg सुबह एक खाने के बाद 3 दिन",
+          "b": "Tab Janumet 50 mg/1000 mg सुबह एक खाने के बाद 3 दिन",
+          "ratio": 91.0891089108911
+        },
+        {
+          "a": "Tab [?] 10mg 1-[?]-[?] cont",
+          "b": "Tab [?] 100 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB Liv 52 1-0-1 AFTER FOOD x 60 DAYS",
+          "b": "TAB Liv 52 1-0-1 AFTER FOOD x 3 DAYS",
+          "ratio": 95.89041095890411
+        },
+        {
+          "a": "Tab Combiflam 400 mg/325 mg HS PC x15d",
+          "b": "Tab Combiflam 400 mg/325 mg OD PC x15d",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "TAB Thyronorm 25 mcg 1-0-1 AFTER FOOD x 10 DAYS",
+          "b": "TAB. Thyronorm 75 mcg 1-0-1 AFTER FOOD x 30 DAYS",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "TAB Istamet 50 mg/500 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Janumet 50 mg/1000 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 92.06349206349206
+        },
+        {
+          "a": "TAB Stugeron 25mg 1-0-1 AFTER FOOD x 60 DAYS",
+          "b": "TAB. Stugeron 25 mg 1-1-1 AFTER FOOD x 3 DAYS",
+          "ratio": 92.13483146067416
+        },
+        {
+          "a": "Tab Cardace 10 mg सुबह एक दोपहर एक रात एक खाने के बाद 3 दिन",
+          "b": "℞ Tab Cardace 2.5 mg सुबह एक दोपहर एक रात एक खाने के बाद 10 दिन",
+          "ratio": 91.80327868852459
+        },
+        {
+          "a": "Tab Rozavel 20 mg सकाळी एक रात्री एक जेवणाआधी 3 दिवस",
+          "b": "Tab Rozavel 10 mg सकाळी एक रात्री अर्धी जेवणाआधी 30 दिवस",
+          "ratio": 90.74074074074075
+        },
+        {
+          "a": "Tab Tegrital 200 mg BD PC x10d",
+          "b": "Tab Tegrital 200 mg BD x10d",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab Rantac 150 mg subah ek raat ko ek khali pet 90 din",
+          "b": "Tab Rantac 300 mg subah ek raat ko ek khali pet 30 din",
+          "ratio": 94.44444444444444
+        },
+        {
+          "a": "Tab Glycomet GP2 500 mg/2 mg HS x7d",
+          "b": "Tab Glycomet GP2 500 mg/2 mg HS PC x10d",
+          "ratio": 91.89189189189189
+        },
+        {
+          "a": "Tab Zerodol SP 100 mg/325 mg सुबह एक रात एक खाने से पहले 10 दिन",
+          "b": "℞ Tab Zerodol SP 100 mg/325 mg रात एक खाने से पहले 10 दिन",
+          "ratio": 91.66666666666666
+        },
+        {
+          "a": "℞ TAB. Met XL 50 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "℞ TAB. Azee 250mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 91.07142857142857
+        },
+        {
+          "a": "℞ TAB Stugeron 25 mg 1-1-1 AFTER FOOD x 7 DAYS",
+          "b": "TAB. Stugeron 25 mg 1-1-1 AFTER FOOD x 3 DAYS",
+          "ratio": 94.5054945054945
+        },
+        {
+          "a": "TAB. Pantoprazole 40mg 0-0-1 x 10 DAYS",
+          "b": "TAB. Pantoprazole 40mg 1-0-1 x 10 DAYS",
+          "ratio": 97.36842105263158
+        },
+        {
+          "a": "Tab [?] 5mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 96.2962962962963
+        },
+        {
+          "a": "TAB Tenlimac 20 mg 0-0-1 AFTER FOOD x 7 DAYS",
+          "b": "℞ TAB. Tenlimac 20 mg 1-0-1 AFTER FOOD x 3 DAYS",
+          "ratio": 92.3076923076923
+        },
+        {
+          "a": "Tab Stugeron 25mg BD x15d",
+          "b": "Tab Stugeron 25 mg TDS x5d",
+          "ratio": 90.19607843137256
+        },
+        {
+          "a": "Tab [?] 5 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 98.18181818181819
+        },
+        {
+          "a": "Tab [?] 10 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 100 mg 1-[?]-[?] cont",
+          "ratio": 98.24561403508771
+        },
+        {
+          "a": "TAB. Dolo 650 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Voveran 50 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 91.37931034482759
+        },
+        {
+          "a": "TAB Levoflox 500 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Norflox 400 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 92.98245614035088
+        },
+        {
+          "a": "℞ TAB. Nexito 10 mg 1-0-1 AFTER FOOD x 10 DAYS",
+          "b": "TAB. Nexito 10 mg 1-0-0 AFTER FOOD x 3 DAYS",
+          "ratio": 92.13483146067416
+        },
+        {
+          "a": "Tab [?] 2.5 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "TAB. Rantac 150 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Voveran 50 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 91.52542372881356
+        },
+        {
+          "a": "TAB Lonazep 0.25 mg 1-1-1 सुबह एक दोपहर एक रात एक khane se pehle x10d",
+          "b": "TAB Digoxin 0.25 mg 1-1-1 सुबह एक दोपहर एक रात एक khane se pehle x60d",
+          "ratio": 91.30434782608697
+        },
+        {
+          "a": "Inj Lantus 100 IU/ml 10-0-10 AC x3d",
+          "b": "Inj Lantus 100 IU/ml 10-0-10 x10d",
+          "ratio": 91.17647058823529
+        },
+        {
+          "a": "Tab Glycomet SR 500 mg subah ek raat ko ek khane ke baad 3 din",
+          "b": "℞ Tab Glycomet SR 500 mg subah ek raat ko ek khane ke saath 10 din",
+          "ratio": 92.1875
+        },
+        {
+          "a": "Inj Lantus 100 IU/ml 10-10-10 PC x60d",
+          "b": "Inj Lantus 100 IU/ml 10-0-10 x10d",
+          "ratio": 91.42857142857143
+        },
+        {
+          "a": "TAB. Metformin 500 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Voveran 50 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Combiflam 400 mg/325 mg OD x15d",
+          "b": "Tab Combiflam 400 mg/325 mg OD PC x15d",
+          "ratio": 95.89041095890411
+        },
+        {
+          "a": "Tab [?] 40mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 98.18181818181819
+        },
+        {
+          "a": "℞ TAB Levoflox 500mg 1-0-0 सुबह एक khane ke baad 1/12",
+          "b": "TAB Levoflox 500 mg 1-0-0 सुबह एक khane ke baad x15d",
+          "ratio": 91.42857142857143
+        },
+        {
+          "a": "4. TAB. Omnacortil 10 mg 1-0-0 AFTER FOOD x 7 DAYS",
+          "b": "1. TAB. Omnacortil 10 mg 0-0-1 AFTER FOOD x 5 DAYS",
+          "ratio": 92.0
+        },
+        {
+          "a": "TAB. Ciplox 500mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Norflox 400mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 91.89189189189189
+        },
+        {
+          "a": "Tab Cetzine 10 mg OD PC x5d",
+          "b": "Tab Cetzine 10mg BD PC x5d",
+          "ratio": 94.33962264150944
+        },
+        {
+          "a": "TAB Levoflox 500 mg 1-0-0 सुबह एक khane ke baad cont",
+          "b": "TAB Levoflox 500 mg 1-0-0 सुबह एक khane ke baad x15d",
+          "ratio": 92.3076923076923
+        }
+      ]
+    },
+    {
+      "a": "train",
+      "b": "synth_test",
+      "n_a": 3096,
+      "n_b": 400,
+      "exact": 3,
+      "exact_occurrences": 4,
+      "exact_normalized": 3,
+      "exact_lines": [
+        "Cap [?] 1-[?]-[?] cont",
+        "Tab [?] 1-[?]-[?] cont",
+        "Tab [?] 40 mg 1-[?]-[?] cont"
+      ],
+      "near_ratio_gt_90": 65,
+      "near_pairs": [
+        {
+          "a": "Tab [?] 25mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab [?] 2 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "Tab [?] 200 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab [?] 500 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab [?] 75 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 92.85714285714286
+        },
+        {
+          "a": "Tab [?] 10mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "Tab Ivermectol 12 mg subah aadhi raat ko aadhi khane ke baad 10 din",
+          "b": "Tab Xarelto 15 mg subah aadhi raat ko aadhi khane ke baad 10 din",
+          "ratio": 91.6030534351145
+        },
+        {
+          "a": "TAB. Amlodac 5 mg 1-0-1 AFTER FOOD x 30 DAYS",
+          "b": "TAB. Aldactone 25 mg 1-0-1 AFTER FOOD x 3 DAYS",
+          "ratio": 91.11111111111111
+        },
+        {
+          "a": "℞ Cap [?] 1-[?]-[?] cont",
+          "b": "Cap [?] 1-[?]-[?] cont",
+          "ratio": 95.65217391304348
+        },
+        {
+          "a": "Tab Carca 6.25mg subah ek raat ko ek 10 din",
+          "b": "Tab Clavam 625mg subah ek raat ko ek 10 din",
+          "ratio": 93.02325581395348
+        },
+        {
+          "a": "SYR. Cremaffin 5-0-5 x 5d then 0-0-5 x 5d AFTER FOOD",
+          "b": "SYR. Mucaine 5-0-5 x 5d then 0-0-5 x 5d AFTER FOOD",
+          "ratio": 90.19607843137256
+        },
+        {
+          "a": "Tab Pan 40 mg subah ek dopahar ek raat ko ek khane ke baad 3 din",
+          "b": "Tab Amaryl 2 mg subah ek dopahar ek raat ko ek khane ke baad 60 din",
+          "ratio": 90.07633587786259
+        },
+        {
+          "a": "TAB. Telma 80mg 1-0-1 AFTER FOOD x 5 DAYS",
+          "b": "TAB. Telmisartan 80 mg 1-0-1 AFTER FOOD x 15 DAYS",
+          "ratio": 91.11111111111111
+        },
+        {
+          "a": "Tab [?] 5mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 92.5925925925926
+        },
+        {
+          "a": "Tab [?] 5 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.54545454545455
+        },
+        {
+          "a": "Tab [?] 400mg/325mg 1-[?]-[?] cont",
+          "b": "Tab [?] 500mg/1mg 1-[?]-[?] cont",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab [?] 10 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB. Dolo 650 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Xarelto 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 91.37931034482759
+        },
+        {
+          "a": "TAB. Folvite 5 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Clavam 625 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.09009009009009
+        },
+        {
+          "a": "Tab Carca 6.25mg subah ek raat ko ek khane ke baad 3 din",
+          "b": "℞ Tab Clavam 625 mg subah ek raat ko ek khane ke baad 5 din",
+          "ratio": 90.43478260869566
+        },
+        {
+          "a": "Tab Forxiga 10 mg subah ek raat ko ek khane ke baad 10 din",
+          "b": "Tab Nucoxia 60 mg subah ek raat ko ek khane ke baad 15 din",
+          "ratio": 91.37931034482759
+        },
+        {
+          "a": "Tab [?] 2.5 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 91.22807017543859
+        },
+        {
+          "a": "TAB. Sucral 1 g 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "b": "TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 90.09009009009009
+        },
+        {
+          "a": "TAB. Domstal 10 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Amaryl 2 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Tryptomer 25 mg subah ek raat ko ek khane ke baad 30 din",
+          "b": "Tab Dytor 20 mg subah ek raat ko ek khane ke baad 5 din",
+          "ratio": 90.43478260869566
+        },
+        {
+          "a": "TAB. Losar 50 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "b": "TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 91.07142857142857
+        },
+        {
+          "a": "Tab Rablet 20 mg subah ek raat ko ek khane ke baad 15 din",
+          "b": "Tab Dytor 20 mg subah ek raat ko ek khane ke baad 5 din",
+          "ratio": 91.07142857142857
+        },
+        {
+          "a": "Tab [?] 40mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 98.18181818181819
+        },
+        {
+          "a": "Tab [?] 300 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab Etoshine 60 mg subah ek raat ko ek khane ke baad 5 din",
+          "b": "Tab Dytor 20 mg subah ek raat ko ek khane ke baad 5 din",
+          "ratio": 90.2654867256637
+        },
+        {
+          "a": "TAB. Envas 5 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Clavam 625 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 91.74311926605505
+        },
+        {
+          "a": "TAB Envas 2.5 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Clavam 625 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "TAB. Ivabrad 5 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Clavam 625 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.09009009009009
+        },
+        {
+          "a": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "Tab [?] 100 mcg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 93.10344827586206
+        },
+        {
+          "a": "TAB. Omnacortil 10 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Olmesar 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Nexito 5mg subah ek khane ke baad 90 din hafte mein ek baar",
+          "b": "Tab Clopitab 75 mg subah ek khane ke baad 90 din hafte mein ek baar",
+          "ratio": 90.76923076923077
+        },
+        {
+          "a": "Tab [?] 400mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB. Cardace 2.5 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Xarelto 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 90.75630252100841
+        },
+        {
+          "a": "Tab [?] 100 mg/4 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 500mg/1mg 1-[?]-[?] cont",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Glycomet GP2 500 mg/2 mg OD PC x5d",
+          "b": "Tab Glycomet GP1 500 mg/1 mg OD PC x5d",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "TAB. Forxiga 10 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "b": "TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 92.98245614035088
+        },
+        {
+          "a": "Tab [?] 500 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab Warf 5 mg subah aadhi raat ko aadhi khane ke baad 10 din",
+          "b": "Tab Xarelto 15 mg subah aadhi raat ko aadhi khane ke baad 10 din",
+          "ratio": 93.5483870967742
+        },
+        {
+          "a": "℞ TAB. Forxiga 10 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "b": "TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 91.37931034482759
+        },
+        {
+          "a": "TAB. Glycomet SR 500 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "b": "℞ TAB. Glycomet GP1 500 mg/1 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab [?] 10 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB. Glycomet GP2 500 mg/2 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "℞ TAB. Glycomet GP1 500 mg/1 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+          "ratio": 90.51094890510949
+        },
+        {
+          "a": "℞ Tab [?] 40mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "TAB. Nurokind 500 mcg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Nucoxia 60 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.43478260869566
+        }
+      ]
+    },
+    {
+      "a": "train",
+      "b": "handwritten_realistic",
+      "n_a": 3096,
+      "n_b": 102,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 10,
+      "near_pairs": [
+        {
+          "a": "Tab Pioglar 15mg OD PC x3d",
+          "b": "Tab Pioglar 15mg OD PC x30d",
+          "ratio": 98.11320754716981
+        },
+        {
+          "a": "CREAM Volini 0-0-1 x 7 DAYS",
+          "b": "CREAM Volini  0-0-1  x 10 DAYS",
+          "ratio": 91.22807017543859
+        },
+        {
+          "a": "Tab Pioglar 15 mg BD PC x10d",
+          "b": "Tab Pioglar 15mg OD PC x30d",
+          "ratio": 90.9090909090909
+        },
+        {
+          "a": "Tab Envas 5mg BD WF x3d",
+          "b": "Tab Envas 5mg BD WF x30d",
+          "ratio": 97.87234042553192
+        },
+        {
+          "a": "Tab Eltroxin 50 mcg BD ES cont",
+          "b": "Tab Eltroxin 50mcg OD ES cont",
+          "ratio": 94.91525423728814
+        },
+        {
+          "a": "TAB. Glycomet GP2 500 mg/2 mg 1-0-1 AFTER FOOD x 60 DAYS",
+          "b": "TAB. Glycomet GP1 500mg/1mg  1-0-1  AFTER FOOD  x 30 DAYS",
+          "ratio": 90.2654867256637
+        },
+        {
+          "a": "SYR. Ascoril LS 5-0-5 AFTER FOOD x 15 DAYS",
+          "b": "SYR. Ascoril LS  5-0-5  AFTER FOOD  x 5 DAYS",
+          "ratio": 95.34883720930233
+        },
+        {
+          "a": "TAB. Amlong 5 mg ½-0-0 AFTER FOOD x 30 DAYS",
+          "b": "TAB. Amlong 5MG  ½-0-0  AFTER FOOD  x 30 DAYS",
+          "ratio": 93.18181818181819
+        },
+        {
+          "a": "SYR. Ascoril LS 5-0-0 AFTER FOOD x 60 DAYS",
+          "b": "SYR. Ascoril LS  5-0-5  AFTER FOOD  x 5 DAYS",
+          "ratio": 90.69767441860466
+        },
+        {
+          "a": "SACHET Econorm 250 mg 1-0-1 AFTER FOOD x 15 DAYS",
+          "b": "SACHET Econorm  1-0-1  AFTER FOOD  x 5 DAYS",
+          "ratio": 90.10989010989012
+        }
+      ]
+    },
+    {
+      "a": "train",
+      "b": "hmr100_gold",
+      "n_a": 3096,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "train",
+      "b": "bd200_gold",
+      "n_a": 3096,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "val",
+      "b": "synth_test",
+      "n_a": 250,
+      "n_b": 400,
+      "exact": 1,
+      "exact_occurrences": 1,
+      "exact_normalized": 1,
+      "exact_lines": [
+        "Tab [?] 40 mg 1-[?]-[?] cont"
+      ],
+      "near_ratio_gt_90": 8,
+      "near_pairs": [
+        {
+          "a": "Tab [?] 650 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab [?] 50 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 96.42857142857143
+        },
+        {
+          "a": "TAB. Norflox 400 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "b": "TAB. Nucoxia 60 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "ratio": 90.2654867256637
+        },
+        {
+          "a": "Tab [?] 100 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 94.73684210526316
+        },
+        {
+          "a": "Tab Metformin 500 mg subah ek raat ko ek khane ke baad 5 din",
+          "b": "Tab Dytor 20 mg subah ek raat ko ek khane ke baad 5 din",
+          "ratio": 90.43478260869566
+        },
+        {
+          "a": "TAB. Nexpro 40 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "b": "TAB. Xarelto 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+          "ratio": 90.5982905982906
+        },
+        {
+          "a": "Tab Telma 20 mg subah ek dopahar ek raat ko ek khane se pehle 60 din",
+          "b": "Tab Amaryl 1 mg subah ek dopahar ek raat ko ek khane se pehle 5 din",
+          "ratio": 90.37037037037037
+        },
+        {
+          "a": "℞ Tab [?] 10 mg 1-[?]-[?] cont",
+          "b": "Tab [?] 40 mg 1-[?]-[?] cont",
+          "ratio": 93.10344827586206
+        }
+      ]
+    },
+    {
+      "a": "val",
+      "b": "handwritten_realistic",
+      "n_a": 250,
+      "n_b": 102,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 1,
+      "near_pairs": [
+        {
+          "a": "Tab Glycomet GP2 500 mg/2 mg HS PC x10d",
+          "b": "Tab Glycomet GP2 500mg/2mg TDS PC x30d",
+          "ratio": 90.9090909090909
+        }
+      ]
+    },
+    {
+      "a": "val",
+      "b": "hmr100_gold",
+      "n_a": 250,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "val",
+      "b": "bd200_gold",
+      "n_a": 250,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "synth_test",
+      "b": "handwritten_realistic",
+      "n_a": 400,
+      "n_b": 102,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 3,
+      "near_pairs": [
+        {
+          "a": "CAP Nitrofurantoin 100 mg ½-0-½ AFTER FOOD x 3 DAYS",
+          "b": "CAP Nitrofurantoin 100 mg  1-0-1  AFTER FOOD  x 7 DAYS",
+          "ratio": 91.42857142857143
+        },
+        {
+          "a": "SYR. Duphalac 0-0-5 AFTER FOOD x 7 DAYS",
+          "b": "SYR. Duphalac  15-0-15  AFTER FOOD  x 7 DAYS",
+          "ratio": 91.56626506024097
+        },
+        {
+          "a": "Tab Clopitab 75 mg BD PC cont",
+          "b": "Tab Clopitab 75mg HS PC cont",
+          "ratio": 91.22807017543859
+        }
+      ]
+    },
+    {
+      "a": "synth_test",
+      "b": "hmr100_gold",
+      "n_a": 400,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "synth_test",
+      "b": "bd200_gold",
+      "n_a": 400,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "handwritten_realistic",
+      "b": "hmr100_gold",
+      "n_a": 102,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "handwritten_realistic",
+      "b": "bd200_gold",
+      "n_a": 102,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    },
+    {
+      "a": "hmr100_gold",
+      "b": "bd200_gold",
+      "n_a": 0,
+      "n_b": 0,
+      "exact": 0,
+      "exact_occurrences": 0,
+      "exact_normalized": 0,
+      "exact_lines": [],
+      "near_ratio_gt_90": 0,
+      "near_pairs": []
+    }
+  ]
+}

@@ -15,6 +15,7 @@ from typing import Protocol
 import httpx
 
 from pillclerk import config
+from pillclerk.privacy import log_sent_payload, redact_secret, strip_pii
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 
 TEACHER = config.GEMINI_MODEL
@@ -77,11 +78,12 @@ class GeminiBackend:
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
         url = f"{self.base}/models/{model or self.model}:generateContent"
+        headers = {"x-goog-api-key": self.api_key, "Content-Type": "application/json"}
         last_err: Exception | None = None
         for attempt in range(6):
             try:
                 with httpx.Client(timeout=120.0) as client:
-                    r = client.post(url, params={"key": self.api_key}, json=payload)
+                    r = client.post(url, headers=headers, json=payload)
                     if r.status_code == 400 and "generationConfig" in payload:
                         cfg = dict(payload["generationConfig"])
                         cfg.pop("thinkingConfig", None)
@@ -104,7 +106,7 @@ class GeminiBackend:
             except httpx.HTTPError as exc:
                 last_err = exc
                 time.sleep(min(2**attempt, 30))
-        raise RuntimeError(f"Gemini generateContent failed: {last_err}")
+        raise RuntimeError(f"Gemini generateContent failed: {redact_secret(last_err, self.api_key)}")
 
 
 class BackboardBackend:
@@ -161,34 +163,48 @@ def get_llm_backend() -> ChatBackend:
     return GeminiBackend()
 
 
+def _model_name(backend: ChatBackend) -> str:
+    return str(getattr(backend, "model", None) or getattr(backend, "model_name", None) or type(backend).__name__)
+
+
 def render(gold: MedLine, style: str, backend: ChatBackend | None = None) -> str:
     backend = backend or get_llm_backend()
-    return backend.complete(
-        [
-            {"role": "system", "content": RENDER_SYS},
-            {
-                "role": "user",
-                "content": f"STYLE: {STYLES[style]}\nJSON: {gold.model_dump_json(exclude_defaults=True)}",
-            },
-        ],
-        temperature=0.9,
-        max_tokens=120,
+    raw = f"STYLE: {STYLES[style]}\nJSON: {gold.model_dump_json(exclude_defaults=True)}"
+    clean, stripped = strip_pii(raw)
+    messages = [
+        {"role": "system", "content": RENDER_SYS},
+        {"role": "user", "content": clean},
+    ]
+    log_sent_payload(
+        system="render",
+        set_path="synthetic_render",
+        model=_model_name(backend),
+        line=clean,
+        stripped=stripped,
+        messages=messages,
     )
+    return backend.complete(messages, temperature=0.9, max_tokens=120)
 
 
 def parse_back(line: str, backend: ChatBackend | None = None) -> MedLine | None:
     backend = backend or get_llm_backend()
-    txt = backend.complete(
-        [
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT + "\nSchema: " + json.dumps(MedLine.model_json_schema()),
-            },
-            {"role": "user", "content": line},
-        ],
-        temperature=0.0,
-        max_tokens=400,
+    clean, stripped = strip_pii(line)
+    messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT + "\nSchema: " + json.dumps(MedLine.model_json_schema()),
+        },
+        {"role": "user", "content": clean},
+    ]
+    log_sent_payload(
+        system="parse_back",
+        set_path="synthetic_parse_back",
+        model=_model_name(backend),
+        line=clean,
+        stripped=stripped,
+        messages=messages,
     )
+    txt = backend.complete(messages, temperature=0.0, max_tokens=400)
     txt = re.sub(r"^```(?:json)?|```$", "", txt.strip()).strip()
     try:
         return MedLine.model_validate_json(txt)

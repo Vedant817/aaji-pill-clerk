@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from math import comb
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,13 +14,24 @@ def load_preds(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
 
 
-def mcnemar_exact(a: list[dict], b: list[dict]) -> dict:
+def mcnemar_p_two_sided(n01: int, n10: int) -> float:
+    """Exact two-sided McNemar p-value (binomial n01 vs n10, p=0.5)."""
+    n = n01 + n10
+    if n == 0:
+        return 1.0
+    tail = min(n01, n10)
+    cdf = sum(comb(n, i) for i in range(tail + 1))
+    p = 2.0 * cdf / (2**n)
+    return min(1.0, p)
+
+
+def mcnemar_exact(a: list[dict], b: list[dict], field: str = "exact") -> dict:
     """n01 = a wrong / b right; n10 = a right / b wrong (McNemar discordant pairs)."""
     if len(a) != len(b):
         raise ValueError(f"pred length mismatch {len(a)} vs {len(b)}")
     n01 = n10 = n11 = n00 = 0
     for x, y in zip(a, b, strict=True):
-        ax, by = int(x.get("exact") or 0), int(y.get("exact") or 0)
+        ax, by = int(x.get(field) or 0), int(y.get(field) or 0)
         if ax == 0 and by == 1:
             n01 += 1
         elif ax == 1 and by == 0:
@@ -28,7 +40,15 @@ def mcnemar_exact(a: list[dict], b: list[dict]) -> dict:
             n11 += 1
         else:
             n00 += 1
-    return {"n": len(a), "n01_b_fixes": n01, "n10_b_regresses": n10, "both_right": n11, "both_wrong": n00}
+    return {
+        "n": len(a),
+        "n01_b_fixes": n01,
+        "n10_b_regresses": n10,
+        "both_right": n11,
+        "both_wrong": n00,
+        "p_two_sided": mcnemar_p_two_sided(n01, n10),
+        "field": field,
+    }
 
 
 def danger_counts(preds: list[dict]) -> int:

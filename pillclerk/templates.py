@@ -176,7 +176,8 @@ def render_hard_negative(gold: MedLine, style: str) -> str:
         return f"{form} {name} {strength} 1-[?]-[?] { _dur(gold.duration_days, 'doctor_short')}".strip()
     if "as directed" in note:
         return f"{form} {name} {strength} as directed".strip()
-    return f"{form} {name} {strength} x {gold.duration_days or 5}d".strip()
+    dur = _dur(gold.duration_days, "doctor_short")
+    return f"{form} {name} {strength} {dur}".strip()
 
 
 def render_template(gold: MedLine, style: str, rng: random.Random | None = None) -> str:
@@ -196,9 +197,9 @@ def render_template(gold: MedLine, style: str, rng: random.Random | None = None)
         elif style == "hinglish_wa":
             line = f"{form_short} {name} {strength} zarurat pe {maxd} {_dur(gold.duration_days, style)}".strip()
         elif style == "hindi":
-            line = f"{form_short} {name} {strength} जरूरत पर {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} जरूरत पर{maxd} {_dur(gold.duration_days, style)}".strip()
         elif style == "marathi":
-            line = f"{form_short} {name} {strength} गरजेनुसार {_dur(gold.duration_days, style)}".strip()
+            line = f"{form_short} {name} {strength} गरजेनुसार{maxd} {_dur(gold.duration_days, style)}".strip()
         else:
             line = f"{form} {name} {strength}  SOS / PRN{maxd}  {_dur(gold.duration_days, 'clinic_print')}".strip()
         return _noise(line, rng)

@@ -19,9 +19,10 @@ Licensed under the MIT License
 https://github.com/ggml-org/llama.cpp
 
 HMR-100 (Public real-world set: HMR-100 (India))
-100 Indian doctor-handwritten prescriptions released with the MIRAGE paper
-(arXiv 2410.09729). The paper describes them as simulated records written by
-doctors: the handwriting and notation are real; the patients are not.
+Creators: Chaithanya Kota and Tavish Mankash. 100 Indian doctor-handwritten
+prescriptions released with the MIRAGE paper (arXiv 2410.09729). The paper
+describes them as simulated records written by doctors: the handwriting and
+notation are real; the patients are not.
 Source: https://huggingface.co/datasets/chaithanyakota/100-handwritten-medical-records
 License: CC BY-ND 4.0
 https://creativecommons.org/licenses/by-nd/4.0/
@@ -30,7 +31,8 @@ Do not commit the images or any modified version of them. Gold labels typed
 for this project live in data/public_labels/hmr100_gold.jsonl.
 
 BD-200 (Public real-world set: BD-200 (Bangladesh))
-Bangladesh prescription images with 1+0+1 schedules and Bangla durations.
+Creators: Dipto Saha et al. Mendeley Data v2. Bangladesh prescription images
+with 1+0+1 schedules and Bangla durations.
 Source: Mendeley Data, DOI 10.17632/k62rfd23kz
 https://doi.org/10.17632/k62rfd23kz
 License: CC BY 4.0

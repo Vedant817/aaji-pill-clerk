@@ -35,6 +35,13 @@ HMR_TARGET_PAGES = 30
 BD_TARGET_LINES = 40
 NEAR_DUP_RATIO = 90
 
+
+def refuse_daily_zero_dose(*, kind: str, morning: float, afternoon: float, night: float, ask: bool) -> bool:
+    """Label REAL: kind=daily with dose 0-0-0 is refused unless ASK is ticked."""
+    if kind != "daily" or ask:
+        return False
+    return (morning + afternoon + night) == 0.0
+
 TITLE_HMR = "Public real-world set: HMR-100 (India)"
 TITLE_BD = "Public real-world set: BD-200 (Bangladesh)"
 

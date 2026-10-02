@@ -22,6 +22,7 @@ from pillclerk.public_data import (
     make_gold_row,
     near_duplicates,
     parse_medicine_name,
+    refuse_daily_zero_dose,
     set_title,
     upsert_gold,
     work_items,
@@ -254,6 +255,14 @@ if st.button("Accept", type="primary"):
                 dose = None
             else:
                 dose = Dose(morning=morning, afternoon=afternoon, night=night, unit=unit)
+            m_amt = 0.0 if dose is None else float(dose.morning)
+            a_amt = 0.0 if dose is None else float(dose.afternoon)
+            n_amt = 0.0 if dose is None else float(dose.night)
+            if refuse_daily_zero_dose(
+                kind=use_kind, morning=m_amt, afternoon=a_amt, night=n_amt, ask=bool(illegible)
+            ):
+                st.error("kind=daily with dose 0-0-0 is refused unless ASK is ticked.")
+                st.stop()
             if illegible:
                 if use_kind == "daily" and (dose is None or (dose.morning + dose.afternoon + dose.night) == 0):
                     dose = None

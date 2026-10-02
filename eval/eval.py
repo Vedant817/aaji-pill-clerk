@@ -14,6 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from statistics import median
 
+from pillclerk.normalize import drug_eq, strength_eq
 from pillclerk.schema import MedLine
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +30,20 @@ FIELDS = [
     "duration_days",
     "prn_max_per_day",
 ]
-DANGER = ["dose", "taper", "duration_days", "every_n_days", "kind"]
+DANGER_V1 = ["dose", "taper", "duration_days", "every_n_days", "kind"]
+DANGER_V2 = ["drug", "strength", "dose", "taper", "duration_days", "every_n_days", "kind"]
+# schema needs_check uses "schedule" for kind / taper / every_n_days
+NEEDS_FOR = {
+    "drug": "drug",
+    "strength": "strength",
+    "dose": "dose",
+    "duration_days": "duration_days",
+    "taper": "schedule",
+    "every_n_days": "schedule",
+    "kind": "schedule",
+}
+DANGER = DANGER_V1  # alias kept for older tests
+TRAIN_JSONL = ROOT / "data" / "synth" / "train.jsonl"
 
 
 def norm(v):
@@ -55,16 +69,69 @@ def canon(v):
     return v
 
 
-def field_eq(p: MedLine, g: MedLine, f: str) -> bool:
-    return canon(getattr(p, f)) == canon(getattr(g, f))
+def field_eq(p: MedLine, g: MedLine, f: str, *, normalize: bool = False) -> bool:
+    pv, gv = getattr(p, f), getattr(g, f)
+    if normalize and f == "strength":
+        return strength_eq(pv, gv)
+    if normalize and f == "drug":
+        return drug_eq(pv, gv)
+    return canon(pv) == canon(gv)
+
+
+def train_lines() -> set[str]:
+    if not TRAIN_JSONL.is_file():
+        return set()
+    return {
+        json.loads(l)["line"]
+        for l in TRAIN_JSONL.read_text(encoding="utf-8").splitlines()
+        if l.strip()
+    }
+
+
+def drop_train_duplicates(gold_rows: list[dict], pred_rows: list[dict] | None = None) -> tuple[list[dict], list[dict] | None, int]:
+    """Drop exact train/eval line duplicates from scoring (3 synth_test ASK stubs)."""
+    banned = train_lines()
+    keep = [i for i, r in enumerate(gold_rows) if r.get("line") not in banned]
+    dropped = len(gold_rows) - len(keep)
+    gold_kept = [gold_rows[i] for i in keep]
+    pred_kept = [pred_rows[i] for i in keep] if pred_rows is not None else None
+    return gold_kept, pred_kept, dropped
 
 
 def score(pred: MedLine | None, gold: MedLine) -> dict:
+    gold_ask = int(bool(gold.needs_check))
     if pred is None:
-        return {"valid": 0, "exact": 0, "danger": 1, **{f: 0 for f in FIELDS}}
-    fs = {f: int(field_eq(pred, gold, f)) for f in FIELDS}
-    danger = int(any(not fs[f] for f in DANGER) and not pred.needs_check)
-    return {"valid": 1, "exact": int(all(fs.values())), "danger": danger, **fs}
+        return {
+            "valid": 0,
+            "parse_fail": 1,
+            "exact": 0,
+            "exact_norm": 0,
+            "danger": 1,
+            "danger_v1": 1,
+            "danger_v2": 0,
+            "ask_gold": gold_ask,
+            "ask_pred": 0,
+            **{f: 0 for f in FIELDS},
+        }
+    fs = {f: int(field_eq(pred, gold, f, normalize=False)) for f in FIELDS}
+    fs_norm = {f: int(field_eq(pred, gold, f, normalize=True)) for f in FIELDS}
+    flagged = set(pred.needs_check or [])
+    danger_v1 = int(any(not fs[f] for f in DANGER_V1) and not flagged)
+    danger_v2 = int(
+        any(not fs[f] and NEEDS_FOR[f] not in flagged for f in DANGER_V2)
+    )
+    return {
+        "valid": 1,
+        "parse_fail": 0,
+        "exact": int(all(fs.values())),
+        "exact_norm": int(all(fs_norm.values())),
+        "danger": danger_v1,
+        "danger_v1": danger_v1,
+        "danger_v2": danger_v2,
+        "ask_gold": gold_ask,
+        "ask_pred": int(bool(flagged)),
+        **fs,
+    }
 
 
 def bootstrap_ci(xs, n=1000, seed=0):
@@ -89,14 +156,27 @@ def get_parser(system: str, set_path: str = ""):
 
 def summarize(system: str, set_path: str, scores: list[dict], lat: list[float] | None) -> dict:
     mean = lambda k: sum(s[k] for s in scores) / len(scores)
+    gold_ask = [s for s in scores if s.get("ask_gold")]
+    gold_clear = [s for s in scores if not s.get("ask_gold")]
+    ask_recall = (sum(s["ask_pred"] for s in gold_ask) / len(gold_ask)) if gold_ask else None
+    false_ask = (sum(s["ask_pred"] for s in gold_clear) / len(gold_clear)) if gold_clear else None
     out = {
         "system": system,
         "set": set_path,
         "n": len(scores),
         "json_valid": mean("valid"),
+        "parse_fail": mean("parse_fail"),
         "exact": mean("exact"),
         "exact_ci95": bootstrap_ci([s["exact"] for s in scores]),
+        "exact_norm": mean("exact_norm"),
+        "exact_norm_ci95": bootstrap_ci([s["exact_norm"] for s in scores]),
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
         "danger": mean("danger"),
+        "danger_v1": mean("danger_v1"),
+        "danger_v2": mean("danger_v2"),
+        "ask_recall": ask_recall,
+        "false_ask_rate": false_ask,
+        "n_gold_ask": len(gold_ask),
         "per_field": {f: mean(f) for f in FIELDS},
     }
     if lat:
@@ -138,10 +218,12 @@ def main() -> None:
 
         assert_gemini_eval_set(Path(a.set))
     scores, lat, preds = [], [], []
+    dropped_train = 0
     if a.preds:
         pred_rows = [json.loads(l) for l in open(a.preds, encoding="utf-8")]
         if a.limit:
             pred_rows = pred_rows[: a.limit]
+        gold_rows, pred_rows, dropped_train = drop_train_duplicates(gold_rows, pred_rows)
         for r, pr in zip(gold_rows, pred_rows, strict=True):
             gold = MedLine.model_validate(r["gold"])
             p = MedLine.model_validate(pr["pred"]) if pr.get("pred") else None
@@ -150,11 +232,13 @@ def main() -> None:
             preds.append({"line": r["line"], "pred": pr.get("pred"), **s})
         prev = json.loads((ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").read_text(encoding="utf-8")) if (ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").is_file() else {}
         out = summarize(a.system, a.set, scores, None)
+        out["dropped_train_duplicates"] = dropped_train
         if "p50_s" in prev:
             out["p50_s"] = prev["p50_s"]
             out["p95_s"] = prev["p95_s"]
             out["rescored_from_preds"] = True
     else:
+        gold_rows, _, dropped_train = drop_train_duplicates(gold_rows, None)
         parse = get_parser(a.system, a.set)
         workers = a.workers or (3 if a.system == "gemma31" else 1)
         parsed: list[tuple[MedLine | None, float]] = [(None, 0.0)] * len(gold_rows)
@@ -184,6 +268,11 @@ def main() -> None:
             scores.append(score(p, gold))
             preds.append({"line": row["line"], "pred": p.model_dump() if p else None, **scores[-1]})
         out = summarize(a.system, a.set, scores, lat)
+        out["dropped_train_duplicates"] = dropped_train
+    if a.system == "gemma31":
+        from pillclerk.privacy import write_payload_summary
+
+        out["payload_summary"] = write_payload_summary()
     print(json.dumps(out, indent=2))
     write_out(out, preds, a.set, a.system)
 

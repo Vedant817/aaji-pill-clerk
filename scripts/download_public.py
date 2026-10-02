@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import sys
 import urllib.request
 import zipfile
@@ -23,8 +24,9 @@ BD = PUBLIC / "bd200"
 HMR_HF = "chaithanyakota/100-handwritten-medical-records"
 HMR_PARQUET = "https://huggingface.co/datasets/chaithanyakota/100-handwritten-medical-records/resolve/main/data/train-00000-of-00001.parquet"
 # Mendeley "A Curated Bangladesh-Based Dataset of Handwritten and Printed Prescription Images"
-# DOI 10.17632/k62rfd23kz (182 de-identified images; this repo calls the folder bd200).
-BD_ZIP = "https://prod-dcd-datasets-cache-zipfiles.s3.eu-west-1.amazonaws.com/k62rfd23kz-1.zip"
+# DOI 10.17632/k62rfd23kz (v2 zip). This repo calls the folder bd200.
+BD_ZIP = "https://data.mendeley.com/public-api/zip/k62rfd23kz/download/2"
+HF_TIMEOUT_S = 120
 
 
 def _download(url: str, dest: Path) -> None:
@@ -49,6 +51,10 @@ def extract_hmr() -> int:
     parquet_path = HMR / "_source.parquet"
     if not parquet_path.is_file():
         try:
+            _download(HMR_PARQUET, parquet_path)
+        except Exception as exc:
+            print(f"direct HF URL failed ({exc}); trying hf_hub_download", flush=True)
+            os.environ.setdefault("HF_HUB_DOWNLOAD_TIMEOUT", str(HF_TIMEOUT_S))
             from huggingface_hub import hf_hub_download
 
             got = hf_hub_download(
@@ -56,11 +62,9 @@ def extract_hmr() -> int:
                 filename="data/train-00000-of-00001.parquet",
                 repo_type="dataset",
                 local_dir=str(HMR / "_hf"),
+                etag_timeout=HF_TIMEOUT_S,
             )
             parquet_path = Path(got)
-        except Exception as exc:
-            print(f"huggingface_hub failed ({exc}); trying direct URL", flush=True)
-            _download(HMR_PARQUET, parquet_path)
 
     try:
         import pandas as pd
