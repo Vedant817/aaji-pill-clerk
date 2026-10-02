@@ -24,8 +24,9 @@ Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `ev
 | FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.0504 | 0.6471 [0.5588, 0.7451] | 0.1471 | 0.2843 |
 | FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 0.8627 [0.7941, 0.9314] | 0.0490 | 0.1275 |
 | T Gemma 4 31B | TODO | TODO | TODO | TODO | TODO | TODO |
+| FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 0.8824 [0.8235, 0.9412] | 0.0686 | 0.0686 |
 
-McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`).
+McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 8/6 p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0); `.env` stays on v2. Sources: `eval/out/ft3_synth_test.json`, `eval/out/ft3_handwritten_realistic.json`.
 
 **Public real-world set: HMR-100 (India)** is parser-only, gold from Label REAL while looking at the image. n=0 labelled lines so far. At n≈100, 95% CIs are about ±8–9 points; do not claim a winner unless the gap exceeds that interval.
 

@@ -79,13 +79,16 @@ The photographed test set is **Public real-world set: HMR-100 (India)** (optiona
 uv run python -m train.build_dataset --split --n-targeted 500
 uv run python -m train.build_dataset --append-form-dose-food --n-form-dose-food 400
 uv run python -m train.sft --name pillclerk-v2
+uv run python -m train.build_dataset --write-ft3-danger --n-ft3-danger 200
+uv run python -m eval.overlap --extra data/synth/targeted_ft3_danger.jsonl
+uv run python -m train.sft --name pillclerk-v3 --extra data/synth/targeted_ft3_danger.jsonl --log train/ft3_sft.log
 uv run python -m eval.eval --system b0_fair --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft1 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/heldout/handwritten_realistic.jsonl
 ```
 
-SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train and was trained on the **2500-row** `train.jsonl` at git `5619cee`. Later appends added 396 unique form/dose/food stress rows then 200 drug/strength rows; **`data/synth/train.jsonl` is 3096 rows**, all `renderer=template`. Those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`.
+SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train and was trained on the **2500-row** `train.jsonl` at git `5619cee`. Later appends added 396 unique form/dose/food stress rows then 200 drug/strength rows; **`data/synth/train.jsonl` is 3096 rows**, all `renderer=template`. Those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`. FT3 mixes `targeted_ft3_danger.jsonl` (200 rows) at SFT time via `--extra`; it does **not** rewrite `train.jsonl`. v3 is not written to `.env` unless `--apply-env` after the keep-rule (exact up on SYNTH+HMR, McNemar p<0.05, danger_v2 not up).
 
 ## Results
 
@@ -96,8 +99,9 @@ Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=1
 | B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3529 [0.2549, 0.4510] | 0.4510 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
 | FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.6471 [0.5588, 0.7451] | 0.1471 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
 | FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.8627 [0.7941, 0.9314] | 0.0490 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
+| FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.8824 [0.8235, 0.9412] | 0.0686 | 3.12 | `eval/out/ft3_synth_test.json` · `eval/out/ft3_handwritten_realistic.json` |
 
-Corrected SYNTH: gold aligned to the written line; 3 exact train duplicates dropped (n=397). Old n=400 scores live in `eval/out/*_synth_test_gold_v1.json`. FT2 vs FT1 on the same 397 SYNTH lines: 22 exact-match fixes, 0 regressions, McNemar p = 4.76837158203125e-07. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions, p = 2.744048833847046e-05. Full table, danger_v2, ASK metrics, and exact_norm in `eval/results.md`. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
+Corrected SYNTH: gold aligned to the written line; 3 exact train duplicates dropped (n=397). Old n=400 scores live in `eval/out/*_synth_test_gold_v1.json`. FT2 vs FT1 on the same 397 SYNTH lines: 22 exact-match fixes, 0 regressions, McNemar p = 4.76837158203125e-07. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions, p = 2.744048833847046e-05. FT3 vs FT2 SYNTH: 0/0, p=1.0 (tied exact; ASK recall 0.7059 → 0.9412). FT3 vs FT2 HW (dev): 8/6, p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0); v3 is not in `.env`. Full table, danger_v2, ASK metrics, and exact_norm in `eval/results.md`. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
 
 ## What is real
 

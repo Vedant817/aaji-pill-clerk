@@ -66,3 +66,31 @@ def public_set_name(n: int | None = None) -> str:
     if n is None:
         return "Public real-world set: HMR-100 (India)"
     return f"Public real-world set: HMR-100 (India), n={n}"
+
+
+def main() -> None:
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--a", required=True, help="preds jsonl A (e.g. ft2)")
+    ap.add_argument("--b", required=True, help="preds jsonl B (e.g. ft3 or gemma31)")
+    ap.add_argument("--field", default="exact")
+    args = ap.parse_args()
+    a = load_preds(Path(args.a))
+    b = load_preds(Path(args.b))
+    print(json.dumps(mcnemar_exact(a, b, field=args.field), indent=2))
+    print(
+        json.dumps(
+            {
+                "danger_v2_count_a": sum(int(r.get("danger_v2") or 0) for r in a),
+                "danger_v2_count_b": sum(int(r.get("danger_v2") or 0) for r in b),
+                "n": len(a),
+            },
+            indent=2,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
+

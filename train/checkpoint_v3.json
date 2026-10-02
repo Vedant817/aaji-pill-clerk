@@ -1,0 +1,10 @@
+{
+  "state": "tinker://5680f310-7f12-5848-af79-3441366d4f82:train:0/weights/pillclerk-v3",
+  "sampler": "tinker://5680f310-7f12-5848-af79-3441366d4f82:train:0/sampler_weights/pillclerk-v3",
+  "model": "Qwen/Qwen3-8B",
+  "name": "pillclerk-v3",
+  "n_train": 3296,
+  "extras": [
+    "data\\synth\\targeted_ft3_danger.jsonl"
+  ]
+}

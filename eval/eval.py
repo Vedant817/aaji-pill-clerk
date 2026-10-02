@@ -252,6 +252,8 @@ def main() -> None:
             for i, row in enumerate(gold_rows):
                 _, pred, sec = _one(i, row)
                 parsed[i] = (pred, sec)
+                if (i + 1) % 20 == 0 or i + 1 == len(gold_rows):
+                    print(f"{a.system} {i + 1}/{len(gold_rows)}", flush=True)
         else:
             with ThreadPoolExecutor(max_workers=workers) as pool:
                 futs = [pool.submit(_one, i, row) for i, row in enumerate(gold_rows)]

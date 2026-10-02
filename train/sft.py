@@ -27,6 +27,20 @@ def _load(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def load_train_rows(train_path: Path, extra_paths: list[Path] | None = None, limit: int = 0) -> list[dict]:
+    """Load train jsonl plus optional extra jsonl files. Limit applies after concat."""
+    if not train_path.is_file():
+        raise FileNotFoundError(train_path)
+    rows = _load(train_path)
+    for extra in extra_paths or []:
+        if not extra.is_file():
+            raise FileNotFoundError(extra)
+        rows.extend(_load(extra))
+    if limit:
+        rows = rows[:limit]
+    return rows
+
+
 def _conversation_ids(tokenizer, messages: list[dict]) -> tuple[list[int], list[int]]:
     prompt = tokenizer.apply_chat_template(
         messages[:-1],
@@ -87,21 +101,29 @@ def main() -> None:
     ap.add_argument("--name", default="pillclerk-v1")
     ap.add_argument("--train", default="", help="override train jsonl path")
     ap.add_argument(
+        "--extra",
+        action="append",
+        default=[],
+        help="extra jsonl mixed after --train (repeatable). Does not rewrite train.jsonl",
+    )
+    ap.add_argument(
         "--apply-env",
         action="store_true",
         help="write sampler path to .env (v1/v2 always do; v3 only with this flag)",
     )
+    ap.add_argument("--log", default="", help="append train_nll lines to this path")
     args = ap.parse_args()
 
     require_env("TINKER_API_KEY")
     train_path = Path(args.train) if args.train else ROOT / "data" / "synth" / "train.jsonl"
     val_path = ROOT / "data" / "synth" / "val.jsonl"
+    extra_paths = [Path(p) for p in args.extra]
     if not train_path.is_file():
         raise SystemExit("missing data/synth/train.jsonl — run: uv run python -m train.build_dataset --split")
 
-    train_rows, val_rows = _load(train_path), _load(val_path)
-    if args.limit:
-        train_rows = train_rows[: args.limit]
+    train_rows = load_train_rows(train_path, extra_paths, limit=args.limit)
+    val_rows = _load(val_path)
+    print(f"train_rows {len(train_rows)} extras {[str(p) for p in extra_paths]}", flush=True)
     service = tinker.ServiceClient()
     tc = service.create_lora_training_client(base_model=BASE_MODEL, rank=RANK)
     tokenizer = tc.get_tokenizer()
@@ -151,6 +173,11 @@ def main() -> None:
                 vnll = mean_nll(v.loss_fn_outputs, val_batch)
                 msg += f" val_nll {vnll:.4f}"
             print(msg, flush=True)
+            if args.log:
+                log_path = Path(args.log)
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                with log_path.open("a", encoding="utf-8") as fh:
+                    fh.write(msg + "\n")
             step += 1
 
     state = tc.save_state(args.name).result().path
@@ -164,7 +191,20 @@ def main() -> None:
     else:
         ck_name = f"checkpoint_{args.name}.json"
     ck = ROOT / "train" / ck_name
-    ck.write_text(json.dumps({"state": state, "sampler": sampler, "model": BASE_MODEL, "name": args.name}, indent=2), encoding="utf-8")
+    ck.write_text(
+        json.dumps(
+            {
+                "state": state,
+                "sampler": sampler,
+                "model": BASE_MODEL,
+                "name": args.name,
+                "n_train": len(train_rows),
+                "extras": [str(p) for p in extra_paths],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     if args.apply_env or args.name in ("pillclerk-v1", "v1", "pillclerk-v2", "v2"):
         apply_tinker_checkpoint(ck)
     print("saved", sampler)

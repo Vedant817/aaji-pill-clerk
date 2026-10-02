@@ -1,0 +1,620 @@
+ep 0 step 0/618 lr 4.00e-04 train_nll 3.4890 3.1s val_nll 1.7098
+ep 0 step 1/618 lr 3.99e-04 train_nll 1.5659 2.5s
+ep 0 step 2/618 lr 3.99e-04 train_nll 0.8087 2.5s
+ep 0 step 3/618 lr 3.98e-04 train_nll 0.6151 2.5s
+ep 0 step 4/618 lr 3.97e-04 train_nll 0.4583 2.7s
+ep 0 step 5/618 lr 3.97e-04 train_nll 0.2825 2.5s
+ep 0 step 6/618 lr 3.96e-04 train_nll 0.1724 2.5s
+ep 0 step 7/618 lr 3.95e-04 train_nll 0.1383 2.5s
+ep 0 step 8/618 lr 3.95e-04 train_nll 0.0745 3.9s
+ep 0 step 9/618 lr 3.94e-04 train_nll 0.0613 2.5s
+ep 0 step 10/618 lr 3.94e-04 train_nll 0.0720 2.7s val_nll 0.0591
+ep 0 step 11/618 lr 3.93e-04 train_nll 0.0274 2.5s
+ep 0 step 12/618 lr 3.92e-04 train_nll 0.0245 2.5s
+ep 0 step 13/618 lr 3.92e-04 train_nll 0.0231 3.6s
+ep 0 step 14/618 lr 3.91e-04 train_nll 0.0127 2.5s
+ep 0 step 15/618 lr 3.90e-04 train_nll 0.0486 2.5s
+ep 0 step 16/618 lr 3.90e-04 train_nll 0.0492 3.6s
+ep 0 step 17/618 lr 3.89e-04 train_nll 0.0422 2.7s
+ep 0 step 18/618 lr 3.88e-04 train_nll 0.0505 2.7s
+ep 0 step 19/618 lr 3.88e-04 train_nll 0.0188 2.6s
+ep 0 step 20/618 lr 3.87e-04 train_nll 0.0107 2.5s val_nll 0.0331
+ep 0 step 21/618 lr 3.86e-04 train_nll 0.0026 2.7s
+ep 0 step 22/618 lr 3.86e-04 train_nll 0.0089 2.7s
+ep 0 step 23/618 lr 3.85e-04 train_nll 0.0312 2.7s
+ep 0 step 24/618 lr 3.84e-04 train_nll 0.0013 2.7s
+ep 0 step 25/618 lr 3.84e-04 train_nll 0.0178 4.4s
+ep 0 step 26/618 lr 3.83e-04 train_nll 0.0494 2.7s
+ep 0 step 27/618 lr 3.83e-04 train_nll 0.0017 2.9s
+ep 0 step 28/618 lr 3.82e-04 train_nll 0.0635 2.5s
+ep 0 step 29/618 lr 3.81e-04 train_nll 0.0106 2.5s
+ep 0 step 30/618 lr 3.81e-04 train_nll 0.0024 2.7s val_nll 0.0144
+ep 0 step 31/618 lr 3.80e-04 train_nll 0.0097 2.7s
+ep 0 step 32/618 lr 3.79e-04 train_nll 0.0116 2.6s
+ep 0 step 33/618 lr 3.79e-04 train_nll 0.0112 2.5s
+ep 0 step 34/618 lr 3.78e-04 train_nll 0.0054 2.7s
+ep 0 step 35/618 lr 3.77e-04 train_nll 0.0081 2.7s
+ep 0 step 36/618 lr 3.77e-04 train_nll 0.0116 2.5s
+ep 0 step 37/618 lr 3.76e-04 train_nll 0.0008 2.7s
+ep 0 step 38/618 lr 3.75e-04 train_nll 0.0053 2.6s
+ep 0 step 39/618 lr 3.75e-04 train_nll 0.0008 3.5s
+ep 0 step 40/618 lr 3.74e-04 train_nll 0.0005 2.5s val_nll 0.0068
+ep 0 step 41/618 lr 3.73e-04 train_nll 0.0066 2.7s
+ep 0 step 42/618 lr 3.73e-04 train_nll 0.0123 3.3s
+ep 0 step 43/618 lr 3.72e-04 train_nll 0.0006 3.5s
+ep 0 step 44/618 lr 3.72e-04 train_nll 0.0030 3.3s
+ep 0 step 45/618 lr 3.71e-04 train_nll 0.0041 3.3s
+ep 0 step 46/618 lr 3.70e-04 train_nll 0.0032 3.6s
+ep 0 step 47/618 lr 3.70e-04 train_nll 0.0070 4.1s
+ep 0 step 48/618 lr 3.69e-04 train_nll 0.0046 4.2s
+ep 0 step 49/618 lr 3.68e-04 train_nll 0.0037 3.3s
+ep 0 step 50/618 lr 3.68e-04 train_nll 0.0060 3.3s val_nll 0.0081
+ep 0 step 51/618 lr 3.67e-04 train_nll 0.0230 2.9s
+ep 0 step 52/618 lr 3.66e-04 train_nll 0.0074 2.9s
+ep 0 step 53/618 lr 3.66e-04 train_nll 0.0036 2.5s
+ep 0 step 54/618 lr 3.65e-04 train_nll 0.0139 2.7s
+ep 0 step 55/618 lr 3.64e-04 train_nll 0.0040 4.2s
+ep 0 step 56/618 lr 3.64e-04 train_nll 0.0092 2.7s
+ep 0 step 57/618 lr 3.63e-04 train_nll 0.0094 2.9s
+ep 0 step 58/618 lr 3.62e-04 train_nll 0.0009 2.7s
+ep 0 step 59/618 lr 3.62e-04 train_nll 0.0006 2.7s
+ep 0 step 60/618 lr 3.61e-04 train_nll 0.0015 2.7s val_nll 0.0056
+ep 0 step 61/618 lr 3.61e-04 train_nll 0.0075 2.7s
+ep 0 step 62/618 lr 3.60e-04 train_nll 0.0002 2.7s
+ep 0 step 63/618 lr 3.59e-04 train_nll 0.0187 2.7s
+ep 0 step 64/618 lr 3.59e-04 train_nll 0.0006 2.6s
+ep 0 step 65/618 lr 3.58e-04 train_nll 0.0066 2.7s
+ep 0 step 66/618 lr 3.57e-04 train_nll 0.0027 2.5s
+ep 0 step 67/618 lr 3.57e-04 train_nll 0.0020 2.5s
+ep 0 step 68/618 lr 3.56e-04 train_nll 0.0023 2.5s
+ep 0 step 69/618 lr 3.55e-04 train_nll 0.0080 2.7s
+ep 0 step 70/618 lr 3.55e-04 train_nll 0.0013 2.7s val_nll 0.0069
+ep 0 step 71/618 lr 3.54e-04 train_nll 0.0053 3.8s
+ep 0 step 72/618 lr 3.53e-04 train_nll 0.0002 2.7s
+ep 0 step 73/618 lr 3.53e-04 train_nll 0.0053 2.5s
+ep 0 step 74/618 lr 3.52e-04 train_nll 0.0101 2.5s
+ep 0 step 75/618 lr 3.51e-04 train_nll 0.0074 4.5s
+ep 0 step 76/618 lr 3.51e-04 train_nll 0.0014 2.7s
+ep 0 step 77/618 lr 3.50e-04 train_nll 0.0006 2.7s
+ep 0 step 78/618 lr 3.50e-04 train_nll 0.0018 2.6s
+ep 0 step 79/618 lr 3.49e-04 train_nll 0.0067 2.5s
+ep 0 step 80/618 lr 3.48e-04 train_nll 0.0194 2.5s val_nll 0.0055
+ep 0 step 81/618 lr 3.48e-04 train_nll 0.0013 2.7s
+ep 0 step 82/618 lr 3.47e-04 train_nll 0.0068 2.4s
+ep 0 step 83/618 lr 3.46e-04 train_nll 0.0034 2.5s
+ep 0 step 84/618 lr 3.46e-04 train_nll 0.0084 2.9s
+ep 0 step 85/618 lr 3.45e-04 train_nll 0.0036 2.6s
+ep 0 step 86/618 lr 3.44e-04 train_nll 0.0005 2.6s
+ep 0 step 87/618 lr 3.44e-04 train_nll 0.0024 2.5s
+ep 0 step 88/618 lr 3.43e-04 train_nll 0.0076 2.7s
+ep 0 step 89/618 lr 3.42e-04 train_nll 0.0066 2.7s
+ep 0 step 90/618 lr 3.42e-04 train_nll 0.0087 2.7s val_nll 0.0110
+ep 0 step 91/618 lr 3.41e-04 train_nll 0.0008 2.5s
+ep 0 step 92/618 lr 3.40e-04 train_nll 0.0154 2.7s
+ep 0 step 93/618 lr 3.40e-04 train_nll 0.0096 3.8s
+ep 0 step 94/618 lr 3.39e-04 train_nll 0.0030 2.7s
+ep 0 step 95/618 lr 3.39e-04 train_nll 0.0016 2.7s
+ep 0 step 96/618 lr 3.38e-04 train_nll 0.0058 2.7s
+ep 0 step 97/618 lr 3.37e-04 train_nll 0.0062 3.6s
+ep 0 step 98/618 lr 3.37e-04 train_nll 0.0029 2.8s
+ep 0 step 99/618 lr 3.36e-04 train_nll 0.0014 2.7s
+ep 0 step 100/618 lr 3.35e-04 train_nll 0.0029 2.5s val_nll 0.0052
+ep 0 step 101/618 lr 3.35e-04 train_nll 0.0017 2.7s
+ep 0 step 102/618 lr 3.34e-04 train_nll 0.0011 2.5s
+ep 0 step 103/618 lr 3.33e-04 train_nll 0.0024 2.7s
+ep 0 step 104/618 lr 3.33e-04 train_nll 0.0031 3.3s
+ep 0 step 105/618 lr 3.32e-04 train_nll 0.0077 2.7s
+ep 0 step 106/618 lr 3.31e-04 train_nll 0.0022 2.7s
+ep 0 step 107/618 lr 3.31e-04 train_nll 0.0061 2.5s
+ep 0 step 108/618 lr 3.30e-04 train_nll 0.0008 2.5s
+ep 0 step 109/618 lr 3.29e-04 train_nll 0.0077 2.7s
+ep 0 step 110/618 lr 3.29e-04 train_nll 0.0016 2.6s val_nll 0.0074
+ep 0 step 111/618 lr 3.28e-04 train_nll 0.0031 2.5s
+ep 0 step 112/618 lr 3.28e-04 train_nll 0.0012 2.7s
+ep 0 step 113/618 lr 3.27e-04 train_nll 0.0027 4.2s
+ep 0 step 114/618 lr 3.26e-04 train_nll 0.0118 3.3s
+ep 0 step 115/618 lr 3.26e-04 train_nll 0.0027 3.3s
+ep 0 step 116/618 lr 3.25e-04 train_nll 0.0025 3.3s
+ep 0 step 117/618 lr 3.24e-04 train_nll 0.0017 3.6s
+ep 0 step 118/618 lr 3.24e-04 train_nll 0.0041 3.4s
+ep 0 step 119/618 lr 3.23e-04 train_nll 0.0006 3.3s
+ep 0 step 120/618 lr 3.22e-04 train_nll 0.0001 3.6s val_nll 0.0046
+ep 0 step 121/618 lr 3.22e-04 train_nll 0.0003 3.3s
+ep 0 step 122/618 lr 3.21e-04 train_nll 0.0005 3.6s
+ep 0 step 123/618 lr 3.20e-04 train_nll 0.0125 2.5s
+ep 0 step 124/618 lr 3.20e-04 train_nll 0.0045 2.9s
+ep 0 step 125/618 lr 3.19e-04 train_nll 0.0001 2.4s
+ep 0 step 126/618 lr 3.18e-04 train_nll 0.0001 3.8s
+ep 0 step 127/618 lr 3.18e-04 train_nll 0.0001 2.5s
+ep 0 step 128/618 lr 3.17e-04 train_nll 0.0003 2.7s
+ep 0 step 129/618 lr 3.17e-04 train_nll 0.0002 2.5s
+ep 0 step 130/618 lr 3.16e-04 train_nll 0.0007 2.7s val_nll 0.0039
+ep 0 step 131/618 lr 3.15e-04 train_nll 0.0062 3.9s
+ep 0 step 132/618 lr 3.15e-04 train_nll 0.0033 2.7s
+ep 0 step 133/618 lr 3.14e-04 train_nll 0.0005 2.5s
+ep 0 step 134/618 lr 3.13e-04 train_nll 0.0020 2.5s
+ep 0 step 135/618 lr 3.13e-04 train_nll 0.0007 2.5s
+ep 0 step 136/618 lr 3.12e-04 train_nll 0.0010 3.8s
+ep 0 step 137/618 lr 3.11e-04 train_nll 0.0007 4.1s
+ep 0 step 138/618 lr 3.11e-04 train_nll 0.0085 2.7s
+ep 0 step 139/618 lr 3.10e-04 train_nll 0.0096 2.7s
+ep 0 step 140/618 lr 3.09e-04 train_nll 0.0029 2.5s val_nll 0.0019
+ep 0 step 141/618 lr 3.09e-04 train_nll 0.0014 2.5s
+ep 0 step 142/618 lr 3.08e-04 train_nll 0.0035 2.6s
+ep 0 step 143/618 lr 3.07e-04 train_nll 0.0034 2.9s
+ep 0 step 144/618 lr 3.07e-04 train_nll 0.0002 2.5s
+ep 0 step 145/618 lr 3.06e-04 train_nll 0.0037 3.5s
+ep 0 step 146/618 lr 3.06e-04 train_nll 0.0010 2.7s
+ep 0 step 147/618 lr 3.05e-04 train_nll 0.0004 2.5s
+ep 0 step 148/618 lr 3.04e-04 train_nll 0.0004 2.7s
+ep 0 step 149/618 lr 3.04e-04 train_nll 0.0001 2.5s
+ep 0 step 150/618 lr 3.03e-04 train_nll 0.0026 2.7s val_nll 0.0067
+ep 0 step 151/618 lr 3.02e-04 train_nll 0.0008 2.5s
+ep 0 step 152/618 lr 3.02e-04 train_nll 0.0000 2.5s
+ep 0 step 153/618 lr 3.01e-04 train_nll 0.0045 2.7s
+ep 0 step 154/618 lr 3.00e-04 train_nll 0.0007 2.7s
+ep 0 step 155/618 lr 3.00e-04 train_nll 0.0087 2.7s
+ep 0 step 156/618 lr 2.99e-04 train_nll 0.0001 2.7s
+ep 0 step 157/618 lr 2.98e-04 train_nll 0.0001 2.6s
+ep 0 step 158/618 lr 2.98e-04 train_nll 0.0002 4.3s
+ep 0 step 159/618 lr 2.97e-04 train_nll 0.0001 2.5s
+ep 0 step 160/618 lr 2.96e-04 train_nll 0.0000 2.6s val_nll 0.0040
+ep 0 step 161/618 lr 2.96e-04 train_nll 0.0019 2.4s
+ep 0 step 162/618 lr 2.95e-04 train_nll 0.0002 2.5s
+ep 0 step 163/618 lr 2.94e-04 train_nll 0.0001 2.5s
+ep 0 step 164/618 lr 2.94e-04 train_nll 0.0030 2.5s
+ep 0 step 165/618 lr 2.93e-04 train_nll 0.0039 2.7s
+ep 0 step 166/618 lr 2.93e-04 train_nll 0.0023 3.5s
+ep 0 step 167/618 lr 2.92e-04 train_nll 0.0004 2.7s
+ep 0 step 168/618 lr 2.91e-04 train_nll 0.0002 2.5s
+ep 0 step 169/618 lr 2.91e-04 train_nll 0.0021 2.5s
+ep 0 step 170/618 lr 2.90e-04 train_nll 0.0019 2.5s val_nll 0.0038
+ep 0 step 171/618 lr 2.89e-04 train_nll 0.0103 2.7s
+ep 0 step 172/618 lr 2.89e-04 train_nll 0.0018 2.4s
+ep 0 step 173/618 lr 2.88e-04 train_nll 0.0017 2.5s
+ep 0 step 174/618 lr 2.87e-04 train_nll 0.0061 2.5s
+ep 0 step 175/618 lr 2.87e-04 train_nll 0.0070 2.7s
+ep 0 step 176/618 lr 2.86e-04 train_nll 0.0012 2.6s
+ep 0 step 177/618 lr 2.85e-04 train_nll 0.0002 2.7s
+ep 0 step 178/618 lr 2.85e-04 train_nll 0.0022 2.5s
+ep 0 step 179/618 lr 2.84e-04 train_nll 0.0002 2.7s
+ep 0 step 180/618 lr 2.83e-04 train_nll 0.0076 3.8s val_nll 0.0034
+ep 0 step 181/618 lr 2.83e-04 train_nll 0.0032 3.6s
+ep 0 step 182/618 lr 2.82e-04 train_nll 0.0002 2.5s
+ep 0 step 183/618 lr 2.82e-04 train_nll 0.0006 2.7s
+ep 0 step 184/618 lr 2.81e-04 train_nll 0.0029 2.7s
+ep 0 step 185/618 lr 2.80e-04 train_nll 0.0019 2.5s
+ep 0 step 186/618 lr 2.80e-04 train_nll 0.0039 2.5s
+ep 0 step 187/618 lr 2.79e-04 train_nll 0.0035 2.6s
+ep 0 step 188/618 lr 2.78e-04 train_nll 0.0000 3.6s
+ep 0 step 189/618 lr 2.78e-04 train_nll 0.0003 3.5s
+ep 0 step 190/618 lr 2.77e-04 train_nll 0.0005 3.3s val_nll 0.0052
+ep 0 step 191/618 lr 2.76e-04 train_nll 0.0013 3.6s
+ep 0 step 192/618 lr 2.76e-04 train_nll 0.0001 3.3s
+ep 0 step 193/618 lr 2.75e-04 train_nll 0.0000 3.8s
+ep 0 step 194/618 lr 2.74e-04 train_nll 0.0000 3.1s
+ep 0 step 195/618 lr 2.74e-04 train_nll 0.0000 3.3s
+ep 0 step 196/618 lr 2.73e-04 train_nll 0.0000 4.1s
+ep 0 step 197/618 lr 2.72e-04 train_nll 0.0008 2.7s
+ep 0 step 198/618 lr 2.72e-04 train_nll 0.0000 2.5s
+ep 0 step 199/618 lr 2.71e-04 train_nll 0.0067 2.5s
+ep 0 step 200/618 lr 2.71e-04 train_nll 0.0024 3.8s val_nll 0.0200
+ep 0 step 201/618 lr 2.70e-04 train_nll 0.0334 2.5s
+ep 0 step 202/618 lr 2.69e-04 train_nll 0.0019 2.9s
+ep 0 step 203/618 lr 2.69e-04 train_nll 0.0051 2.7s
+ep 0 step 204/618 lr 2.68e-04 train_nll 0.0102 2.7s
+ep 0 step 205/618 lr 2.67e-04 train_nll 0.0125 3.0s
+ep 1 step 206/618 lr 2.67e-04 train_nll 0.0065 3.4s
+ep 1 step 207/618 lr 2.66e-04 train_nll 0.0055 2.5s
+ep 1 step 208/618 lr 2.65e-04 train_nll 0.0022 2.7s
+ep 1 step 209/618 lr 2.65e-04 train_nll 0.0098 3.8s
+ep 1 step 210/618 lr 2.64e-04 train_nll 0.0064 3.1s val_nll 0.0085
+ep 1 step 211/618 lr 2.63e-04 train_nll 0.0079 2.5s
+ep 1 step 212/618 lr 2.63e-04 train_nll 0.0062 2.7s
+ep 1 step 213/618 lr 2.62e-04 train_nll 0.0008 2.7s
+ep 1 step 214/618 lr 2.61e-04 train_nll 0.0073 2.5s
+ep 1 step 215/618 lr 2.61e-04 train_nll 0.0025 3.2s
+ep 1 step 216/618 lr 2.60e-04 train_nll 0.0012 2.5s
+ep 1 step 217/618 lr 2.60e-04 train_nll 0.0265 2.4s
+ep 1 step 218/618 lr 2.59e-04 train_nll 0.0007 2.5s
+ep 1 step 219/618 lr 2.58e-04 train_nll 0.0022 2.5s
+ep 1 step 220/618 lr 2.58e-04 train_nll 0.0062 4.1s val_nll 0.0045
+ep 1 step 221/618 lr 2.57e-04 train_nll 0.0009 2.5s
+ep 1 step 222/618 lr 2.56e-04 train_nll 0.0012 2.7s
+ep 1 step 223/618 lr 2.56e-04 train_nll 0.0051 2.7s
+ep 1 step 224/618 lr 2.55e-04 train_nll 0.0004 2.9s
+ep 1 step 225/618 lr 2.54e-04 train_nll 0.0025 2.5s
+ep 1 step 226/618 lr 2.54e-04 train_nll 0.0006 2.7s
+ep 1 step 227/618 lr 2.53e-04 train_nll 0.0065 2.7s
+ep 1 step 228/618 lr 2.52e-04 train_nll 0.0053 2.7s
+ep 1 step 229/618 lr 2.52e-04 train_nll 0.0006 3.0s
+ep 1 step 230/618 lr 2.51e-04 train_nll 0.0003 2.5s val_nll 0.0028
+ep 1 step 231/618 lr 2.50e-04 train_nll 0.0017 2.9s
+ep 1 step 232/618 lr 2.50e-04 train_nll 0.0048 2.7s
+ep 1 step 233/618 lr 2.49e-04 train_nll 0.0012 2.7s
+ep 1 step 234/618 lr 2.49e-04 train_nll 0.0031 2.5s
+ep 1 step 235/618 lr 2.48e-04 train_nll 0.0001 2.4s
+ep 1 step 236/618 lr 2.47e-04 train_nll 0.0011 2.7s
+ep 1 step 237/618 lr 2.47e-04 train_nll 0.0038 2.5s
+ep 1 step 238/618 lr 2.46e-04 train_nll 0.0028 2.5s
+ep 1 step 239/618 lr 2.45e-04 train_nll 0.0015 2.4s
+ep 1 step 240/618 lr 2.45e-04 train_nll 0.0020 4.1s val_nll 0.0040
+ep 1 step 241/618 lr 2.44e-04 train_nll 0.0160 2.7s
+ep 1 step 242/618 lr 2.43e-04 train_nll 0.0079 2.8s
+ep 1 step 243/618 lr 2.43e-04 train_nll 0.0008 2.5s
+ep 1 step 244/618 lr 2.42e-04 train_nll 0.0006 2.5s
+ep 1 step 245/618 lr 2.41e-04 train_nll 0.0001 2.5s
+ep 1 step 246/618 lr 2.41e-04 train_nll 0.0049 2.7s
+ep 1 step 247/618 lr 2.40e-04 train_nll 0.0045 2.5s
+ep 1 step 248/618 lr 2.39e-04 train_nll 0.0004 2.5s
+ep 1 step 249/618 lr 2.39e-04 train_nll 0.0010 2.5s
+ep 1 step 250/618 lr 2.38e-04 train_nll 0.0030 2.7s val_nll 0.0025
+ep 1 step 251/618 lr 2.38e-04 train_nll 0.0021 2.5s
+ep 1 step 252/618 lr 2.37e-04 train_nll 0.0031 2.5s
+ep 1 step 253/618 lr 2.36e-04 train_nll 0.0010 2.7s
+ep 1 step 254/618 lr 2.36e-04 train_nll 0.0004 2.5s
+ep 1 step 255/618 lr 2.35e-04 train_nll 0.0055 3.6s
+ep 1 step 256/618 lr 2.34e-04 train_nll 0.0041 3.1s
+ep 1 step 257/618 lr 2.34e-04 train_nll 0.0020 2.8s
+ep 1 step 258/618 lr 2.33e-04 train_nll 0.0011 2.7s
+ep 1 step 259/618 lr 2.32e-04 train_nll 0.0002 2.7s
+ep 1 step 260/618 lr 2.32e-04 train_nll 0.0002 2.5s val_nll 0.0034
+ep 1 step 261/618 lr 2.31e-04 train_nll 0.0001 3.6s
+ep 1 step 262/618 lr 2.30e-04 train_nll 0.0018 3.6s
+ep 1 step 263/618 lr 2.30e-04 train_nll 0.0002 3.3s
+ep 1 step 264/618 lr 2.29e-04 train_nll 0.0055 2.9s
+ep 1 step 265/618 lr 2.28e-04 train_nll 0.0002 6.1s
+ep 1 step 266/618 lr 2.28e-04 train_nll 0.0005 3.8s
+ep 1 step 267/618 lr 2.27e-04 train_nll 0.0019 4.5s
+ep 1 step 268/618 lr 2.27e-04 train_nll 0.0003 3.3s
+ep 1 step 269/618 lr 2.26e-04 train_nll 0.0007 3.6s
+ep 1 step 270/618 lr 2.25e-04 train_nll 0.0015 2.7s val_nll 0.0049
+ep 1 step 271/618 lr 2.25e-04 train_nll 0.0000 2.5s
+ep 1 step 272/618 lr 2.24e-04 train_nll 0.0028 4.5s
+ep 1 step 273/618 lr 2.23e-04 train_nll 0.0050 2.7s
+ep 1 step 274/618 lr 2.23e-04 train_nll 0.0145 3.8s
+ep 1 step 275/618 lr 2.22e-04 train_nll 0.0002 2.9s
+ep 1 step 276/618 lr 2.21e-04 train_nll 0.0001 2.5s
+ep 1 step 277/618 lr 2.21e-04 train_nll 0.0001 2.7s
+ep 1 step 278/618 lr 2.20e-04 train_nll 0.0009 2.4s
+ep 1 step 279/618 lr 2.19e-04 train_nll 0.0001 2.5s
+ep 1 step 280/618 lr 2.19e-04 train_nll 0.0004 2.5s val_nll 0.0020
+ep 1 step 281/618 lr 2.18e-04 train_nll 0.0011 2.5s
+ep 1 step 282/618 lr 2.17e-04 train_nll 0.0010 2.5s
+ep 1 step 283/618 lr 2.17e-04 train_nll 0.0006 2.5s
+ep 1 step 284/618 lr 2.16e-04 train_nll 0.0093 2.5s
+ep 1 step 285/618 lr 2.16e-04 train_nll 0.0059 2.7s
+ep 1 step 286/618 lr 2.15e-04 train_nll 0.0001 2.6s
+ep 1 step 287/618 lr 2.14e-04 train_nll 0.0035 2.5s
+ep 1 step 288/618 lr 2.14e-04 train_nll 0.0001 2.7s
+ep 1 step 289/618 lr 2.13e-04 train_nll 0.0005 2.5s
+ep 1 step 290/618 lr 2.12e-04 train_nll 0.0047 2.5s val_nll 0.0026
+ep 1 step 291/618 lr 2.12e-04 train_nll 0.0009 2.7s
+ep 1 step 292/618 lr 2.11e-04 train_nll 0.0009 2.5s
+ep 1 step 293/618 lr 2.10e-04 train_nll 0.0018 2.7s
+ep 1 step 294/618 lr 2.10e-04 train_nll 0.0011 2.4s
+ep 1 step 295/618 lr 2.09e-04 train_nll 0.0054 2.5s
+ep 1 step 296/618 lr 2.08e-04 train_nll 0.0008 3.5s
+ep 1 step 297/618 lr 2.08e-04 train_nll 0.0018 2.5s
+ep 1 step 298/618 lr 2.07e-04 train_nll 0.0002 2.6s
+ep 1 step 299/618 lr 2.06e-04 train_nll 0.0021 2.5s
+ep 1 step 300/618 lr 2.06e-04 train_nll 0.0021 2.7s val_nll 0.0021
+ep 1 step 301/618 lr 2.05e-04 train_nll 0.0024 2.5s
+ep 1 step 302/618 lr 2.05e-04 train_nll 0.0026 2.7s
+ep 1 step 303/618 lr 2.04e-04 train_nll 0.0015 2.6s
+ep 1 step 304/618 lr 2.03e-04 train_nll 0.0071 2.5s
+ep 1 step 305/618 lr 2.03e-04 train_nll 0.0017 2.7s
+ep 1 step 306/618 lr 2.02e-04 train_nll 0.0013 2.9s
+ep 1 step 307/618 lr 2.01e-04 train_nll 0.0008 3.1s
+ep 1 step 308/618 lr 2.01e-04 train_nll 0.0042 2.4s
+ep 1 step 309/618 lr 2.00e-04 train_nll 0.0012 3.6s
+ep 1 step 310/618 lr 1.99e-04 train_nll 0.0010 2.7s val_nll 0.0025
+ep 1 step 311/618 lr 1.99e-04 train_nll 0.0016 2.7s
+ep 1 step 312/618 lr 1.98e-04 train_nll 0.0001 2.5s
+ep 1 step 313/618 lr 1.97e-04 train_nll 0.0068 2.7s
+ep 1 step 314/618 lr 1.97e-04 train_nll 0.0009 2.5s
+ep 1 step 315/618 lr 1.96e-04 train_nll 0.0020 2.4s
+ep 1 step 316/618 lr 1.95e-04 train_nll 0.0001 2.7s
+ep 1 step 317/618 lr 1.95e-04 train_nll 0.0006 2.5s
+ep 1 step 318/618 lr 1.94e-04 train_nll 0.0022 2.5s
+ep 1 step 319/618 lr 1.94e-04 train_nll 0.0029 2.7s
+ep 1 step 320/618 lr 1.93e-04 train_nll 0.0015 2.5s val_nll 0.0029
+ep 1 step 321/618 lr 1.92e-04 train_nll 0.0063 2.5s
+ep 1 step 322/618 lr 1.92e-04 train_nll 0.0026 2.5s
+ep 1 step 323/618 lr 1.91e-04 train_nll 0.0001 2.7s
+ep 1 step 324/618 lr 1.90e-04 train_nll 0.0001 2.5s
+ep 1 step 325/618 lr 1.90e-04 train_nll 0.0003 2.5s
+ep 1 step 326/618 lr 1.89e-04 train_nll 0.0006 2.7s
+ep 1 step 327/618 lr 1.88e-04 train_nll 0.0000 2.5s
+ep 1 step 328/618 lr 1.88e-04 train_nll 0.0017 2.5s
+ep 1 step 329/618 lr 1.87e-04 train_nll 0.0006 2.7s
+ep 1 step 330/618 lr 1.86e-04 train_nll 0.0001 2.9s val_nll 0.0029
+ep 1 step 331/618 lr 1.86e-04 train_nll 0.0024 2.7s
+ep 1 step 332/618 lr 1.85e-04 train_nll 0.0001 2.5s
+ep 1 step 333/618 lr 1.84e-04 train_nll 0.0001 2.7s
+ep 1 step 334/618 lr 1.84e-04 train_nll 0.0007 2.7s
+ep 1 step 335/618 lr 1.83e-04 train_nll 0.0017 3.6s
+ep 1 step 336/618 lr 1.83e-04 train_nll 0.0003 3.8s
+ep 1 step 337/618 lr 1.82e-04 train_nll 0.0000 3.1s
+ep 1 step 338/618 lr 1.81e-04 train_nll 0.0035 3.5s
+ep 1 step 339/618 lr 1.81e-04 train_nll 0.0018 3.6s
+ep 1 step 340/618 lr 1.80e-04 train_nll 0.0004 4.0s val_nll 0.0026
+ep 1 step 341/618 lr 1.79e-04 train_nll 0.0054 3.9s
+ep 1 step 342/618 lr 1.79e-04 train_nll 0.0011 3.6s
+ep 1 step 343/618 lr 1.78e-04 train_nll 0.0000 3.3s
+ep 1 step 344/618 lr 1.77e-04 train_nll 0.0000 2.5s
+ep 1 step 345/618 lr 1.77e-04 train_nll 0.0009 2.7s
+ep 1 step 346/618 lr 1.76e-04 train_nll 0.0000 2.7s
+ep 1 step 347/618 lr 1.75e-04 train_nll 0.0006 2.5s
+ep 1 step 348/618 lr 1.75e-04 train_nll 0.0001 2.6s
+ep 1 step 349/618 lr 1.74e-04 train_nll 0.0000 2.5s
+ep 1 step 350/618 lr 1.73e-04 train_nll 0.0024 2.8s val_nll 0.0020
+ep 1 step 351/618 lr 1.73e-04 train_nll 0.0005 2.9s
+ep 1 step 352/618 lr 1.72e-04 train_nll 0.0098 3.6s
+ep 1 step 353/618 lr 1.72e-04 train_nll 0.0005 2.5s
+ep 1 step 354/618 lr 1.71e-04 train_nll 0.0001 2.9s
+ep 1 step 355/618 lr 1.70e-04 train_nll 0.0034 2.7s
+ep 1 step 356/618 lr 1.70e-04 train_nll 0.0011 2.5s
+ep 1 step 357/618 lr 1.69e-04 train_nll 0.0000 2.5s
+ep 1 step 358/618 lr 1.68e-04 train_nll 0.0001 2.5s
+ep 1 step 359/618 lr 1.68e-04 train_nll 0.0021 2.5s
+ep 1 step 360/618 lr 1.67e-04 train_nll 0.0016 2.5s val_nll 0.0026
+ep 1 step 361/618 lr 1.66e-04 train_nll 0.0038 2.5s
+ep 1 step 362/618 lr 1.66e-04 train_nll 0.0014 2.7s
+ep 1 step 363/618 lr 1.65e-04 train_nll 0.0000 2.5s
+ep 1 step 364/618 lr 1.64e-04 train_nll 0.0000 2.7s
+ep 1 step 365/618 lr 1.64e-04 train_nll 0.0032 2.5s
+ep 1 step 366/618 lr 1.63e-04 train_nll 0.0001 2.7s
+ep 1 step 367/618 lr 1.62e-04 train_nll 0.0001 2.5s
+ep 1 step 368/618 lr 1.62e-04 train_nll 0.0009 2.7s
+ep 1 step 369/618 lr 1.61e-04 train_nll 0.0012 3.9s
+ep 1 step 370/618 lr 1.61e-04 train_nll 0.0046 2.6s val_nll 0.0016
+ep 1 step 371/618 lr 1.60e-04 train_nll 0.0000 2.6s
+ep 1 step 372/618 lr 1.59e-04 train_nll 0.0001 2.7s
+ep 1 step 373/618 lr 1.59e-04 train_nll 0.0001 2.7s
+ep 1 step 374/618 lr 1.58e-04 train_nll 0.0001 2.7s
+ep 1 step 375/618 lr 1.57e-04 train_nll 0.0001 2.5s
+ep 1 step 376/618 lr 1.57e-04 train_nll 0.0002 2.7s
+ep 1 step 377/618 lr 1.56e-04 train_nll 0.0003 2.5s
+ep 1 step 378/618 lr 1.55e-04 train_nll 0.0013 2.7s
+ep 1 step 379/618 lr 1.55e-04 train_nll 0.0023 3.3s
+ep 1 step 380/618 lr 1.54e-04 train_nll 0.0012 2.4s val_nll 0.0014
+ep 1 step 381/618 lr 1.53e-04 train_nll 0.0002 2.7s
+ep 1 step 382/618 lr 1.53e-04 train_nll 0.0031 2.4s
+ep 1 step 383/618 lr 1.52e-04 train_nll 0.0000 2.7s
+ep 1 step 384/618 lr 1.51e-04 train_nll 0.0016 2.5s
+ep 1 step 385/618 lr 1.51e-04 train_nll 0.0001 2.7s
+ep 1 step 386/618 lr 1.50e-04 train_nll 0.0000 2.5s
+ep 1 step 387/618 lr 1.50e-04 train_nll 0.0020 2.5s
+ep 1 step 388/618 lr 1.49e-04 train_nll 0.0013 2.7s
+ep 1 step 389/618 lr 1.48e-04 train_nll 0.0006 2.5s
+ep 1 step 390/618 lr 1.48e-04 train_nll 0.0012 2.4s val_nll 0.0014
+ep 1 step 391/618 lr 1.47e-04 train_nll 0.0001 2.5s
+ep 1 step 392/618 lr 1.46e-04 train_nll 0.0000 2.5s
+ep 1 step 393/618 lr 1.46e-04 train_nll 0.0003 2.7s
+ep 1 step 394/618 lr 1.45e-04 train_nll 0.0027 2.7s
+ep 1 step 395/618 lr 1.44e-04 train_nll 0.0027 2.7s
+ep 1 step 396/618 lr 1.44e-04 train_nll 0.0031 2.5s
+ep 1 step 397/618 lr 1.43e-04 train_nll 0.0035 2.5s
+ep 1 step 398/618 lr 1.42e-04 train_nll 0.0001 3.3s
+ep 1 step 399/618 lr 1.42e-04 train_nll 0.0020 2.7s
+ep 1 step 400/618 lr 1.41e-04 train_nll 0.0009 3.0s val_nll 0.0030
+ep 1 step 401/618 lr 1.40e-04 train_nll 0.0002 2.7s
+ep 1 step 402/618 lr 1.40e-04 train_nll 0.0046 2.6s
+ep 1 step 403/618 lr 1.39e-04 train_nll 0.0039 2.5s
+ep 1 step 404/618 lr 1.39e-04 train_nll 0.0021 2.7s
+ep 1 step 405/618 lr 1.38e-04 train_nll 0.0000 2.7s
+ep 1 step 406/618 lr 1.37e-04 train_nll 0.0000 2.4s
+ep 1 step 407/618 lr 1.37e-04 train_nll 0.0000 2.5s
+ep 1 step 408/618 lr 1.36e-04 train_nll 0.0003 2.6s
+ep 1 step 409/618 lr 1.35e-04 train_nll 0.0000 4.1s
+ep 1 step 410/618 lr 1.35e-04 train_nll 0.0024 4.1s val_nll 0.0027
+ep 1 step 411/618 lr 1.34e-04 train_nll 0.0017 4.1s
+ep 2 step 412/618 lr 1.33e-04 train_nll 0.0000 3.8s
+ep 2 step 413/618 lr 1.33e-04 train_nll 0.0007 5.4s
+ep 2 step 414/618 lr 1.32e-04 train_nll 0.0011 3.1s
+ep 2 step 415/618 lr 1.31e-04 train_nll 0.0020 4.4s
+ep 2 step 416/618 lr 1.31e-04 train_nll 0.0002 3.8s
+ep 2 step 417/618 lr 1.30e-04 train_nll 0.0002 4.1s
+ep 2 step 418/618 lr 1.29e-04 train_nll 0.0032 3.8s
+ep 2 step 419/618 lr 1.29e-04 train_nll 0.0000 3.1s
+ep 2 step 420/618 lr 1.28e-04 train_nll 0.0041 3.3s val_nll 0.0036
+ep 2 step 421/618 lr 1.28e-04 train_nll 0.0001 3.9s
+ep 2 step 422/618 lr 1.27e-04 train_nll 0.0000 3.5s
+ep 2 step 423/618 lr 1.26e-04 train_nll 0.0026 4.4s
+ep 2 step 424/618 lr 1.26e-04 train_nll 0.0020 4.1s
+ep 2 step 425/618 lr 1.25e-04 train_nll 0.0009 3.3s
+ep 2 step 426/618 lr 1.24e-04 train_nll 0.0000 4.2s
+ep 2 step 427/618 lr 1.24e-04 train_nll 0.0068 3.1s
+ep 2 step 428/618 lr 1.23e-04 train_nll 0.0043 3.1s
+ep 2 step 429/618 lr 1.22e-04 train_nll 0.0011 3.8s
+ep 2 step 430/618 lr 1.22e-04 train_nll 0.0056 3.3s val_nll 0.0033
+ep 2 step 431/618 lr 1.21e-04 train_nll 0.0001 3.8s
+ep 2 step 432/618 lr 1.20e-04 train_nll 0.0019 3.3s
+ep 2 step 433/618 lr 1.20e-04 train_nll 0.0012 4.3s
+ep 2 step 434/618 lr 1.19e-04 train_nll 0.0000 2.5s
+ep 2 step 435/618 lr 1.18e-04 train_nll 0.0000 4.1s
+ep 2 step 436/618 lr 1.18e-04 train_nll 0.0001 3.3s
+ep 2 step 437/618 lr 1.17e-04 train_nll 0.0020 4.1s
+ep 2 step 438/618 lr 1.17e-04 train_nll 0.0000 3.3s
+ep 2 step 439/618 lr 1.16e-04 train_nll 0.0022 4.4s
+ep 2 step 440/618 lr 1.15e-04 train_nll 0.0015 4.2s val_nll 0.0021
+ep 2 step 441/618 lr 1.15e-04 train_nll 0.0011 3.8s
+ep 2 step 442/618 lr 1.14e-04 train_nll 0.0000 3.1s
+ep 2 step 443/618 lr 1.13e-04 train_nll 0.0000 3.1s
+ep 2 step 444/618 lr 1.13e-04 train_nll 0.0016 3.1s
+ep 2 step 445/618 lr 1.12e-04 train_nll 0.0000 3.8s
+ep 2 step 446/618 lr 1.11e-04 train_nll 0.0009 3.3s
+ep 2 step 447/618 lr 1.11e-04 train_nll 0.0027 3.3s
+ep 2 step 448/618 lr 1.10e-04 train_nll 0.0026 3.8s
+ep 2 step 449/618 lr 1.09e-04 train_nll 0.0031 4.1s
+ep 2 step 450/618 lr 1.09e-04 train_nll 0.0011 3.8s val_nll 0.0034
+ep 2 step 451/618 lr 1.08e-04 train_nll 0.0005 4.4s
+ep 2 step 452/618 lr 1.07e-04 train_nll 0.0015 4.1s
+ep 2 step 453/618 lr 1.07e-04 train_nll 0.0001 3.8s
+ep 2 step 454/618 lr 1.06e-04 train_nll 0.0009 4.1s
+ep 2 step 455/618 lr 1.06e-04 train_nll 0.0000 3.3s
+ep 2 step 456/618 lr 1.05e-04 train_nll 0.0038 3.3s
+ep 2 step 457/618 lr 1.04e-04 train_nll 0.0018 3.3s
+ep 2 step 458/618 lr 1.04e-04 train_nll 0.0012 3.3s
+ep 2 step 459/618 lr 1.03e-04 train_nll 0.0000 2.9s
+ep 2 step 460/618 lr 1.02e-04 train_nll 0.0000 4.1s val_nll 0.0026
+ep 2 step 461/618 lr 1.02e-04 train_nll 0.0035 4.1s
+ep 2 step 462/618 lr 1.01e-04 train_nll 0.0001 3.6s
+ep 2 step 463/618 lr 1.00e-04 train_nll 0.0008 4.5s
+ep 2 step 464/618 lr 9.97e-05 train_nll 0.0000 3.8s
+ep 2 step 465/618 lr 9.90e-05 train_nll 0.0000 3.8s
+ep 2 step 466/618 lr 9.84e-05 train_nll 0.0020 3.5s
+ep 2 step 467/618 lr 9.77e-05 train_nll 0.0006 4.1s
+ep 2 step 468/618 lr 9.71e-05 train_nll 0.0031 4.6s
+ep 2 step 469/618 lr 9.64e-05 train_nll 0.0054 4.5s
+ep 2 step 470/618 lr 9.58e-05 train_nll 0.0000 4.1s val_nll 0.0020
+ep 2 step 471/618 lr 9.51e-05 train_nll 0.0014 4.8s
+ep 2 step 472/618 lr 9.45e-05 train_nll 0.0000 3.1s
+ep 2 step 473/618 lr 9.39e-05 train_nll 0.0008 3.6s
+ep 2 step 474/618 lr 9.32e-05 train_nll 0.0010 4.8s
+ep 2 step 475/618 lr 9.26e-05 train_nll 0.0006 4.1s
+ep 2 step 476/618 lr 9.19e-05 train_nll 0.0023 3.5s
+ep 2 step 477/618 lr 9.13e-05 train_nll 0.0031 4.5s
+ep 2 step 478/618 lr 9.06e-05 train_nll 0.0013 3.6s
+ep 2 step 479/618 lr 9.00e-05 train_nll 0.0005 3.9s
+ep 2 step 480/618 lr 8.93e-05 train_nll 0.0001 3.1s val_nll 0.0024
+ep 2 step 481/618 lr 8.87e-05 train_nll 0.0015 3.6s
+ep 2 step 482/618 lr 8.80e-05 train_nll 0.0023 4.8s
+ep 2 step 483/618 lr 8.74e-05 train_nll 0.0000 3.8s
+ep 2 step 484/618 lr 8.67e-05 train_nll 0.0009 4.2s
+ep 2 step 485/618 lr 8.61e-05 train_nll 0.0006 3.1s
+ep 2 step 486/618 lr 8.54e-05 train_nll 0.0000 4.9s
+ep 2 step 487/618 lr 8.48e-05 train_nll 0.0009 4.5s
+ep 2 step 488/618 lr 8.41e-05 train_nll 0.0025 4.1s
+ep 2 step 489/618 lr 8.35e-05 train_nll 0.0018 4.1s
+ep 2 step 490/618 lr 8.28e-05 train_nll 0.0000 3.1s val_nll 0.0020
+ep 2 step 491/618 lr 8.22e-05 train_nll 0.0000 4.2s
+ep 2 step 492/618 lr 8.16e-05 train_nll 0.0002 4.2s
+ep 2 step 493/618 lr 8.09e-05 train_nll 0.0005 3.8s
+ep 2 step 494/618 lr 8.03e-05 train_nll 0.0010 4.8s
+ep 2 step 495/618 lr 7.96e-05 train_nll 0.0000 3.8s
+ep 2 step 496/618 lr 7.90e-05 train_nll 0.0020 5.2s
+ep 2 step 497/618 lr 7.83e-05 train_nll 0.0000 3.3s
+ep 2 step 498/618 lr 7.77e-05 train_nll 0.0020 4.1s
+ep 2 step 499/618 lr 7.70e-05 train_nll 0.0000 3.8s
+ep 2 step 500/618 lr 7.64e-05 train_nll 0.0021 3.1s val_nll 0.0025
+ep 2 step 501/618 lr 7.57e-05 train_nll 0.0034 4.6s
+ep 2 step 502/618 lr 7.51e-05 train_nll 0.0027 3.1s
+ep 2 step 503/618 lr 7.44e-05 train_nll 0.0029 3.1s
+ep 2 step 504/618 lr 7.38e-05 train_nll 0.0024 4.2s
+ep 2 step 505/618 lr 7.31e-05 train_nll 0.0018 3.3s
+ep 2 step 506/618 lr 7.25e-05 train_nll 0.0019 4.1s
+ep 2 step 507/618 lr 7.18e-05 train_nll 0.0010 3.6s
+ep 2 step 508/618 lr 7.12e-05 train_nll 0.0000 3.3s
+ep 2 step 509/618 lr 7.06e-05 train_nll 0.0000 3.1s
+ep 2 step 510/618 lr 6.99e-05 train_nll 0.0013 3.1s val_nll 0.0048
+ep 2 step 511/618 lr 6.93e-05 train_nll 0.0000 3.9s
+ep 2 step 512/618 lr 6.86e-05 train_nll 0.0061 3.6s
+ep 2 step 513/618 lr 6.80e-05 train_nll 0.0028 3.1s
+ep 2 step 514/618 lr 6.73e-05 train_nll 0.0018 4.1s
+ep 2 step 515/618 lr 6.67e-05 train_nll 0.0000 3.3s
+ep 2 step 516/618 lr 6.60e-05 train_nll 0.0002 4.4s
+ep 2 step 517/618 lr 6.54e-05 train_nll 0.0000 3.1s
+ep 2 step 518/618 lr 6.47e-05 train_nll 0.0002 3.1s
+ep 2 step 519/618 lr 6.41e-05 train_nll 0.0018 3.3s
+ep 2 step 520/618 lr 6.34e-05 train_nll 0.0001 3.8s val_nll 0.0025
+ep 2 step 521/618 lr 6.28e-05 train_nll 0.0021 3.8s
+ep 2 step 522/618 lr 6.21e-05 train_nll 0.0007 3.3s
+ep 2 step 523/618 lr 6.15e-05 train_nll 0.0011 4.1s
+ep 2 step 524/618 lr 6.08e-05 train_nll 0.0000 3.6s
+ep 2 step 525/618 lr 6.02e-05 train_nll 0.0015 4.5s
+ep 2 step 526/618 lr 5.95e-05 train_nll 0.0000 4.8s
+ep 2 step 527/618 lr 5.89e-05 train_nll 0.0000 3.3s
+ep 2 step 528/618 lr 5.83e-05 train_nll 0.0019 3.6s
+ep 2 step 529/618 lr 5.76e-05 train_nll 0.0040 3.8s
+ep 2 step 530/618 lr 5.70e-05 train_nll 0.0000 4.4s val_nll 0.0017
+ep 2 step 531/618 lr 5.63e-05 train_nll 0.0003 2.7s
+ep 2 step 532/618 lr 5.57e-05 train_nll 0.0003 3.3s
+ep 2 step 533/618 lr 5.50e-05 train_nll 0.0010 2.4s
+ep 2 step 534/618 lr 5.44e-05 train_nll 0.0024 2.5s
+ep 2 step 535/618 lr 5.37e-05 train_nll 0.0009 2.7s
+ep 2 step 536/618 lr 5.31e-05 train_nll 0.0002 2.7s
+ep 2 step 537/618 lr 5.24e-05 train_nll 0.0004 2.4s
+ep 2 step 538/618 lr 5.18e-05 train_nll 0.0011 2.5s
+ep 2 step 539/618 lr 5.11e-05 train_nll 0.0001 2.5s
+ep 2 step 540/618 lr 5.05e-05 train_nll 0.0001 2.6s val_nll 0.0016
+ep 2 step 541/618 lr 4.98e-05 train_nll 0.0007 2.7s
+ep 2 step 542/618 lr 4.92e-05 train_nll 0.0000 2.5s
+ep 2 step 543/618 lr 4.85e-05 train_nll 0.0019 2.5s
+ep 2 step 544/618 lr 4.79e-05 train_nll 0.0006 2.5s
+ep 2 step 545/618 lr 4.72e-05 train_nll 0.0000 2.5s
+ep 2 step 546/618 lr 4.66e-05 train_nll 0.0006 2.5s
+ep 2 step 547/618 lr 4.60e-05 train_nll 0.0013 3.8s
+ep 2 step 548/618 lr 4.53e-05 train_nll 0.0000 2.5s
+ep 2 step 549/618 lr 4.47e-05 train_nll 0.0017 2.5s
+ep 2 step 550/618 lr 4.40e-05 train_nll 0.0041 2.6s val_nll 0.0018
+ep 2 step 551/618 lr 4.34e-05 train_nll 0.0000 2.7s
+ep 2 step 552/618 lr 4.27e-05 train_nll 0.0001 2.5s
+ep 2 step 553/618 lr 4.21e-05 train_nll 0.0015 2.5s
+ep 2 step 554/618 lr 4.14e-05 train_nll 0.0009 2.4s
+ep 2 step 555/618 lr 4.08e-05 train_nll 0.0001 2.5s
+ep 2 step 556/618 lr 4.01e-05 train_nll 0.0012 3.6s
+ep 2 step 557/618 lr 3.95e-05 train_nll 0.0008 2.7s
+ep 2 step 558/618 lr 3.88e-05 train_nll 0.0006 2.5s
+ep 2 step 559/618 lr 3.82e-05 train_nll 0.0021 2.7s
+ep 2 step 560/618 lr 3.75e-05 train_nll 0.0013 2.7s val_nll 0.0017
+ep 2 step 561/618 lr 3.69e-05 train_nll 0.0002 4.2s
+ep 2 step 562/618 lr 3.62e-05 train_nll 0.0000 2.7s
+ep 2 step 563/618 lr 3.56e-05 train_nll 0.0010 2.7s
+ep 2 step 564/618 lr 3.50e-05 train_nll 0.0006 2.7s
+ep 2 step 565/618 lr 3.43e-05 train_nll 0.0000 2.5s
+ep 2 step 566/618 lr 3.37e-05 train_nll 0.0012 3.8s
+ep 2 step 567/618 lr 3.30e-05 train_nll 0.0031 2.7s
+ep 2 step 568/618 lr 3.24e-05 train_nll 0.0000 3.5s
+ep 2 step 569/618 lr 3.17e-05 train_nll 0.0011 2.4s
+ep 2 step 570/618 lr 3.11e-05 train_nll 0.0011 2.5s val_nll 0.0018
+ep 2 step 571/618 lr 3.04e-05 train_nll 0.0007 2.5s
+ep 2 step 572/618 lr 2.98e-05 train_nll 0.0035 2.7s
+ep 2 step 573/618 lr 2.91e-05 train_nll 0.0005 2.4s
+ep 2 step 574/618 lr 2.85e-05 train_nll 0.0017 2.5s
+ep 2 step 575/618 lr 2.78e-05 train_nll 0.0012 3.6s
+ep 2 step 576/618 lr 2.72e-05 train_nll 0.0000 2.5s
+ep 2 step 577/618 lr 2.65e-05 train_nll 0.0033 3.3s
+ep 2 step 578/618 lr 2.59e-05 train_nll 0.0001 2.5s
+ep 2 step 579/618 lr 2.52e-05 train_nll 0.0008 2.7s
+ep 2 step 580/618 lr 2.46e-05 train_nll 0.0000 2.7s val_nll 0.0020
+ep 2 step 581/618 lr 2.39e-05 train_nll 0.0000 2.7s
+ep 2 step 582/618 lr 2.33e-05 train_nll 0.0018 2.7s
+ep 2 step 583/618 lr 2.27e-05 train_nll 0.0008 2.5s
+ep 2 step 584/618 lr 2.20e-05 train_nll 0.0001 2.7s
+ep 2 step 585/618 lr 2.14e-05 train_nll 0.0012 2.5s
+ep 2 step 586/618 lr 2.07e-05 train_nll 0.0016 2.5s
+ep 2 step 587/618 lr 2.01e-05 train_nll 0.0000 2.7s
+ep 2 step 588/618 lr 1.94e-05 train_nll 0.0000 3.5s
+ep 2 step 589/618 lr 1.88e-05 train_nll 0.0022 2.7s
+ep 2 step 590/618 lr 1.81e-05 train_nll 0.0006 2.5s val_nll 0.0018
+ep 2 step 591/618 lr 1.75e-05 train_nll 0.0015 3.8s
+ep 2 step 592/618 lr 1.68e-05 train_nll 0.0006 2.5s
+ep 2 step 593/618 lr 1.62e-05 train_nll 0.0000 3.8s
+ep 2 step 594/618 lr 1.55e-05 train_nll 0.0011 3.6s
+ep 2 step 595/618 lr 1.49e-05 train_nll 0.0009 3.1s
+ep 2 step 596/618 lr 1.42e-05 train_nll 0.0003 3.5s
+ep 2 step 597/618 lr 1.36e-05 train_nll 0.0000 3.6s
+ep 2 step 598/618 lr 1.29e-05 train_nll 0.0033 2.7s
+ep 2 step 599/618 lr 1.23e-05 train_nll 0.0008 3.5s
+ep 2 step 600/618 lr 1.17e-05 train_nll 0.0000 3.8s val_nll 0.0017
+ep 2 step 601/618 lr 1.10e-05 train_nll 0.0006 3.3s
+ep 2 step 602/618 lr 1.04e-05 train_nll 0.0007 2.5s
+ep 2 step 603/618 lr 9.71e-06 train_nll 0.0005 4.2s
+ep 2 step 604/618 lr 9.06e-06 train_nll 0.0006 2.9s
+ep 2 step 605/618 lr 8.41e-06 train_nll 0.0010 2.9s
+ep 2 step 606/618 lr 7.77e-06 train_nll 0.0012 2.5s
+ep 2 step 607/618 lr 7.12e-06 train_nll 0.0020 4.2s
+ep 2 step 608/618 lr 6.47e-06 train_nll 0.0011 3.8s
+ep 2 step 609/618 lr 5.83e-06 train_nll 0.0005 2.5s
+ep 2 step 610/618 lr 5.18e-06 train_nll 0.0001 2.9s val_nll 0.0018
+ep 2 step 611/618 lr 4.53e-06 train_nll 0.0000 2.5s
+ep 2 step 612/618 lr 3.88e-06 train_nll 0.0021 3.3s
+ep 2 step 613/618 lr 3.24e-06 train_nll 0.0025 2.5s
+ep 2 step 614/618 lr 2.59e-06 train_nll 0.0008 2.5s
+ep 2 step 615/618 lr 1.94e-06 train_nll 0.0001 2.5s
+ep 2 step 616/618 lr 1.29e-06 train_nll 0.0000 3.6s
+ep 2 step 617/618 lr 6.47e-07 train_nll 0.0028 2.5s
+saved tinker://5680f310-7f12-5848-af79-3441366d4f82:train:0/sampler_weights/pillclerk-v3
+wrote train/checkpoint_v3.json n_train=3296 extras=data/synth/targeted_ft3_danger.jsonl apply_env=false
