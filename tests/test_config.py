@@ -5,6 +5,14 @@ import pytest
 from pillclerk import config
 
 
+def test_key_status_never_returns_secrets(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TINKER_API_KEY", "secret-should-not-leak")
+    status = config.key_status()
+    blob = str(status)
+    assert "secret-should-not-leak" not in blob
+    assert status["TINKER_API_KEY"] is True
+
+
 def test_default_backends(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("LLM_BACKEND", raising=False)
     monkeypatch.delenv("EXTRACT_BACKEND", raising=False)

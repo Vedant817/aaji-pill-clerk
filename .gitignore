@@ -16,6 +16,8 @@ Thumbs.db
 
 # Real prescriptions, photos, and labels never leave the laptop
 data/real/
+data/pillclerk.db
+*.db
 
 # Local model export artifacts (this build does not download/merge/GGUF)
 export/
