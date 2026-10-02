@@ -6,7 +6,7 @@
 >
 > **Weekend overrides (source of truth over later sections):**
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
-> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Optional local Ollama `gemma4:e4b` or hosted Gemma.
+> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.
 > 3. DigitalOcean is **dropped**. No card. Default `LLM_BACKEND=template` (free Python messy-text). Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Optional Backboard. Public demo is Render free (`render.yaml`, `$PORT`, synthetic data only). If Render asks for a card, stop.
 
 ---
@@ -42,7 +42,7 @@
 
 **Build "Aaji's Pill Clerk"**, a local-first assistant that turns a grandparent's messy medicine instructions into a schedule a family can trust. The inputs are handwritten or printed prescriptions, medicine strips, and WhatsApp lines like *"subah ek, raat ko aadhi, khane ke baad"*. The outputs are a **big-font fridge chart** (Marathi/Hindi/English), **phone calendar reminders (`.ics`)**, and **refill dates**.
 
-- **Gemma 4 E4B** (open weights, Apache 2.0) runs **locally via Ollama** and reads the prescription photo into raw text lines.
+- **Scan is paste/type** (`EXTRACT_BACKEND=manual`). Local Gemma 4 E4B OCR is not on this laptop and is not claimed. Photos stay on the machine.
 - **A small open model, Qwen3-8B, fine-tuned with Tinker** (LoRA SFT) turns each messy line ("Tab Glycomet GP1 1-0-1 PC x 30d", "सकाळी एक, रात्री अर्धी") into **strict JSON**. When it isn't sure, it says **"ASK"** instead of guessing.
 - **Training data is template-rendered, correct by construction:** code samples the gold JSON first, then a Python template writes the messy line. All **3096** `train.jsonl` rows have `renderer=template`. Gemma 4 31B (`gemma-4-31b-it` on Google AI Studio) is the eval teacher ceiling only; it did **not** write the training set. Public demo: **`render.yaml` provided; not deployed**.
 - **The headline result** is a measured table on held-out synthetic lines plus **Public real-world set: HMR-100 (India)** once labelled: base Qwen3-8B vs **fine-tuned Qwen3-8B** vs Gemma 4 31B. It reports exact match, **dangerous-error rate**, and latency. This is what the Tinker category asks for: *"show a clear improvement in performance, latency, or cost over a baseline."*
@@ -85,7 +85,7 @@
 | **Relevance to prompt & theme** | One real person, a real handover. Open-source AI **is** the product: an open model is fine-tuned and **runs on the family laptop with the internet off**, and prescriptions never leave the house. |
 | **Creativity** | A fresh take on a familiar problem. It isn't a reminder app with a chatbot: it's **distillation into a domain model for Indian prescription shorthand**, with correct-by-construction synthetic data, a *dangerous-error* metric, and abstention as a feature. |
 | **Technical execution** | Held-out **real** test set, four-way comparison, bootstrap confidence intervals, a v1 → v2 iteration driven by error analysis, a Tinker ↔ Ollama parity check, unit tests on the deterministic schedule builder and `.ics` output. |
-| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** optional local OCR (`gemma4:e4b`) plus the 31B teacher as an eval ceiling on de-identified text. **Render:** `render.yaml` provided; not deployed. |
+| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** 31B teacher as an eval ceiling on de-identified text (not the training-data writer). Local OCR is not claimed. **Render:** `render.yaml` provided; not deployed. |
 
 ### 3.2 Competition read (snapshot of the #hf26challenge feed at ~12:10 PM IST Fri, 27 project posts)
 - **Topics already taken:** study buddy/quiz ×3, grandpa voice-memo recipe book ×2, meal planner, language tutor, sign-language translator, offline first aid, placement assistant, document Q&A, meeting copilot, a voice assistant that calls a grandmother, a guardrails layer, a finance coach for a bubble-tea shop. **Nobody is doing medication schedules or fine-tuning.**
@@ -138,7 +138,7 @@
 ```mermaid
 flowchart LR
     subgraph HOME["Family laptop (offline-capable)"]
-        IN["Photo of prescription<br/>or typed / WhatsApp line"] --> OCR["Gemma extract<br/>Ollama e4b OR hosted"]
+        IN["Photo of prescription<br/>or typed / WhatsApp line"] --> OCR["Type / paste lines<br/>(manual extract)"]
         OCR --> REV1["Caregiver fixes raw text<br/>(optional)"]
         REV1 --> PC["Pill Clerk<br/>fine-tuned Qwen3-8B<br/>Tinker hosted sampling"]
         PC --> VAL["Pydantic validator<br/>+ consistency rules"]
@@ -166,13 +166,13 @@ flowchart LR
 **What leaves the laptop (put this table in the post):**
 | Data | Where it goes | Why |
 |---|---|---|
-| Real / public prescription photos | **Nowhere.** They stay on the laptop | OCR is local Ollama or typed |
+| Real / public prescription photos | **Nowhere.** They stay on the laptop | Type the line on Label REAL |
 | Synthetic **training** text | Tinker SFT | Fine-tune. Never sent to Gemini. |
 | De-identified eval lines (synth_test, handwritten_realistic, public gold text) | Tinker (FT eval); Gemma 31B teacher only when approved | Measure baselines. Logged. |
 
 ### 5.1 Data-flow steps (runtime)
 1. **Capture.** The caregiver snaps a prescription, a strip, or pastes a WhatsApp line into the Streamlit app (`app/pages/1_Scan.py`).
-2. **Read (Gemma 4 E4B, local).** The photo goes to `ollama.chat(model="gemma4:e4b", images=[...])` with a prompt to transcribe each medicine line **verbatim**, one per line, writing `[?]` for unreadable characters. The output is a list of raw lines plus the doctor/date header (kept locally).
+2. **Read (manual).** Type each medicine line while looking at the photo. Local `gemma4:e4b` OCR is not installed on this laptop and is not claimed. Illegible characters are `[?]` / ASK.
 3. **Fix the text (human, optional).** The raw lines appear in an editable text area. The caregiver corrects OCR mistakes. Pill Clerk is trained on *text*, so this step isolates handwriting problems from interpretation problems.
 4. **Interpret (Pill Clerk, Tinker hosted).** Each line goes to the fine-tuned Qwen3-8B via Tinker's sampling API (`PARSER_BACKEND=tinker`). Anything uncertain goes into `needs_check`. Local GGUF/`ollama` is a later option if disk allows.
 5. **Validate.** Pydantic checks types and ranges, and consistency rules apply (taper must have steps, PRN must have no fixed slots, dose ≤ 4 tabs per slot, etc.). Failures get one retry, then the line is marked **ASK**.
@@ -349,7 +349,7 @@ Versions checked on PyPI on **2 Oct 2026**. Pin them in `pyproject.toml`.
 | Fine-tuning helpers | `tinker-cookbook` | **0.5.7** | Optional extra `train`. **Blocked on Windows:** `tml-renderers` 0.1.0 has no `win_amd64` wheel (manylinux + macosx only). Install on WSL/Linux for SFT. Sampling uses the `tinker` SDK, which does install on Windows. |
 | Student model | `Qwen/Qwen3-8B` (Apache 2.0) | — | Dense standard architecture: clean merge + GGUF. Tinker price **$0.44/M train tokens**, $0.195/M prefill, $0.60/M sample. Renderer **`qwen3_disable_thinking`** (no `<think>` in JSON outputs). |
 | Local LLM runtime | Ollama + `ollama` (Python) | **0.6.3** | Optional `EXTRACT_BACKEND=ollama` for `gemma4:e4b`. Parser GGUF skipped this weekend. |
-| Local vision/OCR | `gemma4:e4b` (Apache 2.0) **or hosted Gemma** | Ollama tag / DO | Default `EXTRACT_BACKEND=hosted` so the laptop need not store the vision weights |
+| Local vision/OCR | not claimed | — | `gemma4:e4b` is not on this laptop. `EXTRACT_BACKEND=manual`. |
 | YAML | `pyyaml` | **6.0.3** | `data/patterns.yaml` (not in the original pin list; added because the sampler reads YAML) |
 | Teacher / data generation | DO Serverless Inference, model **`gemma-4-31B-it`** via `openai` | **3.23.0** | OpenAI-compatible at `https://inference.do-ai.run/v1`. $0.18/M in, $0.50/M out (prepaid). The DO docs don't list image input or structured outputs for Gemma, so use JSON-in-prompt + Pydantic. |
 | Schemas | `pydantic` | **2.13.5** | One schema for training targets, validation and Ollama `format` |
@@ -772,7 +772,7 @@ tr{{border-bottom:4px solid #999}} footer{{font-size:16px;margin-top:20px}}</sty
 
 Set `PARSER_BACKEND=tinker` and `PILLCLERK_TINKER_PATH` to the `tinker://…/sampler_weights/…` path from `train/checkpoint_v1.json` (or v2). The Streamlit app calls Tinker sampling. Sampling is $0.60/M output tokens (cents for a demo). **`render.yaml` provided; not deployed.**
 
-Photo OCR: `EXTRACT_BACKEND=manual` by default (paste/type). Optional `EXTRACT_BACKEND=ollama` and `OLLAMA_EXTRACT_MODEL=gemma4:e4b` if disk allows. Photos never leave the laptop.
+Photo extract: `EXTRACT_BACKEND=manual` (paste/type). Local `gemma4:e4b` OCR is not installed and is not claimed. Photos never leave the laptop.
 
 Big-model calls (31B eval teacher): `LLM_BACKEND=gemini` with `GEMINI_API_KEY`, key in the `x-goog-api-key` header. Optional `LLM_BACKEND=backboard` uses the same `ChatBackend` interface; do not depend on it. Training render is `LLM_BACKEND=template`.
 
@@ -919,7 +919,7 @@ Target **2:45**, screen recording + phone footage, captions on.
 9. **My Agent Session** (optional): DevRelay embed or link.
 10. **Prize categories**, each with *what it does here* and *what breaks if you remove it*:
     - **Tinker:** the fine-tune; without it, exact match falls to the B0 number.
-    - **Gemma:** optional local OCR + the 31B teacher as an eval ceiling (not the training-data writer).
+    - **Gemma:** the 31B teacher as an eval ceiling on de-identified text (not the training-data writer). Local OCR is not claimed.
     - **Render:** `render.yaml` provided; not deployed. Do not enter Render until the demo is live.
 11. **Credits:** Qwen3 (Apache 2.0), Gemma 4 (Apache 2.0), Tinker cookbook, llama.cpp, Ollama, icalendar.
 

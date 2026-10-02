@@ -18,8 +18,8 @@ This is a DEV Hacktoberfest 2026 Weekend Challenge entry ("Build for a Friend").
 
 | Data | Leaves the laptop? | Where |
 |---|---|---|
-| Public HMR-100 / BD-200 images (`data/public/`, gitignored) | **No** | Local Ollama `gemma4:e4b`, or you type the line |
-| Photographed family files (`data/real/`, unused this weekend) | **No** | Local Ollama or type |
+| Public HMR-100 / BD-200 images (`data/public/`, gitignored) | **No** | Type the line on Label REAL while looking at the image |
+| Photographed family files (`data/real/`, unused this weekend) | **No** | Type the line |
 | Synthetic **training** text (`data/synth/train.jsonl`, all 3096 rows `renderer=template`) | Yes | Tinker SFT only. This text never went to Gemini. |
 | Synthetic eval lines (`data/synth/synth_test.jsonl`) | Yes, after PII strip | Tinker (FT eval). Gemma 4 31B teacher only when we run `--system gemma31` |
 | Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Tinker (FT eval); 31B teacher on the same allowlist |
@@ -43,7 +43,7 @@ Every model call sits behind an env switch:
 | Variable | Default | What it controls |
 |---|---|---|
 | `LLM_BACKEND` | `template` | Synthetic messy text (`template` is free). Optional: `gemini` (AI Studio), `backboard`, `tinker` |
-| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Optional: `ollama` local `gemma4:e4b`. Photos never leave the laptop. |
+| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Photos never leave the laptop. Local `gemma4:e4b` OCR is not installed and is not claimed. |
 | `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
 DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. The public demo is Render free: **render.yaml provided; not deployed** (`$PORT`, synthetic data only).
@@ -71,7 +71,7 @@ On Scan, tap **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`), the
 
 Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`.
 
-The photographed test set is **Public real-world set: HMR-100 (India)** (optional **BD-200 (Bangladesh)** as a notation stress test). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. Download with `scripts/download_public.sh` into gitignored `data/public/` (HMR is CC BY-ND 4.0 — never commit images or modified copies). Label on **Label REAL**: local Gemma e4b proposes the line, `labels.csv` pre-fills the medicine name, you correct gold. Target ~100 HMR lines (~30 pages), then ~40 BD-200 lines. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
+The photographed test set is **Public real-world set: HMR-100 (India)** (optional **BD-200 (Bangladesh)** as a notation stress test). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. Download with `scripts/download_public.sh` into gitignored `data/public/` (HMR is CC BY-ND 4.0 — never commit images or modified copies). Label on **Label REAL**: type the line while looking at the image; `labels.csv` pre-fills the medicine name; you correct gold. Target ~100 HMR lines (~30 pages), then ~40 BD-200 lines. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
 
 ## Fine-tune (Tinker hosted, no local GGUF)
 

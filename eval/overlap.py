@@ -6,6 +6,7 @@ Writes eval/out/overlap.json. rapidfuzz ratio > 90 is a near-dup.
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -81,6 +82,29 @@ def compare(a_name: str, a_lines: list[str], b_name: str, b_lines: list[str]) ->
     }
 
 
+EVAL_SET_NAMES = ("synth_test", "handwritten_realistic", "hmr100_gold", "bd200_gold")
+
+
+def vs_eval(lines: list[str], extra_name: str = "extra") -> dict:
+    """Exact + near overlap of a candidate file against every eval set (not train)."""
+    vs: dict[str, dict] = {}
+    for name in EVAL_SET_NAMES:
+        c = compare(extra_name, lines, name, load_lines(SETS[name]))
+        vs[name] = {
+            "exact": c["exact"],
+            "exact_normalized": c["exact_normalized"],
+            "near_ratio_gt_90": c["near_ratio_gt_90"],
+            "n_eval": c["n_b"],
+        }
+    return {
+        "extra": extra_name,
+        "n": len(lines),
+        "vs_eval": vs,
+        "any_exact_eval": any(v["exact"] for v in vs.values()),
+        "any_near_eval": any(v["near_ratio_gt_90"] for v in vs.values()),
+    }
+
+
 def run() -> dict:
     loaded = {name: load_lines(path) for name, path in SETS.items()}
     pairs: list[dict] = []
@@ -100,9 +124,18 @@ def run() -> dict:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--extra", type=Path, default=None, help="candidate jsonl to check against eval sets")
+    args = ap.parse_args()
     out = run()
     print(json.dumps({k: out[k] for k in ("near_threshold", "exact_train_synth_test")}, indent=2))
     print(f"wrote {OUT}")
+    if args.extra:
+        extra = vs_eval(load_lines(args.extra), extra_name=args.extra.name)
+        extra_path = OUT.parent / "overlap_extra.json"
+        extra_path.write_text(json.dumps(extra, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(json.dumps(extra, indent=2))
+        print(f"wrote {extra_path}")
 
 
 if __name__ == "__main__":

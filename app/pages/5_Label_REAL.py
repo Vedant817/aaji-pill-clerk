@@ -67,7 +67,8 @@ st.title(set_title("hmr100"))
 st.caption(
     "MIRAGE (arXiv 2410.09729): simulated records written by doctors — handwriting and "
     "notation are real, the patients are not. Never family data. Images stay on this "
-    "laptop (local Gemma e4b). Illegible means ASK."
+    "laptop. Type the line while looking at the image. Illegible means ASK. "
+    "Local Gemma e4b OCR is not installed on this laptop and is not claimed."
 )
 
 dataset = st.radio(
@@ -168,7 +169,7 @@ with right:
 
 c1, c2, c3 = st.columns(3)
 with c1:
-    if st.button("Propose line (local Gemma e4b)"):
+    if st.button("Propose line (optional local OCR)"):
         try:
             proposed = transcribe_local(str(photo))
             # Prefer the line that matches this medicine name.
@@ -204,7 +205,7 @@ if hint and not st.session_state.drug_box:
     _apply_medicine_hint(hint)
 
 line = st.text_area(
-    "Transcribed line (correct the e4b text). Gold copies what you see.",
+    "Transcribed line (type what you see). Gold copies the image.",
     height=90,
     key="line_box",
 )

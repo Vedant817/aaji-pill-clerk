@@ -1,0 +1,32 @@
+{
+  "extra": "targeted_ft3_danger.jsonl",
+  "n": 200,
+  "vs_eval": {
+    "synth_test": {
+      "exact": 0,
+      "exact_normalized": 0,
+      "near_ratio_gt_90": 0,
+      "n_eval": 400
+    },
+    "handwritten_realistic": {
+      "exact": 0,
+      "exact_normalized": 0,
+      "near_ratio_gt_90": 0,
+      "n_eval": 102
+    },
+    "hmr100_gold": {
+      "exact": 0,
+      "exact_normalized": 0,
+      "near_ratio_gt_90": 0,
+      "n_eval": 0
+    },
+    "bd200_gold": {
+      "exact": 0,
+      "exact_normalized": 0,
+      "near_ratio_gt_90": 0,
+      "n_eval": 0
+    }
+  },
+  "any_exact_eval": false,
+  "any_near_eval": false
+}

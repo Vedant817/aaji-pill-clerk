@@ -17,7 +17,7 @@ Fixes in the product and in v2 data:
 
 **Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, authored by Vedant, never used in training. Gold is typed against the written line. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions. The set was created **after** FT2 was trained (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl` (counted from those files).
 
-**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`). Scores stay TODO until a saved `eval/out/` run exists. Gemma 4 31B may see de-identified gold *text* only — never the images. B1 (local Gemma E4B) stays TODO without a local pull.
+**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`). Scores stay TODO until a saved `eval/out/` run exists. Gemma 4 31B may see de-identified gold *text* only — never the images. Local OCR (`gemma4:e4b`) is **not claimed**: ollama is not on this laptop (`eval/ocr_cer.py`).
 
 JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
 
@@ -30,7 +30,7 @@ JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written re
 | System | JSON valid | Exact HW [95% CI] | Danger_v1 HW | Exact SYNTH corrected n=397 [95% CI] | Danger_v1 SYNTH | Danger_v2 SYNTH | p50 s/line | Files |
 |---|---|---|---|---|---|---|---|---|
 | B0-fair Qwen3-8B base | 0.8060 | 0.3529 [0.2549, 0.4510] | 0.4510 | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3073 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
-| B1 Gemma 4 E4B | TODO | TODO | TODO | TODO | TODO | TODO | TODO | — |
+| B1 local OCR (gemma4:e4b) | not claimed | — | — | — | — | — | — | `eval/ocr_cer.py` (e4b not on this laptop) |
 | FT1 Qwen3-8B + LoRA v1 | 0.9748 | 0.6471 [0.5588, 0.7451] | 0.1471 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.0504 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
 | FT2 Qwen3-8B + LoRA v2 | 1.0 | 0.8627 [0.7941, 0.9314] | 0.0490 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
 | T Gemma 4 31B (AI Studio) | TODO | TODO | TODO | TODO | TODO | TODO | n/a (API) | — |

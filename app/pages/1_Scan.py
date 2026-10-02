@@ -11,7 +11,7 @@ DEMO = ROOT / "data" / "demo" / "prescriptions" / "aaji_sample.txt"
 
 stepper("Scan")
 st.title("Scan")
-st.caption("Paste one medicine line per row. Photo OCR uses local Gemma e4b on the Label REAL page (public HMR/BD images never leave this laptop).")
+st.caption("Paste one medicine line per row. Public HMR/BD photos stay on this laptop; type the line on Label REAL while looking at the image. Local OCR is not claimed.")
 
 text = st.text_area(
     "Prescription lines",

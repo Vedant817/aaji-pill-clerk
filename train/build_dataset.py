@@ -8,6 +8,8 @@ import random
 import sys
 from pathlib import Path
 
+from rapidfuzz import fuzz
+
 from pillclerk.copy_explicit import align_gold
 from pillclerk.filters import normalised_text, rule_ok
 from pillclerk.render import to_chat_row
@@ -22,6 +24,7 @@ from pillclerk.sampler import (
     sample_prn,
     sample_taper,
 )
+from pillclerk.schema import Dose, MedLine
 from pillclerk.templates import render_template
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -210,6 +213,176 @@ def generate_form_dose_food(
     return out
 
 
+def eval_drug_names() -> set[str]:
+    names: set[str] = set()
+    for path in (
+        SYNTH / "synth_test.jsonl",
+        ROOT / "data" / "heldout" / "handwritten_realistic.jsonl",
+        ROOT / "data" / "public_labels" / "hmr100_gold.jsonl",
+        ROOT / "data" / "public_labels" / "bd200_gold.jsonl",
+    ):
+        if not path.is_file():
+            continue
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            if not raw.strip():
+                continue
+            drug = (json.loads(raw).get("gold") or {}).get("drug")
+            if drug:
+                names.add(str(drug).lower())
+    return names
+
+
+def generate_ft3_danger(
+    n: int,
+    *,
+    drugs,
+    patterns,
+    seed: int = 2026,
+    banned_lines: set[str] | None = None,
+) -> list[dict]:
+    """Insulin N unit, syrup ml / ASK, Hindi-Marathi three-slot, combo suffixes.
+
+    Drugs must not appear in synth_test, handwritten_realistic, or hmr100_gold.
+    """
+    rng = random.Random(seed)
+    banned_lines = banned_lines if banned_lines is not None else eval_line_keys()
+    banned_drugs = eval_drug_names()
+    eval_lines = eval_raw_lines()
+    pool = [d for d in drugs if d["name"].lower() not in banned_drugs]
+    insulins = [d for d in pool if d.get("form") == "injection"]
+    syrups = [d for d in pool if d.get("form") == "syrup"]
+    suffixes = {"AM", "MT", "LS", "CV", "XR", "D3"}
+    combos = [
+        d
+        for d in pool
+        if d["name"].strip().split()[-1].upper() in suffixes or d["name"].upper().endswith("D3")
+    ]
+    tabs = [d for d in pool if d.get("form") in ("tab", "cap")] or pool
+    seen: set[str] = set(banned_lines)
+    out: list[dict] = []
+    attempts = 0
+
+    def _near_eval(line: str) -> bool:
+        return any(fuzz.ratio(line, other) > 90 for other in eval_lines)
+
+    def _add(line: str, gold: MedLine, style: str, drug_name: str, tag: str) -> None:
+        key = normalised_text(line)
+        if key in seen:
+            return
+        if _near_eval(line):
+            return
+        if not gold.needs_check and not rule_ok(line, gold):
+            return
+        seen.add(key)
+        out.append(pair_row(line, gold, style, drug_name, targeted=tag))
+
+    while len(out) < n and attempts < n * 80:
+        attempts += 1
+        bucket = rng.choice(
+            ["insulin", "insulin", "syrup", "syrup", "syrup_ask", "hi_slots", "combo", "combo"]
+        )
+        if bucket == "insulin" and insulins:
+            drug = rng.choice(insulins)
+            units = float(rng.choice([6, 8, 10, 12, 16]))
+            slot = rng.choice(["morning", "afternoon", "night"])
+            m = a = nt = 0.0
+            if slot == "morning":
+                m = units
+                word = "subah"
+            elif slot == "afternoon":
+                a = units
+                word = "dopahar"
+            else:
+                nt = units
+                word = "raat"
+            gold = MedLine(
+                drug=drug["name"],
+                strength=None,
+                form="injection",
+                kind="daily",
+                dose=Dose(morning=m, afternoon=a, night=nt, unit="unit"),
+                food="any",
+                duration_days=None,
+            )
+            if rng.choice([True, False]):
+                line = f"INJ. {drug['name']} {int(units)} unit {word}"
+            else:
+                line = f"{drug['name']} {int(units)} unit {word} ko"
+            _add(line, gold, "hinglish_wa", drug["name"], "ft3_insulin")
+        elif bucket in {"syrup", "syrup_ask"} and syrups:
+            drug = rng.choice(syrups)
+            days = int(rng.choice([3, 5, 7]))
+            if bucket == "syrup_ask":
+                gold = MedLine(
+                    drug=drug["name"],
+                    strength=None,
+                    form="syrup",
+                    kind="daily",
+                    dose=None,
+                    food="any",
+                    duration_days=days,
+                    needs_check=["dose", "schedule"],
+                    note="frequency not written",
+                )
+                line = (
+                    f"SYR. {drug['name']} x {days}d"
+                    if rng.choice([True, False])
+                    else f"SYR. {drug['name']} AFTER FOOD x {days} DAYS"
+                )
+                _add(line, gold, "doctor_short", drug["name"], "ft3_syrup_ask")
+            else:
+                m, a, nt = rng.choice([(5.0, 0.0, 5.0), (5.0, 0.0, 0.0), (0.0, 0.0, 5.0), (5.0, 5.0, 5.0)])
+                gold = MedLine(
+                    drug=drug["name"],
+                    strength=drug["strengths"][0] if drug["strengths"] else None,
+                    form="syrup",
+                    kind="daily",
+                    dose=Dose(morning=m, afternoon=a, night=nt, unit="ml"),
+                    food="after",
+                    duration_days=days,
+                )
+                line = f"SYR. {drug['name']}  {int(m)}-{int(a)}-{int(nt)} ml  AFTER FOOD  x {days} DAYS"
+                _add(line, gold, "clinic_print", drug["name"], "ft3_syrup")
+        elif bucket == "hi_slots" and tabs:
+            drug = rng.choice(tabs)
+            unit = FORM_TO_UNIT.get(drug["form"], "tab")
+            gold = sample_daily_slots(rng, drug, patterns, unit, (1.0, 1.0, 1.0))
+            style = rng.choice(["hindi", "marathi", "hinglish_wa"])
+            line = render_template(gold, style, rng)
+            _add(line, gold, style, drug["name"], "ft3_hi_slots")
+        elif bucket == "combo" and combos:
+            drug = rng.choice(combos)
+            unit = FORM_TO_UNIT.get(drug["form"], "tab")
+            gold = sample_daily_slots(rng, drug, patterns, unit, rng.choice([(1.0, 0.0, 0.0), (0.0, 0.0, 1.0), (1.0, 0.0, 1.0)]))
+            style = rng.choice(["clinic_print", "doctor_short", "hinglish_wa"])
+            line = render_template(gold, style, rng)
+            _add(line, gold, style, drug["name"], "ft3_combo")
+        if len(out) >= n:
+            break
+    if len(out) < n:
+        raise RuntimeError(f"ft3 danger targeted only produced {len(out)}/{n}")
+    return out[:n]
+
+
+def eval_raw_lines() -> list[str]:
+    lines: list[str] = []
+    for path in (
+        SYNTH / "synth_test.jsonl",
+        ROOT / "data" / "heldout" / "handwritten_realistic.jsonl",
+        ROOT / "data" / "public_labels" / "hmr100_gold.jsonl",
+        ROOT / "data" / "public_labels" / "bd200_gold.jsonl",
+    ):
+        if not path.is_file():
+            continue
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            if not raw.strip():
+                continue
+            line = json.loads(raw).get("line")
+            if line:
+                lines.append(str(line))
+    return lines
+
+
 def eval_line_keys() -> set[str]:
     keys: set[str] = set()
     for path in (
@@ -329,11 +502,35 @@ def main(argv: list[str] | None = None) -> int:
         help="append ~200 drug/strength stress rows; leave eval sets unchanged",
     )
     ap.add_argument("--n-drug-strength", type=int, default=200)
+    ap.add_argument(
+        "--write-ft3-danger",
+        action="store_true",
+        help="write targeted_ft3_danger.jsonl (does not append train.jsonl; ask before Tinker SFT)",
+    )
+    ap.add_argument("--n-ft3-danger", type=int, default=200)
     args = ap.parse_args(argv)
 
     if args.renderer == "llm":
         print("LLM renderer is off. Use --renderer template (free).", file=sys.stderr)
         return 2
+
+    if args.write_ft3_danger:
+        patterns = load_patterns()
+        drugs = load_drugs()
+        extra = generate_ft3_danger(
+            args.n_ft3_danger,
+            drugs=drugs,
+            patterns=patterns,
+            seed=args.seed + 23,
+            banned_lines=eval_line_keys(),
+        )
+        dest = SYNTH / "targeted_ft3_danger.jsonl"
+        write_jsonl(dest, extra)
+        tags: dict[str, int] = {}
+        for row in extra:
+            tags[str(row.get("targeted"))] = tags.get(str(row.get("targeted")), 0) + 1
+        print(json.dumps({"wrote": dest.name, "n": len(extra), "tags": tags}, indent=2))
+        return 0
 
     if args.append_drug_strength:
         patterns = load_patterns()

@@ -11,6 +11,14 @@ def test_compare_exact_and_near() -> None:
     assert NEAR == 90
 
 
+def test_vs_eval_reports_no_exact_on_disjoint() -> None:
+    from eval.overlap import vs_eval
+
+    out = vs_eval(["zz-unique-ft3-line-not-in-any-eval-aaa"], extra_name="probe")
+    assert out["any_exact_eval"] is False
+    assert out["n"] == 1
+
+
 def test_overlap_json_lists_train_synth_dups() -> None:
     out = run()
     assert out["exact_train_synth_test"] == 3
