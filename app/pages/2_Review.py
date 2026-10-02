@@ -1,17 +1,21 @@
 """Line-by-line review. Red = needs_check / ASK. Nothing proceeds until confirmed."""
 
-import streamlit as st
-
+from pillclerk.ui import apply_theme, stepper
 from pillclerk.config import tinker_parser_ready
 from pillclerk.schema import CheckField, Dose, Food, Form, Kind, MedLine, Unit
 from pillclerk.validate import extra_rules
 
+apply_theme()
+import streamlit as st
+
+stepper("Review")
 st.title("Review")
 st.caption("A human must confirm every line. ASK fields stay red until you fill them.")
 
 drafts = st.session_state.get("drafts") or []
 if not drafts:
     st.warning("No lines yet. Load them on the Scan page.")
+    st.page_link("pages/1_Scan.py", label="← Back to Scan")
     st.stop()
 
 
@@ -33,7 +37,7 @@ def _push_gold(i: int, gold: MedLine) -> None:
 
 
 if tinker_parser_ready():
-    if st.button("Fill fields from Tinker parser"):
+    if st.button("Fill fields from Tinker parser", type="primary"):
         from pillclerk.infer import get_parser
 
         parse = get_parser()
@@ -58,7 +62,10 @@ else:
     st.info("Tinker sampler path is not set yet. Fill fields by hand, then confirm each line.")
 
 if st.session_state.get("parse_note"):
-    st.caption(st.session_state["parse_note"])
+    st.markdown(
+        f'<div class="pc-ok">{st.session_state["parse_note"]}</div>',
+        unsafe_allow_html=True,
+    )
 
 FOODS: list[Food] = ["before", "after", "with", "empty_stomach", "any"]
 FORMS: list[Form] = ["tab", "cap", "syrup", "drops", "inhaler", "injection", "cream", "sachet", "other"]
@@ -68,10 +75,14 @@ UNITS: list[Unit] = ["tab", "cap", "ml", "drop", "puff", "unit", "sachet", "appl
 updated: list[dict] = []
 for i, draft in enumerate(drafts):
     gold = MedLine.model_validate(draft["gold"])
-    with st.expander(f"{i + 1}. {draft['line']}", expanded=True):
+    title = f"{i + 1}. {draft['line']}"
+    with st.expander(title, expanded=True):
         st.code(draft["line"])
         if gold.needs_check:
-            st.error("ASK: " + ", ".join(gold.needs_check))
+            st.markdown(
+                f'<div class="pc-ask">ASK: {", ".join(gold.needs_check)}</div>',
+                unsafe_allow_html=True,
+            )
         c1, c2, c3 = st.columns(3)
         drug = c1.text_input("Drug", gold.drug or "", key=f"drug{i}")
         strength = c2.text_input("Strength", gold.strength or "", key=f"str{i}")
@@ -98,7 +109,11 @@ for i, draft in enumerate(drafts):
             value=int(gold.prn_max_per_day or 0),
             key=f"prn{i}",
         )
-        confirmed = st.checkbox("I confirm this line copies the prescription", value=draft.get("confirmed", False), key=f"ok{i}")
+        confirmed = st.checkbox(
+            "I confirm this line copies the prescription",
+            value=draft.get("confirmed", False),
+            key=f"ok{i}",
+        )
         checks: list[CheckField] = []
         if not drug.strip():
             checks.append("drug")
@@ -127,10 +142,16 @@ for i, draft in enumerate(drafts):
         )
         if not confirmed:
             st.caption("Not confirmed yet.")
-        updated.append({"line": draft["line"], "gold": med.model_dump(), "confirmed": confirmed and not med.needs_check})
+        updated.append(
+            {"line": draft["line"], "gold": med.model_dump(), "confirmed": confirmed and not med.needs_check}
+        )
 
 st.session_state["drafts"] = updated
 if updated and all(d["confirmed"] for d in updated):
-    st.success("Every line is confirmed. Open Chart to print and download .ics.")
+    st.markdown(
+        '<div class="pc-ok">Every line is confirmed. Open Chart to print and download .ics.</div>',
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/3_Chart.py", label="Go to Chart →")
 else:
     st.warning("Chart stays locked until every line is confirmed and has no ASK fields.")

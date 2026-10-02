@@ -78,9 +78,15 @@ def chart_html(
         )
         rows.append(f"<tr><th>{L['prn']}</th><td>{cells}</td></tr>")
     return f"""<!doctype html><meta charset="utf-8">
-<style>@page{{size:A4 landscape;margin:12mm}} body{{font-family:'Noto Sans Devanagari','Noto Sans',sans-serif}}
-th{{font-size:40px;text-align:left;padding:12px 24px;white-space:nowrap}} td{{font-size:30px}}
-.pill{{display:inline-block;border:3px solid #333;border-radius:14px;padding:10px 18px;margin:8px}}
-.ask{{border-color:#c00;color:#c00}}
-tr{{border-bottom:4px solid #999}} footer{{font-size:16px;margin-top:20px}}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Noto+Sans:wght@500;700&family=Noto+Sans+Devanagari:wght@600;700&display=swap">
+<style>
+@page{{size:A4 landscape;margin:12mm}}
+body{{font-family:'Noto Sans Devanagari','Noto Sans','Figtree',sans-serif;background:#F0F9FF;color:#0C4A6E;margin:0;padding:12px}}
+table{{width:100%;border-collapse:separate;border-spacing:0 10px}}
+th{{font-family:'Figtree',sans-serif;font-size:36px;text-align:left;padding:14px 20px;white-space:nowrap;color:#0369A1;width:220px}}
+td{{font-size:28px}}
+.pill{{display:inline-block;background:#FFFFFF;border:2px solid #E0F2FE;border-radius:18px;padding:12px 18px;margin:6px;box-shadow:0 8px 20px rgba(12,74,110,.08)}}
+.ask{{border-color:#DC2626;color:#DC2626}}
+footer{{font-size:16px;margin-top:16px;color:#475569}}
+</style>
 <table>{''.join(rows)}</table><footer>{escape(footer)}</footer>"""

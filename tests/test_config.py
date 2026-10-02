@@ -5,6 +5,16 @@ import pytest
 from pillclerk import config
 
 
+def test_theme_uses_senior_care_palette() -> None:
+    from pillclerk.ui import ACCENT, ASK, CSS, PRIMARY
+
+    assert PRIMARY == "#0369A1"
+    assert ACCENT == "#16A34A"
+    assert ASK == "#DC2626"
+    assert "Figtree" in CSS
+    assert "Noto Sans Devanagari" in CSS
+
+
 def test_as_token_ids_unwraps_batch_encoding() -> None:
     from pillclerk.infer import as_token_ids
 
