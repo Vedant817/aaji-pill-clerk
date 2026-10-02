@@ -85,7 +85,7 @@
 | **Relevance to prompt & theme** | One real person, a real handover. Open-source AI **is** the product: an open model is fine-tuned and **runs on the family laptop with the internet off**, and prescriptions never leave the house. |
 | **Creativity** | A fresh take on a familiar problem. It isn't a reminder app with a chatbot: it's **distillation into a domain model for Indian prescription shorthand**, with correct-by-construction synthetic data, a *dangerous-error* metric, and abstention as a feature. |
 | **Technical execution** | Held-out **real** test set, four-way comparison, bootstrap confidence intervals, a v1 → v2 iteration driven by error analysis, a Tinker ↔ Ollama parity check, unit tests on the deterministic schedule builder and `.ics` output. |
-| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** 31B teacher on de-identified text (not the training-data writer); JSON-mode fairness still TODO. Local OCR is not claimed. Render is not entered. |
+| **Use of partner tech** | **Tinker:** the fine-tune *is* the model; remove it and accuracy drops to the base number. **Gemma:** 31B teacher on de-identified text (not the training-data writer); JSON-mode fairness (`gemma31_json`) ties FT2 on SYNTH and HW. Local OCR is not claimed. Render is not entered. |
 
 ### 3.2 Competition read (snapshot of the #hf26challenge feed at ~12:10 PM IST Fri, 27 project posts)
 - **Topics already taken:** study buddy/quiz ×3, grandpa voice-memo recipe book ×2, meal planner, language tutor, sign-language translator, offline first aid, placement assistant, document Q&A, meeting copilot, a voice assistant that calls a grandmother, a guardrails layer, a finance coach for a bubble-tea shop. **Nobody is doing medication schedules or fine-tuning.**
@@ -285,7 +285,7 @@ flowchart TD
 | B0 | Qwen3-8B **base**, same prompt + JSON instructions | Tinker sampling (`base_model="Qwen/Qwen3-8B"`) | The baseline the Tinker category compares against |
 | B1 | Gemma 4 E4B zero-shot | Laptop, Ollama | "Why not just use the local Gemma?" |
 | **FT1 / FT2** | **Qwen3-8B + LoRA (Tinker)**, v1 and v2 | Tinker sampling + laptop (Ollama Q4_K_M) | The product |
-| T | Gemma 4 31B zero-shot (no JSON mode) | Google AI Studio | Teacher; JSON-mode fairness is `gemma31_json` (not run) |
+| T | Gemma 4 31B zero-shot (no JSON mode) | Google AI Studio | Teacher; JSON-mode fairness is `gemma31_json` (run; ties FT2) |
 
 ### 8.3 Metrics
 - **JSON validity rate:** parses and passes the Pydantic schema.
@@ -913,14 +913,14 @@ Target **2:45**, screen recording + phone footage, captions on.
    - **I could fine-tune it at all** because the weights are open. A closed API wouldn't let me teach it Indian prescription shorthand and then *own* the result.
    - **It runs in her house with the internet off.** Prescriptions are some of the most private documents a family has; they never leave the laptop. Show the "what leaves the laptop" table.
    - **₹0 per month, forever.** No subscription for a 74-year-old, and no vendor can switch it off. Apache 2.0 for both Gemma 4 and Qwen3 means I can hand the family a copy.
-   - **Open models helped train open models.** Template-rendered gold trains an Apache-2.0 8B; Gemma 4 31B is the measured 31B teacher on the same schema. Whole-set exact vs FT2 is a schema-validity gap until JSON mode is measured.
+   - **Open models helped train open models.** Template-rendered gold trains an Apache-2.0 8B; Gemma 4 31B is the measured 31B teacher on the same schema. JSON-mode 31B ties the fine-tuned 8B; the 8B is a quarter of the size, cheaper, and never breaks the format.
    - **Swap, don't rewrite.** One env var moves between template (free), Tinker (cloud sampling) and Gemini 31B.
    - **Where closed would have been better:** a frontier model probably reads bad handwriting better. Say so, and explain why the trade-off still favours open here.
 8. **What Aaji said.** Direct quotes (original Marathi/Hindi + English), what she disagreed with, what you changed, how many lines the caregiver had to correct.
 9. **My Agent Session** (optional): DevRelay embed or link.
 10. **Prize categories**, each with *what it does here* and *what breaks if you remove it*:
     - **Tinker:** the fine-tune; without it, exact match falls to the B0 number.
-    - **Gemma:** the 31B teacher on de-identified text (not the training-data writer). Local OCR is not claimed. JSON-mode fairness (`gemma31_json`) is not run until approved.
+    - **Gemma:** the 31B teacher on de-identified text (not the training-data writer). Local OCR is not claimed. JSON-mode fairness (`gemma31_json`) ties FT2 on SYNTH (p=0.1078) and HW (p=1.0).
     - **Render:** not entered. `render.yaml` provided; not deployed.
 11. **Credits:** Qwen3 (Apache 2.0), Gemma 4 (Apache 2.0), Tinker cookbook, llama.cpp, Ollama, icalendar.
 

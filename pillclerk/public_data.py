@@ -225,6 +225,18 @@ def labelled_count(dataset: str) -> int:
     return len(gold_index(dataset))
 
 
+def prefill_from_hint(token: str) -> dict:
+    """labels.csv medicine string → line stub + drug/strength/form for Label REAL."""
+    parsed = parse_medicine_name(token)
+    line = (parsed.get("raw") or token or "").strip()
+    return {
+        "line": line,
+        "drug": parsed.get("drug") or "",
+        "strength": parsed.get("strength") or "",
+        "form": parsed.get("form") or "tab",
+    }
+
+
 def upsert_gold(dataset: str, row: dict) -> None:
     path = Path(DATASETS[dataset]["gold"])
     path.parent.mkdir(parents=True, exist_ok=True)

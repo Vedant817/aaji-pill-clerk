@@ -16,7 +16,7 @@ Local Streamlit: Scan → **Load demo slip** (`data/demo/prescriptions/aaji_samp
 
 Headline sets: corrected SYNTH held-out drugs **n=397** (3 exact train duplicates dropped; gold aligned to the written line) and **Hand-written realistic n=102** (generated in code in `eval/handwritten_realistic.py`, `authored=code:eval/handwritten_realistic.py`, after FT2 at `5619cee`; **67/102** lines use train drug names; not photographed, not Vedant's handwriting).
 
-Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `eval/out/ft2_synth_test.json`, `eval/out/b0_fair_handwritten_realistic.json`, `eval/out/ft1_handwritten_realistic.json`, `eval/out/ft2_handwritten_realistic.json`, `eval/out/gemma31_synth_test.json`, `eval/out/t_valid.json`.
+Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `eval/out/ft2_synth_test.json`, `eval/out/b0_fair_handwritten_realistic.json`, `eval/out/ft1_handwritten_realistic.json`, `eval/out/ft2_handwritten_realistic.json`, `eval/out/gemma31_synth_test.json`, `eval/out/gemma31_json_synth_test.json`, `eval/out/gemma31_json_handwritten_realistic.json`, `eval/out/t_valid.json`.
 
 | System | Exact SYNTH n=397 [95% CI] | Danger_v2_norm SYNTH | parse_fail / http_fail | Exact HW n=102 [95% CI] | Danger_v2_norm HW |
 |---|---|---|---|---|---|
@@ -24,15 +24,16 @@ Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `ev
 | FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0504 | 0.0252 / 0 | 0.6471 [0.5588, 0.7451] | 0.1078 |
 | FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8627 [0.7941, 0.9314] | 0.0588 |
 | T Gemma 4 31B (no JSON mode) | 0.8715 [0.8363, 0.9043] | 0.0101 | 0.1083 / 0.0101 | 0.6275 [0.5196, 0.7255] | 0.0098 |
+| T JSON mode (`gemma31_json`) | 0.9572 [0.9370, 0.9748] | 0.0126 | 0 / 0.0050 | 0.8725 [0.8039, 0.9314] | 0.0098 |
 | FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8824 [0.8235, 0.9412] | 0.0588 |
 
 McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 8/6 p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0; normalised danger_v2); `.env` stays on v2.
 
-Whole-set FT2 vs T SYNTH 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09 is a **schema-validity** win for FT2 (`parse_fail` 0.1083 plus `http_fail` 0.0101). On T-valid lines: **346/350** vs FT2 **342/350**, McNemar 8/4, p = 0.3876953125. HW T-valid **64/70** vs **64/70**, p = 1.0. `gemma31_json` (JSON mime + MedLine responseSchema) is the fairness rerun and has **not** been started. T p50 includes HTTP retries.
+Whole-set FT2 vs T (no JSON mode) SYNTH 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09 is a **schema-validity** win for FT2 (`parse_fail` 0.1083 plus `http_fail` 0.0101). On T-valid lines: **346/350** vs FT2 **342/350**, McNemar 8/4, p = 0.3876953125. HW T-valid **64/70** vs **64/70**, p = 1.0. JSON mode closed the parse hole: SYNTH json_valid 0.9950, parse_fail 0, http_fail 0.0050, exact 0.9572 [0.9370, 0.9748], danger_v2_norm 0.0126; HW json_valid 1.0, parse_fail 0, http_fail 0, exact 0.8725 [0.8039, 0.9314], danger_v2_norm 0.0098. McNemar FT2 vs `gemma31_json`: SYNTH 8/17 p = 0.10775214433670044; HW 8/7 p = 1.0. Both ties. A fine-tuned 8B matches a JSON-mode 31B at a quarter of the size, runs cheaper on Tinker, and never breaks the format. T p50 includes HTTP retries.
 
-**Public real-world set: HMR-100 (India)** is parser-only, gold from Label REAL while looking at the image. n=0 labelled lines so far. At n≈100, 95% CIs are about ±8–9 points; do not claim a winner unless the gap exceeds that interval. Do not publish cropped or blurred HMR photos (CC BY-ND).
+**Public real-world set: HMR-100 (India)** is parser-only, gold from Label REAL while looking at the image. Label REAL queues the first 30 HMR pages, pre-fills medicine names from `labels.csv`, and counts labelled/100 (shortcuts A/N/B/P). n=0 labelled lines so far. At n≈100, 95% CIs are about ±8–9 points; do not claim a winner unless the gap exceeds that interval. `scripts/run_hmr_eval_if_ready.py` then scores b0_fair, ft2, ft3, and gemma31_json. Do not publish cropped or blurred HMR photos (CC BY-ND).
 
-Gemma 4 31B is the measured 31B teacher on de-identified text (`synth_test`, `handwritten_realistic`), **no JSON mode** in the saved run. It did **not** write `train.jsonl` (all 3096 rows `renderer=template`). Local OCR (`gemma4:e4b`) is not claimed.
+Gemma 4 31B is the measured 31B teacher on de-identified text (`synth_test`, `handwritten_realistic`). Official T is **no JSON mode**; `gemma31_json` is the fairness rerun with responseMimeType + MedLine schema. It did **not** write `train.jsonl` (all 3096 rows `renderer=template`). Local OCR (`gemma4:e4b`) is not claimed.
 
 ## Honest limits
 

@@ -22,6 +22,7 @@ from pillclerk.public_data import (
     make_gold_row,
     near_duplicates,
     parse_medicine_name,
+    prefill_from_hint,
     refuse_daily_zero_dose,
     set_title,
     upsert_gold,
@@ -49,6 +50,8 @@ def _init_state() -> None:
     st.session_state.setdefault("drug_box", "")
     st.session_state.setdefault("strength_box", "")
     st.session_state.setdefault("propose_note", "")
+    st.session_state.setdefault("form_box", "tab")
+    st.session_state.setdefault("prefill_key", None)
 
 
 def _apply_medicine_hint(token: str) -> None:
@@ -88,14 +91,22 @@ images = images_all if all_pages or not max_pages else images_all[:max_pages]
 items = work_items(dataset, max_pages=max_pages)
 unlabelled = [it for it in items if not it["labelled"]]
 
-st.markdown(
-    f"**{set_title(dataset, n_labelled)}** · target {target} lines"
-    + (f" (~{HMR_TARGET_PAGES} pages)" if dataset == "hmr100" else f" (notation stress, ~{BD_TARGET_LINES} lines)")
-    + f" · {len(images)} images in `data/public/{dataset}/`"
-)
+m1, m2, m3 = st.columns(3)
+m1.metric("Labelled", f"{n_labelled} / {target}")
+m2.metric("Unlabelled in queue", len(unlabelled))
+m3.metric("Pages in queue", len(images))
 st.progress(min(1.0, n_labelled / target) if target else 0.0)
+st.caption(
+    f"**{set_title(dataset, n_labelled)}** · first {HMR_TARGET_PAGES} HMR pages by default "
+    f"(~{target} lines). Type the line while looking at the image. Gold copies what you see."
+    if dataset == "hmr100"
+    else f"**{set_title(dataset, n_labelled)}** · notation stress, ~{BD_TARGET_LINES} lines."
+)
 if n_labelled < target:
-    st.info(f"{target - n_labelled} lines left. At n≈100, 95% CIs are about ±8–9 points; only report gaps larger than that.")
+    st.info(
+        f"{target - n_labelled} lines left to {target}. At n≈100, 95% CIs are about ±8–9 points; "
+        "only report gaps larger than that. Scoring of b0_fair / ft2 / ft3 / gemma31_json starts automatically at 100."
+    )
 else:
     st.success(f"Target reached ({n_labelled} / {target}). Optional: switch to BD-200 for a notation stress test.")
 
@@ -112,14 +123,14 @@ components.html(
 const doc = window.parent.document;
 doc.addEventListener('keydown', (e) => {
   if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
-  if (e.key === 'a' || e.key === 'A') {
-    const b = [...doc.querySelectorAll('button')].find(x => x.innerText.includes('Accept'));
+  const click = (label) => {
+    const b = [...doc.querySelectorAll('button')].find(x => x.innerText.includes(label));
     if (b) b.click();
-  }
-  if (e.key === 'n' || e.key === 'N') {
-    const b = [...doc.querySelectorAll('button')].find(x => x.innerText.includes('Next'));
-    if (b) b.click();
-  }
+  };
+  if (e.key === 'a' || e.key === 'A') click('Accept');
+  if (e.key === 'n' || e.key === 'N') click('Next');
+  if (e.key === 'b' || e.key === 'B') click('Back');
+  if (e.key === 'p' || e.key === 'P') click('Prefill');
 });
 </script>
 """,
@@ -146,6 +157,25 @@ item = items[i]
 photo: Path = item["image"]
 line_no = int(item["line_no"])
 hint = item["medicine"]
+prefill_key = f"{photo.name}:{line_no}"
+if st.session_state.prefill_key != prefill_key:
+    st.session_state.prefill_key = prefill_key
+    gold_row = item.get("gold")
+    if gold_row:
+        st.session_state.line_box = gold_row.get("line") or ""
+        g = gold_row.get("gold") or {}
+        st.session_state.drug_box = g.get("drug") or ""
+        st.session_state.strength_box = g.get("strength") or ""
+        if g.get("form"):
+            st.session_state.form_box = g["form"]
+    else:
+        stub = prefill_from_hint(hint)
+        st.session_state.line_box = stub["line"]
+        st.session_state.drug_box = stub["drug"]
+        st.session_state.strength_box = stub["strength"]
+        if stub["form"]:
+            st.session_state.form_box = stub["form"]
+    st.rerun()
 
 left, right = st.columns([3, 2])
 with left:
@@ -167,12 +197,16 @@ with right:
         parsed = parse_medicine_name(hint)
         st.caption(f"Pre-fill drug from csv: **{parsed['drug'] or hint}**")
 
-c1, c2, c3 = st.columns(3)
+c0, c1, c2, c3 = st.columns(4)
+with c0:
+    if st.button("Back"):
+        st.session_state.pub_i = max(0, i - 1)
+        st.session_state.prefill_key = None
+        st.rerun()
 with c1:
     if st.button("Propose line (optional local OCR)"):
         try:
             proposed = transcribe_local(str(photo))
-            # Prefer the line that matches this medicine name.
             chosen = ""
             if hint and proposed:
                 h = hint.lower()
@@ -187,22 +221,23 @@ with c1:
             _apply_medicine_hint(hint)
         st.rerun()
 with c2:
-    if st.button("Prefill drug from csv"):
-        _apply_medicine_hint(hint)
+    if st.button("Prefill"):
+        stub = prefill_from_hint(hint)
+        st.session_state.line_box = stub["line"]
+        st.session_state.drug_box = stub["drug"]
+        st.session_state.strength_box = stub["strength"]
+        if stub["form"]:
+            st.session_state.form_box = stub["form"]
+        st.session_state.propose_note = "pre-filled from labels.csv — type the schedule from the image"
         st.rerun()
 with c3:
     if st.button("Next"):
         st.session_state.pub_i = i + 1
-        st.session_state.line_box = ""
-        st.session_state.drug_box = ""
-        st.session_state.strength_box = ""
+        st.session_state.prefill_key = None
         st.rerun()
 
 if st.session_state.get("propose_note"):
     st.caption(st.session_state.propose_note)
-
-if hint and not st.session_state.drug_box:
-    _apply_medicine_hint(hint)
 
 line = st.text_area(
     "Transcribed line (type what you see). Gold copies the image.",
@@ -234,7 +269,7 @@ flags = st.multiselect(
 if illegible and not flags:
     flags = ["drug", "dose", "schedule"]
 
-st.caption("Keyboard: **A** accept · **N** next (when not typing in a field).")
+st.caption("Keyboard: **A** accept · **N** next · **B** back · **P** prefill (when not typing in a field).")
 
 if st.button("Accept", type="primary"):
     if not line.strip():
@@ -293,9 +328,7 @@ if st.button("Accept", type="primary"):
                 medicine_hint=hint,
             )
             upsert_gold(dataset, row)
-            st.session_state.line_box = ""
-            st.session_state.drug_box = ""
-            st.session_state.strength_box = ""
+            st.session_state.prefill_key = None
             st.session_state.pub_i = i + 1
             st.success(f"Saved {photo.name} line {line_no}. {set_title(dataset, labelled_count(dataset))}")
             st.rerun()

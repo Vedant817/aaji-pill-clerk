@@ -52,6 +52,29 @@ def test_refuse_daily_zero_without_ask() -> None:
     assert not refuse_daily_zero_dose(kind="prn", morning=0, afternoon=0, night=0, ask=False)
 
 
+def test_prefill_from_hint_and_first_30_pages() -> None:
+    from pillclerk.public_data import HMR_TARGET_PAGES, prefill_from_hint, work_items
+
+    stub = prefill_from_hint("JANUMET 50/1000MG TAB")
+    assert stub["form"] == "tab"
+    assert stub["strength"]
+    assert "JANUMET" in stub["drug"]
+    assert stub["line"] == "JANUMET 50/1000MG TAB"
+    items = work_items("hmr100", max_pages=HMR_TARGET_PAGES)
+    pages = {it["image"].name for it in items}
+    assert len(pages) == HMR_TARGET_PAGES
+    assert len(items) >= 80
+    src = Path("app/pages/5_Label_REAL.py").read_text(encoding="utf-8")
+    assert "Labelled" in src
+    assert "Prefill" in src
+    assert "Keyboard" in src
+    assert "A** accept" in src or "**A** accept" in src
+    hmr = Path("scripts/run_hmr_eval_if_ready.py").read_text(encoding="utf-8")
+    for name in ("b0_fair", "ft2", "ft3", "gemma31_json"):
+        assert name in hmr
+    assert "n < 100" in hmr
+
+
 def test_parse_medicine_name_and_near_dup() -> None:
     p = parse_medicine_name("MONTAIR FX TAB")
     assert p["drug"] == "MONTAIR FX"

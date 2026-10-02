@@ -1,0 +1,83 @@
+{
+  "system": "gemma31_json",
+  "set": "data/synth/synth_test.jsonl",
+  "n": 397,
+  "json_valid": 0.9949622166246851,
+  "parse_fail": 0.0,
+  "http_fail": 0.005037783375314861,
+  "exact": 0.9571788413098237,
+  "exact_ci95": [
+    0.9370277078085643,
+    0.9748110831234257
+  ],
+  "exact_norm": 0.9571788413098237,
+  "exact_norm_ci95": [
+    0.9370277078085643,
+    0.9748110831234257
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.0025188916876574307,
+  "danger_v1": 0.0025188916876574307,
+  "danger_v2": 0.012594458438287154,
+  "danger_v2_strict": 0.012594458438287154,
+  "danger_v2_norm": 0.012594458438287154,
+  "n_valid": 395,
+  "exact_on_valid": 0.9620253164556962,
+  "ask_recall": 0.9411764705882353,
+  "false_ask_rate": 0.1736842105263158,
+  "n_gold_ask": 17,
+  "per_field": {
+    "drug": 0.9874055415617129,
+    "strength": 0.9924433249370277,
+    "form": 0.9949622166246851,
+    "kind": 0.9949622166246851,
+    "dose": 0.9622166246851386,
+    "every_n_days": 0.9949622166246851,
+    "taper": 0.9949622166246851,
+    "food": 0.9949622166246851,
+    "duration_days": 0.9899244332493703,
+    "prn_max_per_day": 0.9949622166246851
+  },
+  "p50_s": 40.79961395263672,
+  "p95_s": 124.34164500236511,
+  "error_fields": {
+    "drug": 5,
+    "dose": 15,
+    "duration_days": 4,
+    "strength": 3,
+    "form": 2,
+    "kind": 2,
+    "every_n_days": 2,
+    "taper": 2,
+    "food": 2,
+    "prn_max_per_day": 2
+  },
+  "dropped_train_duplicates": 3,
+  "gemini_accepted_config": {
+    "maxOutputTokens": 1024,
+    "responseMimeType": "application/json",
+    "responseSchema": true,
+    "temperature": 0.0,
+    "thinkingConfig": true
+  },
+  "gemini_accepted_config_counts": {
+    "{\"maxOutputTokens\": 1024, \"responseMimeType\": \"application/json\", \"responseSchema\": true, \"temperature\": 0.0, \"thinkingConfig\": true}": 397
+  },
+  "json_mode": true,
+  "payload_summary": {
+    "count": 896,
+    "sets": {
+      "synth_test.jsonl": 794,
+      "handwritten_realistic.jsonl": 102
+    },
+    "models": {
+      "gemma-4-31b-it": 896
+    },
+    "systems": {
+      "gemma31": 499,
+      "gemma31_json": 397
+    },
+    "sha256": "abcc01e79e0059c7c88cde8f0def69d5eb15155618d6b1bf089d70203af27dc4",
+    "log": "eval\\out\\sent_payload_log.jsonl"
+  }
+}

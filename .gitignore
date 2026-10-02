@@ -39,6 +39,7 @@ eval/out/*photographed*
 eval/out/*_gt.json
 eval/out/*_gt_preds.jsonl
 eval/out/sent_payload_log.jsonl
+eval/out/hmr_eval_started.json
 train/checkpoint_v3_unofficial.json
 
 # Editor / OS

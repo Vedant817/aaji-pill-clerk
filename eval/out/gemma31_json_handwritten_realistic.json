@@ -1,0 +1,77 @@
+{
+  "system": "gemma31_json",
+  "set": "data/heldout/handwritten_realistic.jsonl",
+  "n": 102,
+  "json_valid": 1.0,
+  "parse_fail": 0.0,
+  "http_fail": 0.0,
+  "exact": 0.8725490196078431,
+  "exact_ci95": [
+    0.803921568627451,
+    0.9313725490196079
+  ],
+  "exact_norm": 0.9313725490196079,
+  "exact_norm_ci95": [
+    0.8823529411764706,
+    0.9803921568627451
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.0,
+  "danger_v1": 0.0,
+  "danger_v2": 0.00980392156862745,
+  "danger_v2_strict": 0.00980392156862745,
+  "danger_v2_norm": 0.00980392156862745,
+  "n_valid": 102,
+  "exact_on_valid": 0.8725490196078431,
+  "ask_recall": 1.0,
+  "false_ask_rate": 0.36082474226804123,
+  "n_gold_ask": 5,
+  "per_field": {
+    "drug": 0.9901960784313726,
+    "strength": 0.9215686274509803,
+    "form": 0.9607843137254902,
+    "kind": 1.0,
+    "dose": 0.9705882352941176,
+    "every_n_days": 1.0,
+    "taper": 1.0,
+    "food": 1.0,
+    "duration_days": 1.0,
+    "prn_max_per_day": 1.0
+  },
+  "p50_s": 43.054842710494995,
+  "p95_s": 108.27157855033875,
+  "error_fields": {
+    "strength": 8,
+    "form": 4,
+    "dose": 3,
+    "drug": 1
+  },
+  "dropped_train_duplicates": 0,
+  "gemini_accepted_config": {
+    "maxOutputTokens": 1024,
+    "responseMimeType": "application/json",
+    "responseSchema": true,
+    "temperature": 0.0,
+    "thinkingConfig": true
+  },
+  "gemini_accepted_config_counts": {
+    "{\"maxOutputTokens\": 1024, \"responseMimeType\": \"application/json\", \"responseSchema\": true, \"temperature\": 0.0, \"thinkingConfig\": true}": 102
+  },
+  "json_mode": true,
+  "payload_summary": {
+    "count": 998,
+    "sets": {
+      "synth_test.jsonl": 794,
+      "handwritten_realistic.jsonl": 204
+    },
+    "models": {
+      "gemma-4-31b-it": 998
+    },
+    "systems": {
+      "gemma31": 499,
+      "gemma31_json": 499
+    },
+    "sha256": "735701f82e6ebe9e9231eee1122308b809a26990ff54abc15311c1050c9d871d",
+    "log": "eval\\out\\sent_payload_log.jsonl"
+  }
+}
