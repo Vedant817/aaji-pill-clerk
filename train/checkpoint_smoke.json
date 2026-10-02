@@ -1,0 +1,6 @@
+{
+  "state": "tinker://d1cd1111-a4aa-566f-97b9-c17336949a19:train:0/weights/pillclerk-smoke",
+  "sampler": "tinker://d1cd1111-a4aa-566f-97b9-c17336949a19:train:0/sampler_weights/pillclerk-smoke",
+  "model": "Qwen/Qwen3-8B",
+  "name": "pillclerk-smoke"
+}

@@ -59,8 +59,8 @@ def to_datum(tokenizer, row: dict) -> tinker.Datum:
     return tinker.Datum(
         model_input=tinker.ModelInput.from_ints(full[:-1]),
         loss_fn_inputs={
-            "target_tokens": tinker.TensorData(data=full[1:]),
-            "weights": tinker.TensorData(data=weights),
+            "target_tokens": tinker.TensorData(data=full[1:], dtype="int64"),
+            "weights": tinker.TensorData(data=weights, dtype="float32"),
         },
     )
 
@@ -118,8 +118,8 @@ def main() -> None:
             return tinker.Datum(
                 model_input=tinker.ModelInput.from_ints(full[:-1]),
                 loss_fn_inputs={
-                    "target_tokens": tinker.TensorData(data=full[1:]),
-                    "weights": tinker.TensorData(data=weights),
+                    "target_tokens": tinker.TensorData(data=full[1:], dtype="int64"),
+                    "weights": tinker.TensorData(data=weights, dtype="float32"),
                 },
             )
 
@@ -149,7 +149,8 @@ def main() -> None:
 
     state = tc.save_state(args.name).result().path
     sampler = tc.save_weights_for_sampler(args.name).result().path
-    ck = ROOT / "train" / "checkpoint_v1.json"
+    ck_name = "checkpoint_v1.json" if args.name == "pillclerk-v1" else f"checkpoint_{args.name}.json"
+    ck = ROOT / "train" / ck_name
     ck.write_text(json.dumps({"state": state, "sampler": sampler, "model": BASE_MODEL, "name": args.name}, indent=2), encoding="utf-8")
     print("saved", sampler)
 
