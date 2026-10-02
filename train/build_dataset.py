@@ -223,6 +223,71 @@ def generate_form_dose_food(
     return out
 
 
+def eval_line_keys() -> set[str]:
+    keys: set[str] = set()
+    for path in (
+        SYNTH / "synth_test.jsonl",
+        SYNTH / "val.jsonl",
+        ROOT / "data" / "heldout" / "handwritten_realistic.jsonl",
+    ):
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                keys.add(normalised_text(json.loads(line)["line"]))
+    return keys
+
+
+def generate_drug_strength(
+    n: int,
+    *,
+    drugs,
+    patterns,
+    seed: int = 77,
+    banned: set[str] | None = None,
+) -> list[dict]:
+    """FT3 extras: combo brands, odd strengths, Hindi/Marathi drug spelling."""
+    rng = random.Random(seed)
+    banned = banned if banned is not None else eval_line_keys()
+    styles = ["clinic_print", "doctor_short", "hinglish_wa", "hindi", "marathi", "mixed"]
+    combos = [d for d in drugs if " " in d["name"] or "/" in d["name"]] or drugs
+    out: list[dict] = []
+    seen: set[str] = set(banned)
+    attempts = 0
+    while len(out) < n and attempts < n * 50:
+        attempts += 1
+        bucket = rng.choice(["drug", "drug", "strength", "strength", "combo"])
+        drug = rng.choice(combos if bucket == "combo" else drugs)
+        unit = FORM_TO_UNIT.get(drug["form"], "tab")
+        gold = sample_daily_slots(
+            rng, drug, patterns, unit, rng.choice([(1.0, 0.0, 1.0), (1.0, 0.0, 0.0), (0.0, 0.0, 1.0)])
+        )
+        style = rng.choice(styles)
+        line = render_template(gold, style, rng)
+        if not rule_ok(line, gold):
+            continue
+        key = normalised_text(line)
+        if key in seen:
+            continue
+        seen.add(key)
+        row = to_chat_row(line, gold)
+        row.update(
+            {
+                "line": line,
+                "gold": json.loads(gold.model_dump_json()),
+                "style": style,
+                "renderer": "template",
+                "drug": drug["name"],
+                "synthetic": True,
+                "targeted": f"ds_{bucket}",
+            }
+        )
+        out.append(row)
+    if len(out) < n:
+        raise RuntimeError(f"drug/strength targeted only produced {len(out)}/{n}")
+    return out
+
+
 def write_splits(
     *,
     n_train: int = 2000,
@@ -281,11 +346,39 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--n-test", type=int, default=400)
     ap.add_argument("--n-targeted", type=int, default=500, help="FT2 extras mixed into train.jsonl")
     ap.add_argument("--n-form-dose-food", type=int, default=400, help="extra form/dose/food stress rows")
+    ap.add_argument(
+        "--append-drug-strength",
+        action="store_true",
+        help="append ~200 drug/strength stress rows; leave eval sets unchanged",
+    )
+    ap.add_argument("--n-drug-strength", type=int, default=200)
     args = ap.parse_args(argv)
 
     if args.renderer == "llm":
         print("LLM renderer is off. Use --renderer template (free).", file=sys.stderr)
         return 2
+
+    if args.append_drug_strength:
+        patterns = load_patterns()
+        drugs = load_drugs()
+        train_drugs, _ = holdout_split(
+            drugs, fraction=float(patterns["held_out_drug_fraction"]), seed=args.seed
+        )
+        extra = generate_drug_strength(
+            args.n_drug_strength,
+            drugs=train_drugs,
+            patterns=patterns,
+            seed=args.seed + 17,
+            banned=eval_line_keys(),
+        )
+        train_path = SYNTH / "train.jsonl"
+        existing = [json.loads(l) for l in train_path.read_text(encoding="utf-8").splitlines() if l.strip()] if train_path.is_file() else []
+        keys = {normalised_text(r["line"]) for r in existing} | eval_line_keys()
+        new = [r for r in extra if normalised_text(r["line"]) not in keys]
+        write_jsonl(SYNTH / "targeted_drug_strength.jsonl", extra)
+        write_jsonl(train_path, existing + new)
+        print(json.dumps({"appended": len(new), "train": len(existing) + len(new), "ds": len(extra)}, indent=2))
+        return 0
 
     if args.append_form_dose_food:
         patterns = load_patterns()

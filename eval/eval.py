@@ -10,6 +10,7 @@ import json
 import random
 import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from statistics import median
 
@@ -72,7 +73,7 @@ def bootstrap_ci(xs, n=1000, seed=0):
     return means[int(0.025 * n)], means[int(0.975 * n)]
 
 
-def get_parser(system: str):
+def get_parser(system: str, set_path: str = ""):
     from pillclerk import infer
 
     ck = lambda v: json.loads((ROOT / "train" / f"checkpoint_{v}.json").read_text())["sampler"]
@@ -81,6 +82,7 @@ def get_parser(system: str):
         "b0_fair": lambda: infer.make_tinker_parser(None, few_shot=True),
         "ft1": lambda: infer.make_tinker_parser(ck("v1")),
         "ft2": lambda: infer.make_tinker_parser(ck("v2")),
+        "gemma31": lambda: infer.make_gemini_parser(set_path),
     }[system]()
 
 
@@ -125,10 +127,15 @@ def main() -> None:
     ap.add_argument("--set", required=True)
     ap.add_argument("--limit", type=int, default=0, help="cap rows (0 = all)")
     ap.add_argument("--preds", default="", help="rescore an existing preds jsonl; skip Tinker")
+    ap.add_argument("--workers", type=int, default=0, help="parallel parsers (gemma31 default 3)")
     a = ap.parse_args()
     gold_rows = [json.loads(l) for l in open(a.set, encoding="utf-8")]
     if a.limit:
         gold_rows = gold_rows[: a.limit]
+    if a.system == "gemma31":
+        from pillclerk.privacy import assert_gemini_eval_set
+
+        assert_gemini_eval_set(Path(a.set))
     scores, lat, preds = [], [], []
     if a.preds:
         pred_rows = [json.loads(l) for l in open(a.preds, encoding="utf-8")]
@@ -147,14 +154,34 @@ def main() -> None:
             out["p95_s"] = prev["p95_s"]
             out["rescored_from_preds"] = True
     else:
-        parse = get_parser(a.system)
-        for r in gold_rows:
+        parse = get_parser(a.system, a.set)
+        workers = a.workers or (3 if a.system == "gemma31" else 1)
+        parsed: list[tuple[MedLine | None, float]] = [(None, 0.0)] * len(gold_rows)
+
+        def _one(i: int, row: dict) -> tuple[int, MedLine | None, float]:
             t0 = time.time()
-            p = parse(r["line"])
-            lat.append(time.time() - t0)
-            gold = MedLine.model_validate(r["gold"])
+            pred = parse(row["line"])
+            return i, pred, time.time() - t0
+
+        if workers <= 1:
+            for i, row in enumerate(gold_rows):
+                _, pred, sec = _one(i, row)
+                parsed[i] = (pred, sec)
+        else:
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                futs = [pool.submit(_one, i, row) for i, row in enumerate(gold_rows)]
+                done = 0
+                for fut in as_completed(futs):
+                    i, pred, sec = fut.result()
+                    parsed[i] = (pred, sec)
+                    done += 1
+                    if done % 20 == 0 or done == len(gold_rows):
+                        print(f"{a.system} {done}/{len(gold_rows)}", flush=True)
+        for row, (p, sec) in zip(gold_rows, parsed, strict=True):
+            lat.append(sec)
+            gold = MedLine.model_validate(row["gold"])
             scores.append(score(p, gold))
-            preds.append({"line": r["line"], "pred": p.model_dump() if p else None, **scores[-1]})
+            preds.append({"line": row["line"], "pred": p.model_dump() if p else None, **scores[-1]})
         out = summarize(a.system, a.set, scores, lat)
     print(json.dumps(out, indent=2))
     write_out(out, preds, a.set, a.system)

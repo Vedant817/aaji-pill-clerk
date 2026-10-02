@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Literal
 
 LlmBackend = Literal["template", "gemini", "backboard", "tinker"]
-ExtractBackend = Literal["manual", "ollama", "gemini"]
+ExtractBackend = Literal["manual", "ollama"]
 ParserBackend = Literal["tinker", "ollama"]
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,13 +55,14 @@ def llm_backend() -> LlmBackend:
 
 def extract_backend() -> ExtractBackend:
     value = _get("EXTRACT_BACKEND", "manual").lower()
-    if value in ("hosted", "digitalocean", "do"):
+    if value in ("hosted", "digitalocean", "do", "gemini"):
         raise ValueError(
-            "DigitalOcean is dropped. Use EXTRACT_BACKEND=manual (paste) or "
-            "EXTRACT_BACKEND=gemini (Google AI Studio)."
+            "Real photos never leave the laptop. Use EXTRACT_BACKEND=manual (type) "
+            "or EXTRACT_BACKEND=ollama (local gemma4:e4b). Gemini is text-only for "
+            "the 31B teacher on synthetic / hand-written realistic lines."
         )
-    if value not in ("manual", "ollama", "gemini"):
-        raise ValueError(f"EXTRACT_BACKEND must be manual, ollama, or gemini, got {value!r}")
+    if value not in ("manual", "ollama"):
+        raise ValueError(f"EXTRACT_BACKEND must be manual or ollama, got {value!r}")
     return value  # type: ignore[return-value]
 
 

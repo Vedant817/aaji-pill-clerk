@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from typing import Protocol
 
 import httpx
@@ -70,17 +71,40 @@ class GeminiBackend:
             "generationConfig": {
                 "temperature": temperature,
                 "maxOutputTokens": max_tokens,
+                "thinkingConfig": {"thinkingLevel": "minimal"},
             },
         }
         if system:
             payload["systemInstruction"] = {"parts": [{"text": system}]}
         url = f"{self.base}/models/{model or self.model}:generateContent"
-        with httpx.Client(timeout=90.0) as client:
-            r = client.post(url, params={"key": self.api_key}, json=payload)
-            r.raise_for_status()
-            data = r.json()
-        parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-        return "".join(str(p.get("text") or "") for p in parts).strip()
+        last_err: Exception | None = None
+        for attempt in range(6):
+            try:
+                with httpx.Client(timeout=120.0) as client:
+                    r = client.post(url, params={"key": self.api_key}, json=payload)
+                    if r.status_code == 400 and "generationConfig" in payload:
+                        cfg = dict(payload["generationConfig"])
+                        cfg.pop("thinkingConfig", None)
+                        cfg.pop("responseMimeType", None)
+                        payload["generationConfig"] = cfg
+                        last_err = httpx.HTTPStatusError(
+                            r.text[:200], request=r.request, response=r
+                        )
+                        continue
+                    if r.status_code in {429, 500, 503}:
+                        time.sleep(min(2**attempt, 30))
+                        last_err = httpx.HTTPStatusError(
+                            f"{r.status_code}", request=r.request, response=r
+                        )
+                        continue
+                    r.raise_for_status()
+                    data = r.json()
+                parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+                return "".join(str(p.get("text") or "") for p in parts).strip()
+            except httpx.HTTPError as exc:
+                last_err = exc
+                time.sleep(min(2**attempt, 30))
+        raise RuntimeError(f"Gemini generateContent failed: {last_err}")
 
 
 class BackboardBackend:

@@ -14,6 +14,18 @@ This is a DEV Hacktoberfest 2026 Weekend Challenge entry ("Build for a Friend").
 - **Not a medical device.** A personal family tool built in a weekend, not validated for clinical use.
 - Real prescription photos and labels stay on the laptop and are gitignored. The public demo uses synthetic prescriptions only.
 
+## What leaves the laptop
+
+| Data | Leaves the laptop? | Where |
+|---|---|---|
+| Photographed prescriptions (`data/real/raw/`) | **No** | Local Ollama `gemma4:e4b`, or you type the line |
+| Photographed gold lines (`data/real/gt.jsonl`) | **No** | Never Gemini, never any teacher API |
+| Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Gemma 4 31B teacher (`gemma-4-31b-it`), logged in `eval/out/sent_payload_log.jsonl` |
+| Synthetic eval/train text | Yes, after PII strip | Same 31B teacher log; Tinker SFT/sampling for the clerk |
+| Confirmed clerk parse in the app | Yes, the medicine line only | Tinker hosted LoRA (`PARSER_BACKEND=tinker`) |
+
+GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl` and `data/heldout/handwritten_realistic.jsonl`. The code refuses `data/real/*`.
+
 ## MVP line
 
 photo → extracted lines → human confirm → fine-tuned parser → schedule → fridge chart + `.ics`
@@ -29,7 +41,7 @@ Every model call sits behind an env switch:
 | Variable | Default | What it controls |
 |---|---|---|
 | `LLM_BACKEND` | `template` | Synthetic messy text (`template` is free). Optional: `gemini` (AI Studio), `backboard`, `tinker` |
-| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Optional: `ollama` local `gemma4:e4b`, or `gemini` |
+| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Optional: `ollama` local `gemma4:e4b`. Photos never leave the laptop. |
 | `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
 DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. The public demo is Render free (`render.yaml`, `$PORT`, synthetic data only).
@@ -48,14 +60,14 @@ uv run pytest
 Keys needed (ask before spending):
 
 - `TINKER_API_KEY` — required. Tinker Console; claim Hacktoberfest credits at https://hacktoberfest.com/my
-- `GEMINI_API_KEY` — optional until the 31B teacher run. Ask before spending. Model id `gemma-4-31b-it`.
+- `GEMINI_API_KEY` — 31B teacher on synthetic + hand-written realistic **text** only. Model id `gemma-4-31b-it`. Never used for photos.
 - `BACKBOARD_API_KEY` — optional. Only if `LLM_BACKEND=backboard`
 
 ## Demo (synthetic slip)
 
 On Scan, tap **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`), then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone.
 
-Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`. Photographed family lines: put photos in `data/real/raw/` (gitignored) and label on **Label REAL**.
+Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`. Photographed family lines: put photos in `data/real/raw/` (gitignored) and label on **Label REAL**. Target ≥80 medicine lines from whatever slips the family has. WhatsApp screenshots are optional. If n < 50, report it as a **small real set** with 95% CIs shown prominently.
 
 ## Fine-tune (Tinker hosted, no local GGUF)
 

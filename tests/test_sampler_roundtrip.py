@@ -6,12 +6,19 @@ from pathlib import Path
 
 import pytest
 
-from pillclerk.filters import drug_present, rule_ok
+from pillclerk.filters import drug_present, normalised_text, rule_ok
 from pillclerk.render import to_chat_row
 from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_hard_negative, sample_line, sample_prn
 from pillclerk.schema import MedLine
 from pillclerk.templates import STYLES, dose_code, render_template
-from train.build_dataset import generate_form_dose_food, generate_pairs, generate_targeted, main as build_main
+from train.build_dataset import (
+    eval_line_keys,
+    generate_drug_strength,
+    generate_form_dose_food,
+    generate_pairs,
+    generate_targeted,
+    main as build_main,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -216,6 +223,17 @@ def test_hard_negative_without_food_token_is_any() -> None:
         gold = sample_hard_negative(rng, rng.choice(drugs), patterns)
         if gold.note == "partially illegible" or gold.note == "as directed" or gold.note == "frequency not written":
             assert gold.food == "any"
+
+
+def test_generate_drug_strength_avoids_eval_lines() -> None:
+    drugs = load_drugs()
+    patterns = load_patterns()
+    banned = eval_line_keys()
+    rows = generate_drug_strength(20, drugs=drugs, patterns=patterns, seed=77, banned=banned)
+    assert len(rows) == 20
+    for r in rows:
+        assert normalised_text(r["line"]) not in banned
+        assert r["targeted"].startswith("ds_")
 
 
 def test_generate_form_dose_food_stresses_ft1_weak_fields() -> None:

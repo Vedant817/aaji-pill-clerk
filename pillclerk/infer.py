@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from pillclerk import config
@@ -74,6 +75,20 @@ def chat_messages(line: str, *, few_shot: bool = False) -> list[dict[str, str]]:
             messages.append({"role": "assistant", "content": gold.model_dump_json()})
     messages.append({"role": "user", "content": line})
     return messages
+
+
+def gemini_teacher_messages(line: str) -> list[dict[str, str]]:
+    """Single user turn: Gemma 4 often ignores systemInstruction and few-shot chat."""
+    examples = "\n\n".join(
+        f"Line: {user}\nJSON: {gold.model_dump_json()}" for user, gold in FEW_SHOT
+    )
+    user = (
+        f"{SYSTEM_PROMPT}{JSON_ONLY}\n\n"
+        f"Examples:\n{examples}\n\n"
+        f"Line: {line}\n"
+        "JSON:"
+    )
+    return [{"role": "user", "content": user}]
 
 
 def _extract_json(text: str) -> str:
@@ -154,6 +169,67 @@ def make_tinker_parser(
             return extra_rules(copy_explicit(med, line))
         except Exception:
             return None
+
+    return parse
+
+
+def parse_medline_blob(text: str) -> MedLine | None:
+    """Pick the first JSON object in text that validates as MedLine."""
+    blob = _extract_json(text)
+    try:
+        return extra_rules(MedLine.model_validate_json(blob))
+    except Exception:
+        pass
+    decoder = json.JSONDecoder()
+    i = 0
+    while i < len(text):
+        start = text.find("{", i)
+        if start == -1:
+            return None
+        try:
+            obj, end = decoder.raw_decode(text, start)
+        except json.JSONDecodeError:
+            i = start + 1
+            continue
+        if isinstance(obj, dict):
+            try:
+                return extra_rules(MedLine.model_validate(obj))
+            except Exception:
+                i = end
+                continue
+        i = end
+    return None
+
+
+def parse_gemini_text(text: str, line: str) -> MedLine | None:
+    med = parse_medline_blob(text)
+    if med is None:
+        return None
+    return extra_rules(copy_explicit(med, line))
+
+
+def make_gemini_parser(set_path: str) -> ParseFn:
+    """Gemma 4 31B teacher. Text-only, allowlisted eval sets, payload log."""
+    from pillclerk.privacy import assert_gemini_eval_set, log_sent_payload, strip_pii
+    from pillclerk.render import GeminiBackend
+
+    allowed = str(assert_gemini_eval_set(Path(set_path)))
+    backend = GeminiBackend()
+    model = backend.model
+
+    def parse(line: str) -> MedLine | None:
+        clean, stripped = strip_pii(line)
+        messages = gemini_teacher_messages(clean)
+        log_sent_payload(
+            system="gemma31",
+            set_path=allowed,
+            model=model,
+            line=clean,
+            stripped=stripped,
+            messages=messages,
+        )
+        text = backend.complete(messages, temperature=0.0, max_tokens=1024)
+        return parse_gemini_text(text, clean)
 
     return parse
 

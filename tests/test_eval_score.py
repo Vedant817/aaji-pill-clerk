@@ -30,6 +30,22 @@ def test_b0_fair_is_registered() -> None:
     assert "few_shot=True" in src
 
 
+def test_parse_medline_blob_skips_inner_dose_object() -> None:
+    from pillclerk.infer import parse_medline_blob
+
+    raw = (
+        'notes dose {"morning": 0.5, "afternoon": 0.0, "night": 0.5, "unit": "cap"} then '
+        '{"drug":"Nitrofurantoin","strength":"100 mg","form":"cap","kind":"daily",'
+        '"dose":{"morning":0.5,"afternoon":0.0,"night":0.5,"unit":"cap"},'
+        '"every_n_days":1,"taper":[],"food":"after","duration_days":3,'
+        '"prn_max_per_day":null,"note":null,"needs_check":[]}'
+    )
+    med = parse_medline_blob(raw)
+    assert med is not None
+    assert med.drug == "Nitrofurantoin"
+    assert med.form == "cap"
+
+
 def test_b0_fair_saved_run_beats_schema_fail_b0() -> None:
     fair = json.loads(Path("eval/out/b0_fair_synth_test.json").read_text(encoding="utf-8"))
     old = json.loads(Path("eval/out/b0_synth_test.json").read_text(encoding="utf-8"))

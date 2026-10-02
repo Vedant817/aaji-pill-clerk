@@ -129,7 +129,10 @@ def test_digitalocean_backend_is_dropped(monkeypatch: pytest.MonkeyPatch) -> Non
     with pytest.raises(ValueError, match="dropped"):
         config.llm_backend()
     monkeypatch.setenv("EXTRACT_BACKEND", "hosted")
-    with pytest.raises(ValueError, match="dropped"):
+    with pytest.raises(ValueError):
+        config.extract_backend()
+    monkeypatch.setenv("EXTRACT_BACKEND", "gemini")
+    with pytest.raises(ValueError, match="never leave"):
         config.extract_backend()
 
 
