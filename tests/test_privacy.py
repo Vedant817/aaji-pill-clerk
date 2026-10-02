@@ -27,9 +27,13 @@ def test_gemini_allowlist_blocks_real_paths() -> None:
     allowed = assert_gemini_eval_set(Path("data/synth/synth_test.jsonl"))
     assert allowed.name == "synth_test.jsonl"
     assert_gemini_eval_set(Path("data/heldout/handwritten_realistic.jsonl"))
+    assert_gemini_eval_set(Path("data/public_labels/hmr100_gold.jsonl"))
+    with pytest.raises(PrivacyError):
+        assert_gemini_eval_set(Path("data/public/hmr100/hmr_000.jpg"))
 
 
 def test_real_path_detects_raw_and_gt() -> None:
     assert is_real_path(Path("data/real/raw/rx01.jpg"))
     assert is_real_path(Path("data/real/gt.jsonl"))
     assert not is_real_path(Path("data/heldout/handwritten_realistic.jsonl"))
+    assert not is_real_path(Path("data/public_labels/hmr100_gold.jsonl"))

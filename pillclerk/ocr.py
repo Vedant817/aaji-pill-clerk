@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from pillclerk import config
-from pillclerk.privacy import PrivacyError, is_real_path
+from pillclerk.privacy import PrivacyError, is_photo_path, is_real_path
 
 
 def lines_from_text(text: str) -> list[str]:
@@ -24,8 +24,8 @@ def extract_from_image(path: str) -> list[str]:
         raise RuntimeError(
             "EXTRACT_BACKEND=manual: paste the lines instead of sending a photo to a model."
         )
-    if is_real_path(p) and backend != "ollama":
-        raise PrivacyError("Photographed prescriptions stay on this laptop. Use local Ollama or type the line.")
+    if (is_photo_path(p) or is_real_path(p)) and backend != "ollama":
+        raise PrivacyError("Prescription photos stay on this laptop. Use local Ollama or type the line.")
     import ollama
 
     return transcribe_local(path)

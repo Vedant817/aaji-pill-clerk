@@ -1,11 +1,11 @@
 """Hand-written realistic held-out slips. Never used in training.
 
-These are de-identified typical Indian family / caregiver lines (clinic print,
+These are de-identified typical clinic / caregiver lines (clinic print,
 doctor shorthand, WhatsApp), gold-typed against what is written. They are
-NOT photographed prescriptions and must not be reported as REAL.
+NOT photographed prescriptions.
 
-Photographed family files stay in gitignored data/real/raw/. Ground truth
-for those photos is gitignored data/real/gt.jsonl.
+The photographed test set is Public real-world set: HMR-100 (India)
+(data/public/ + data/public_labels/hmr100_gold.jsonl). Never call it family data.
 """
 
 from __future__ import annotations

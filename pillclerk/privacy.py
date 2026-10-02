@@ -1,9 +1,9 @@
 """What may leave the laptop.
 
-Real prescription photos and photographed lines never go to Gemini or any
-other remote teacher. Gemma 4 31B (AI Studio) may only see de-identified
-synthetic and hand-written realistic *text*. Every remote teacher payload
-is logged to eval/out/sent_payload_log.jsonl.
+Prescription photos (family or public HMR/BD images) never go to Gemini or
+any other remote teacher. Gemma 4 31B (AI Studio) may only see de-identified
+*text* from allowlisted jsonl sets. Every remote teacher payload is logged
+to eval/out/sent_payload_log.jsonl.
 """
 
 from __future__ import annotations
@@ -22,6 +22,8 @@ _LOG_LOCK = threading.Lock()
 ALLOWED_GEMINI_SETS = {
     (ROOT / "data" / "synth" / "synth_test.jsonl").resolve(),
     (ROOT / "data" / "heldout" / "handwritten_realistic.jsonl").resolve(),
+    (ROOT / "data" / "public_labels" / "hmr100_gold.jsonl").resolve(),
+    (ROOT / "data" / "public_labels" / "bd200_gold.jsonl").resolve(),
 }
 
 PHONE = re.compile(r"(?:\+91[\s-]?)?[6-9]\d{9}")
@@ -41,28 +43,53 @@ class PrivacyError(RuntimeError):
     pass
 
 
-def is_real_path(path: Path) -> bool:
-    rel = path.resolve()
-    real_root = (ROOT / "data" / "real").resolve()
+def _under(path: Path, root: Path) -> bool:
     try:
-        rel.relative_to(real_root)
+        path.resolve().relative_to(root.resolve())
         return True
     except ValueError:
-        pass
+        return False
+
+
+def is_photo_path(path: Path) -> bool:
+    """Image files and gitignored photo folders never leave the laptop."""
+    rel = path.resolve()
+    if _under(rel, ROOT / "data" / "real"):
+        return True
+    if _under(rel, ROOT / "data" / "public"):
+        return True
+    suffix = rel.suffix.lower()
+    if suffix in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".tif", ".tiff", ".bmp"}:
+        return _under(rel, ROOT / "data")
+    return False
+
+
+def is_real_path(path: Path) -> bool:
+    rel = path.resolve()
+    if is_photo_path(rel):
+        return True
+    if _under(rel, ROOT / "data" / "real"):
+        return True
     name = path.name.lower()
     return name in {"gt.jsonl", "real_test.jsonl"} or "photographed" in name
 
 
 def assert_gemini_eval_set(path: Path) -> Path:
     resolved = path.resolve()
-    if is_real_path(resolved):
+    if is_photo_path(resolved):
         raise PrivacyError(
-            "Photographed prescriptions and data/real/* never leave the laptop. "
-            "Gemini 31B is text-only on synth_test and handwritten_realistic."
+            "Prescription images never leave the laptop. Gemini 31B is text-only "
+            "on synth_test, handwritten_realistic, and de-identified public gold jsonl."
+        )
+    if _under(resolved, ROOT / "data" / "real"):
+        raise PrivacyError(
+            "data/real/* never leaves the laptop. Gemini 31B is text-only on "
+            "allowlisted jsonl (synth, handwritten realistic, public gold text)."
         )
     if resolved not in ALLOWED_GEMINI_SETS:
         raise PrivacyError(
-            f"Gemini 31B may only score synth_test or handwritten_realistic, got {path}"
+            "Gemini 31B may only score synth_test, handwritten_realistic, or "
+            f"de-identified public gold jsonl, got {path}"
         )
     return resolved
 

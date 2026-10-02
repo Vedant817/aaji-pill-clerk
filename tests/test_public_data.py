@@ -1,0 +1,57 @@
+from pathlib import Path
+
+import pytest
+
+from pillclerk.privacy import PrivacyError, assert_gemini_eval_set, is_photo_path
+from pillclerk.public_data import (
+    TITLE_HMR,
+    gold_overlaps_train,
+    near_duplicates,
+    parse_medicine_name,
+    set_title,
+)
+
+
+def test_display_name_is_public_hmr() -> None:
+    assert TITLE_HMR == "Public real-world set: HMR-100 (India)"
+    assert set_title("hmr100", 0) == "Public real-world set: HMR-100 (India), n=0"
+    readme = Path("README.md").read_text(encoding="utf-8")
+    notice = Path("NOTICE").read_text(encoding="utf-8")
+    results = Path("eval/results.md").read_text(encoding="utf-8")
+    assert TITLE_HMR in readme
+    assert TITLE_HMR in notice
+    assert TITLE_HMR in results
+    assert "CC BY-ND 4.0" in notice
+    assert "10.17632/k62rfd23kz" in notice
+    assert "Never call it family data" in results
+    assert "arXiv 2410.09729" in notice
+
+
+def test_download_script_and_gitignore() -> None:
+    sh = Path("scripts/download_public.sh").read_text(encoding="utf-8")
+    assert "chaithanyakota/100-handwritten-medical-records" in sh
+    assert "CC BY-ND" in sh
+    gi = Path(".gitignore").read_text(encoding="utf-8")
+    assert "data/public/" in gi
+    assert Path("data/public_labels/hmr100_gold.jsonl").is_file()
+    assert Path("scripts/download_public.py").is_file()
+
+
+def test_parse_medicine_name_and_near_dup() -> None:
+    p = parse_medicine_name("MONTAIR FX TAB")
+    assert p["drug"] == "MONTAIR FX"
+    assert p["form"] == "tab"
+    p2 = parse_medicine_name("JANUMET 50/1000MG TAB")
+    assert p2["form"] == "tab"
+    assert p2["strength"]
+    hits = near_duplicates("this line is not in train.jsonl xyzzy-unique-token")
+    assert hits == []
+    assert gold_overlaps_train("hmr100") == []
+
+
+def test_public_images_blocked_gold_text_allowlisted() -> None:
+    assert is_photo_path(Path("data/public/hmr100/hmr_000.jpg"))
+    with pytest.raises(PrivacyError):
+        assert_gemini_eval_set(Path("data/public/hmr100/hmr_000.jpg"))
+    allowed = assert_gemini_eval_set(Path("data/public_labels/hmr100_gold.jsonl"))
+    assert allowed.name == "hmr100_gold.jsonl"

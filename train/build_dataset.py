@@ -229,6 +229,8 @@ def eval_line_keys() -> set[str]:
         SYNTH / "synth_test.jsonl",
         SYNTH / "val.jsonl",
         ROOT / "data" / "heldout" / "handwritten_realistic.jsonl",
+        ROOT / "data" / "public_labels" / "hmr100_gold.jsonl",
+        ROOT / "data" / "public_labels" / "bd200_gold.jsonl",
     ):
         if not path.is_file():
             continue

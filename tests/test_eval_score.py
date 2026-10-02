@@ -27,7 +27,20 @@ def test_b0_fair_is_registered() -> None:
 
     src = Path(ev.__file__).read_text(encoding="utf-8")
     assert '"b0_fair"' in src
+    assert '"ft3"' in src
     assert "few_shot=True" in src
+
+
+def test_mcnemar_counts_discordant_pairs() -> None:
+    from eval.report import ci_width_points, mcnemar_exact, public_set_name
+
+    a = [{"exact": 0}, {"exact": 1}, {"exact": 0}]
+    b = [{"exact": 1}, {"exact": 1}, {"exact": 0}]
+    m = mcnemar_exact(a, b)
+    assert m["n01_b_fixes"] == 1
+    assert m["n10_b_regresses"] == 0
+    assert public_set_name(100) == "Public real-world set: HMR-100 (India), n=100"
+    assert 8 <= ci_width_points(100) <= 10
 
 
 def test_parse_medline_blob_skips_inner_dose_object() -> None:

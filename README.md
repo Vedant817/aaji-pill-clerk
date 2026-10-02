@@ -18,13 +18,14 @@ This is a DEV Hacktoberfest 2026 Weekend Challenge entry ("Build for a Friend").
 
 | Data | Leaves the laptop? | Where |
 |---|---|---|
-| Photographed prescriptions (`data/real/raw/`) | **No** | Local Ollama `gemma4:e4b`, or you type the line |
-| Photographed gold lines (`data/real/gt.jsonl`) | **No** | Never Gemini, never any teacher API |
-| Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Gemma 4 31B teacher (`gemma-4-31b-it`), logged in `eval/out/sent_payload_log.jsonl` |
+| Public HMR-100 / BD-200 images (`data/public/`, gitignored) | **No** | Local Ollama `gemma4:e4b`, or you type the line |
+| Photographed family files (`data/real/`, unused this weekend) | **No** | Local Ollama or type |
+| Public gold text (`data/public_labels/*.jsonl`) | Yes, after PII strip, once labelled | Gemma 4 31B teacher (`gemma-4-31b-it`), logged in `eval/out/sent_payload_log.jsonl` |
+| Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Same 31B teacher log |
 | Synthetic eval/train text | Yes, after PII strip | Same 31B teacher log; Tinker SFT/sampling for the clerk |
 | Confirmed clerk parse in the app | Yes, the medicine line only | Tinker hosted LoRA (`PARSER_BACKEND=tinker`) |
 
-GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl` and `data/heldout/handwritten_realistic.jsonl`. The code refuses `data/real/*`.
+GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl`, `data/heldout/handwritten_realistic.jsonl`, and de-identified public gold jsonl. Images never leave the laptop. The code refuses `data/real/*` and `data/public/*` image paths.
 
 ## MVP line
 
@@ -67,7 +68,9 @@ Keys needed (ask before spending):
 
 On Scan, tap **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`), then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone.
 
-Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`. Photographed family lines: put photos in `data/real/raw/` (gitignored) and label on **Label REAL**. Target ≥80 medicine lines from whatever slips the family has. WhatsApp screenshots are optional. If n < 50, report it as a **small real set** with 95% CIs shown prominently.
+Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`.
+
+The photographed test set is **Public real-world set: HMR-100 (India)** (optional **BD-200 (Bangladesh)** as a notation stress test). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. Download with `scripts/download_public.sh` into gitignored `data/public/` (HMR is CC BY-ND 4.0 — never commit images or modified copies). Label on **Label REAL**: local Gemma e4b proposes the line, `labels.csv` pre-fills the medicine name, you correct gold. Target ~100 HMR lines (~30 pages), then ~40 BD-200 lines. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
 
 ## Fine-tune (Tinker hosted, no local GGUF)
 
@@ -85,7 +88,7 @@ SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500
 
 ## Results
 
-Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=102)** (never trained, not photographed). Full table and file paths in `eval/results.md`. Raw family photos stay gitignored in `data/real/raw/`.
+Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=102)** (never trained, not photographed). **Public real-world set: HMR-100 (India), n=…** is scored after labelling; numbers stay TODO until `eval/out/` has a run. Full table and file paths in `eval/results.md`. Public images stay gitignored in `data/public/`.
 
 | System | Exact SYNTH [95% CI] | Danger SYNTH | Exact hand-written realistic [95% CI] | Danger hand-written realistic | p50 s/line | Files |
 |---|---|---|---|---|---|---|
@@ -98,9 +101,15 @@ FT2 vs FT1 on the same 400 SYNTH lines: 14 exact-match fixes, 0 regressions. On 
 ## What is real
 
 - Synthetic training data is generated in-repo (gold JSON first, then messy text).
-- Real family prescriptions live in `data/real/` (gitignored) and are never used for training.
-- Post-deadline commits, if any, will be listed here.
+- **Public real-world set: HMR-100 (India)** is photographed doctor handwriting from MIRAGE (simulated patients). Gold text is in `data/public_labels/hmr100_gold.jsonl`. Images are gitignored and never used for training.
+- Optional **Public real-world set: BD-200 (Bangladesh)** is a notation stress test (`1+0+1`, Bangla durations).
+- Family photos are not part of this weekend's test set.
 
 ## License
 
-Apache-2.0. See `LICENSE` and `NOTICE`.
+Apache-2.0 for this repository. See `LICENSE` and `NOTICE`.
+
+Third-party public sets (not redistributed as images in git):
+
+- HMR-100 — CC BY-ND 4.0, MIRAGE arXiv 2410.09729, Hugging Face `chaithanyakota/100-handwritten-medical-records`. Do not commit images or derivatives.
+- BD-200 — CC BY 4.0, Mendeley DOI [10.17632/k62rfd23kz](https://doi.org/10.17632/k62rfd23kz).

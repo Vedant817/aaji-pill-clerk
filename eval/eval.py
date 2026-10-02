@@ -82,6 +82,7 @@ def get_parser(system: str, set_path: str = ""):
         "b0_fair": lambda: infer.make_tinker_parser(None, few_shot=True),
         "ft1": lambda: infer.make_tinker_parser(ck("v1")),
         "ft2": lambda: infer.make_tinker_parser(ck("v2")),
+        "ft3": lambda: infer.make_tinker_parser(ck("v3")),
         "gemma31": lambda: infer.make_gemini_parser(set_path),
     }[system]()
 

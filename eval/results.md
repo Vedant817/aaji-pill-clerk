@@ -1,6 +1,8 @@
 # Eval results
 
-Numbers in this file come only from `eval/eval.py` runs saved under `eval/out/`. Values marked TODO have not been measured. Never invent numbers. A set is called **REAL** only when it is transcribed from photographed prescriptions. That set does not exist yet.
+Numbers in this file come only from `eval/eval.py` runs saved under `eval/out/`. Values marked TODO have not been measured. Never invent numbers.
+
+The photographed test set is **Public real-world set: HMR-100 (India), n=…** (optional **Public real-world set: BD-200 (Bangladesh)**). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
 
 ## What changed for FT2 (IDEA.md §8.6)
 
@@ -13,7 +15,9 @@ Fixes in the product and in v2 data:
 
 **Comparability:** train/val/synth_test were regenerated with form-in-line. B0 / FT1 / FT2 below are scored on this **new** held-out synth_test (n=400, 38 held-out drugs). The old FT1 row (exact 0.80 on the old test) is a footnote, not the headline.
 
-**Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, never used in training. Gold is typed against the written line. These are de-identified typical family / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions. Photographed family files stay gitignored in `data/real/raw/`. Gemma 4 31B (Google AI Studio) stays TODO until `GEMINI_API_KEY` is used with consent. B1 (local Gemma E4B) stays TODO without a local pull.
+**Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, never used in training. Gold is typed against the written line. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions.
+
+**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`). Scores stay TODO until a saved `eval/out/` run exists. Gemma 4 31B may see de-identified gold *text* only — never the images. B1 (local Gemma E4B) stays TODO without a local pull.
 
 JSON-valid in the headline table is SYNTH. Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
 
@@ -91,7 +95,22 @@ Paired FT2 vs FT1 on the same 102 lines: **25** exact-match fixes, **3** regress
 
 FT2 remaining misses: 14 inexact lines. Error-field counts: strength 8, drug 7, dose 5, form 3. Hindi/Marathi Devanagari brand names vs Latin gold, combo brands, and insulin units are the main buckets. Food is 0.990 (1 miss).
 
-**Limits:** no second labeller, no photographed originals in-repo, one author typed gold. IDEA.md §8.1 still wants a second human on family photos.
+**Limits:** no second labeller, photographed originals stay gitignored (HMR CC BY-ND 4.0), one author types gold.
+
+## Public real-world set: HMR-100 (India), n=…
+
+Not scored yet. Gold is empty until labelled on the Label REAL page. After ~100 lines (~30 pages):
+
+```
+uv run python -m eval.eval --system b0_fair --set data/public_labels/hmr100_gold.jsonl
+uv run python -m eval.eval --system ft2 --set data/public_labels/hmr100_gold.jsonl
+uv run python -m eval.eval --system ft3 --set data/public_labels/hmr100_gold.jsonl
+uv run python -m eval.eval --system gemma31 --set data/public_labels/hmr100_gold.jsonl --workers 3
+```
+
+FT3 is kept only if it beats FT2 on exact match without raising danger (McNemar). Optional BD-200 (~40 lines) is a notation stress test (`1+0+1`, Bangla durations), not the headline n.
+
+At n≈100, only report model differences larger than the 95% CI (about ±8–9 points).
 
 Extra synthetic form/dose/food stress: 400 rows in `data/synth/targeted_form_dose_food.jsonl`, 396 unique lines appended to `train.jsonl` (now 2896). FT2 weights were trained on the 2500-row mix; the extra 396 are for a later v3 run.
 

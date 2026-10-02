@@ -86,6 +86,11 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=BATCH)
     ap.add_argument("--name", default="pillclerk-v1")
     ap.add_argument("--train", default="", help="override train jsonl path")
+    ap.add_argument(
+        "--apply-env",
+        action="store_true",
+        help="write sampler path to .env (v1/v2 always do; v3 only with this flag)",
+    )
     args = ap.parse_args()
 
     require_env("TINKER_API_KEY")
@@ -154,11 +159,14 @@ def main() -> None:
         ck_name = "checkpoint_v1.json"
     elif args.name in ("pillclerk-v2", "v2"):
         ck_name = "checkpoint_v2.json"
+    elif args.name in ("pillclerk-v3", "v3"):
+        ck_name = "checkpoint_v3.json"
     else:
         ck_name = f"checkpoint_{args.name}.json"
     ck = ROOT / "train" / ck_name
     ck.write_text(json.dumps({"state": state, "sampler": sampler, "model": BASE_MODEL, "name": args.name}, indent=2), encoding="utf-8")
-    apply_tinker_checkpoint(ck)
+    if args.apply_env or args.name in ("pillclerk-v1", "v1", "pillclerk-v2", "v2"):
+        apply_tinker_checkpoint(ck)
     print("saved", sampler)
     print("wrote", ck)
 
