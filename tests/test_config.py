@@ -1,5 +1,7 @@
 """Backend env switches. No keys required."""
 
+import json
+
 import pytest
 
 from pillclerk import config
@@ -27,6 +29,33 @@ def test_extract_json_strips_fences() -> None:
 
     raw = '```json\n{"drug": "Glycomet"}\n```'
     assert _extract_json(raw) == '{"drug": "Glycomet"}'
+
+
+def test_b0_fair_few_shot_not_in_eval_sets() -> None:
+    from pathlib import Path
+
+    from pillclerk.infer import FEW_SHOT, JSON_ONLY, chat_messages
+
+    eval_lines = set()
+    for p in (
+        Path("data/synth/synth_test.jsonl"),
+        Path("data/heldout/handwritten_realistic.jsonl"),
+    ):
+        for line in p.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                eval_lines.add(json.loads(line)["line"])
+    assert len(FEW_SHOT) == 3
+    for user, gold in FEW_SHOT:
+        assert user not in eval_lines
+        gold.model_dump_json()
+    msgs = chat_messages("TAB. X 5MG 1-0-0 AFTER FOOD x 5 DAYS", few_shot=True)
+    assert msgs[0]["role"] == "system"
+    assert "JSON object only" in msgs[0]["content"]
+    assert "dose is an object" in JSON_ONLY
+    assert sum(1 for m in msgs if m["role"] == "assistant") == 3
+    assert msgs[-1]["content"].startswith("TAB. X")
+    plain = chat_messages("hello", few_shot=False)
+    assert len(plain) == 2
 
 
 def test_set_dotenv_value_does_not_echo_secret(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:

@@ -78,6 +78,7 @@ def get_parser(system: str):
     ck = lambda v: json.loads((ROOT / "train" / f"checkpoint_{v}.json").read_text())["sampler"]
     return {
         "b0": lambda: infer.make_tinker_parser(None),
+        "b0_fair": lambda: infer.make_tinker_parser(None, few_shot=True),
         "ft1": lambda: infer.make_tinker_parser(ck("v1")),
         "ft2": lambda: infer.make_tinker_parser(ck("v2")),
     }[system]()

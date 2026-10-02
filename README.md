@@ -63,7 +63,7 @@ Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwrit
 uv run python -m train.build_dataset --split --n-targeted 500
 uv run python -m train.build_dataset --append-form-dose-food --n-form-dose-food 400
 uv run python -m train.sft --name pillclerk-v2
-uv run python -m eval.eval --system b0 --set data/synth/synth_test.jsonl
+uv run python -m eval.eval --system b0_fair --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft1 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/heldout/handwritten_realistic.jsonl
@@ -77,11 +77,11 @@ Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=1
 
 | System | Exact SYNTH [95% CI] | Danger SYNTH | Exact hand-written realistic [95% CI] | Danger hand-written realistic | p50 s/line | Files |
 |---|---|---|---|---|---|---|
-| B0 Qwen3-8B base | 0.00 | 1.0 | 0.00 | 1.0 | 2.15 | `eval/out/b0_synth_test.json` |
+| B0-fair Qwen3-8B | 0.475 [0.428, 0.525] | 0.38 | 0.353 [0.255, 0.451] | 0.451 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
 | FT1 LoRA v1 | 0.91 [0.88, 0.94] | 0.065 | 0.647 [0.559, 0.745] | 0.147 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
 | FT2 LoRA v2 | 0.945 [0.92, 0.97] | 0.0025 | 0.863 [0.794, 0.931] | 0.049 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
 
-FT2 vs FT1 on the same 400 SYNTH lines: 14 exact-match fixes, 0 regressions. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions; danger 15 → 5. Form/kind/taper/every_n_days/strength are 1.0 on new SYNTH after v2. Hand-written realistic food is 0.990, form 0.971, dose 0.951. B0 emits JSON-shaped guesses that fail the MedLine schema (`dose` as `"1-0-1"`, `kind="regular"`).
+FT2 vs FT1 on the same 400 SYNTH lines: 14 exact-match fixes, 0 regressions. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions; danger 15 → 5. Form/kind/taper/every_n_days/strength are 1.0 on new SYNTH after v2. Hand-written realistic food is 0.990, form 0.971, dose 0.951. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
 
 ## What is real
 

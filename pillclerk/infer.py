@@ -14,6 +14,67 @@ from pillclerk.validate import extra_rules
 
 ParseFn = Callable[[str], MedLine | None]
 
+JSON_ONLY = (
+    " Reply with one JSON object only. No markdown fences, no prose. "
+    "form is lowercase tab|cap|syrup|drops|inhaler|injection|cream|sachet|other (never TAB). "
+    "kind is daily|prn|taper (never regular). "
+    "food is before|after|with|empty_stomach|any (never AFTER FOOD). "
+    "dose is an object {morning, afternoon, night, unit}, never a string like \"1-0-1\". "
+    "Missing fields are null and listed in needs_check."
+)
+
+# Three gold pairs from train.jsonl, held out of synth_test and handwritten_realistic.
+FEW_SHOT: list[tuple[str, MedLine]] = [
+    (
+        "5. Tab Pantoprazole 40mg subah ek raat ko ek khane ke baad 3 din",
+        MedLine(
+            drug="Pantoprazole",
+            strength="40 mg",
+            form="tab",
+            kind="daily",
+            dose={"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"},
+            food="after",
+            duration_days=3,
+        ),
+    ),
+    (
+        "TAB. Sucral 1 g SOS / PRN max 2/d x 7 DAYS",
+        MedLine(
+            drug="Sucral",
+            strength="1 g",
+            form="tab",
+            kind="prn",
+            food="any",
+            duration_days=7,
+            prn_max_per_day=2,
+        ),
+    ),
+    (
+        "Tab Lasix 40 mg subah ek raat ko ek khali pet 7 din",
+        MedLine(
+            drug="Lasix",
+            strength="40 mg",
+            form="tab",
+            kind="daily",
+            dose={"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"},
+            food="empty_stomach",
+            duration_days=7,
+        ),
+    ),
+]
+
+
+def chat_messages(line: str, *, few_shot: bool = False) -> list[dict[str, str]]:
+    """FT2 template is SYSTEM_PROMPT + user line. B0-fair adds JSON-only + 3 shots."""
+    system = SYSTEM_PROMPT + (JSON_ONLY if few_shot else "")
+    messages: list[dict[str, str]] = [{"role": "system", "content": system}]
+    if few_shot:
+        for user, gold in FEW_SHOT:
+            messages.append({"role": "user", "content": user})
+            messages.append({"role": "assistant", "content": gold.model_dump_json()})
+    messages.append({"role": "user", "content": line})
+    return messages
+
 
 def _extract_json(text: str) -> str:
     text = re.sub(r"<think>[\s\S]*?</think>", "", text)
@@ -56,11 +117,8 @@ def as_token_ids(ids: Any) -> list[int]:
     return [int(x) for x in list(ids)]
 
 
-def _qwen_prompt(tokenizer: Any, line: str) -> list[int]:
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": line},
-    ]
+def _qwen_prompt(tokenizer: Any, line: str, *, few_shot: bool = False) -> list[int]:
+    messages = chat_messages(line, few_shot=few_shot)
     kwargs: dict[str, Any] = {"tokenize": True, "add_generation_prompt": True}
     try:
         ids = tokenizer.apply_chat_template(messages, enable_thinking=False, **kwargs)
@@ -72,8 +130,10 @@ def _qwen_prompt(tokenizer: Any, line: str) -> list[int]:
 def make_tinker_parser(
     model_path: str | None = None,
     base_model: str = config.BASE_MODEL,
+    *,
+    few_shot: bool = False,
 ) -> ParseFn:
-    """model_path=tinker://... for the fine-tune, None for the base model (B0)."""
+    """model_path=tinker://... for the fine-tune, None for the base model (B0 / B0-fair)."""
     import tinker
 
     svc = tinker.ServiceClient()
@@ -85,7 +145,7 @@ def make_tinker_parser(
     params = tinker.SamplingParams(max_tokens=400, temperature=0.0)
 
     def parse(line: str) -> MedLine | None:
-        prompt_tokens = _qwen_prompt(tokenizer, line)
+        prompt_tokens = _qwen_prompt(tokenizer, line, few_shot=few_shot)
         model_input = tinker.ModelInput.from_ints(prompt_tokens)
         res = sc.sample(prompt=model_input, num_samples=1, sampling_params=params).result()
         text = tokenizer.decode(res.sequences[0].tokens)
