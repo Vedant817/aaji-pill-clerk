@@ -14,8 +14,16 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Real prescriptions, photos, and labels never leave the laptop
-data/real/
+# Real prescription photos stay on the laptop. Bundled de-identified
+# family-style labels live in data/heldout/ (committed).
+data/real/real_test.jsonl
+data/real/raw/
+data/real/*.jpg
+data/real/*.jpeg
+data/real/*.png
+data/real/*.webp
+data/real/*.heic
+data/real/*.pdf
 data/pillclerk.db
 *.db
 

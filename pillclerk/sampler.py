@@ -161,6 +161,8 @@ def sample_hard_negative(rng: random.Random, drug: dict[str, Any], patterns: dic
     """Lines the model must refuse to guess: missing frequency, as directed, illegible."""
     flavour = rng.choice(["missing_freq", "as_directed", "illegible", "missing_duration"])
     base = _base(rng, drug, patterns)
+    if flavour in {"illegible", "as_directed", "missing_freq"}:
+        base["food"] = "any"
     if flavour == "illegible":
         base = {**base, "drug": None}
         return MedLine(

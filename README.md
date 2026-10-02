@@ -55,29 +55,33 @@ Keys needed (ask before spending):
 
 On Scan, tap **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`), then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone.
 
+To add photographed family lines: transcribe on **Label REAL**, or `uv run python -m eval.family_real` then `uv run python -m eval.eval --system ft2 --set data/heldout/real_style.jsonl`.
+
 ## Fine-tune (Tinker hosted, no local GGUF)
 
 ```powershell
 uv run python -m train.build_dataset --split --n-targeted 500
+uv run python -m train.build_dataset --append-form-dose-food --n-form-dose-food 400
 uv run python -m train.sft --name pillclerk-v2
 uv run python -m eval.eval --system b0 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft1 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/synth/synth_test.jsonl
+uv run python -m eval.eval --system ft2 --set data/heldout/real_style.jsonl
 ```
 
-SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`.
+SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train. A later append added 396 unique form/dose/food stress rows (`train.jsonl` n=2896); those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`.
 
 ## Results
 
-Headline, SYNTH held-out drugs (n=400). Full table in `eval/results.md`. REAL photos are gitignored and not scored.
+Headline numbers: SYNTH held-out drugs (n=400) and REAL-style family slips (n=102, never used in training). Full table in `eval/results.md`. Raw family photos stay gitignored in `data/real/raw/`.
 
-| System | JSON valid | Exact match [95% CI] | Dangerous errors | p50 s/line |
-|---|---|---|---|---|
-| B0 Qwen3-8B base | 0.0 | 0.00 | 1.0 | 2.15 |
-| FT1 LoRA v1 | 0.97 | 0.91 [0.88, 0.94] | 0.065 | 2.18 |
-| FT2 LoRA v2 | 1.0 | 0.945 [0.92, 0.97] | 0.0025 | 3.16 |
+| System | Exact SYNTH [95% CI] | Danger SYNTH | Exact REAL [95% CI] | Danger REAL | p50 s/line |
+|---|---|---|---|---|---|
+| B0 Qwen3-8B base | 0.00 | 1.0 | 0.00 | 1.0 | 2.15 |
+| FT1 LoRA v1 | 0.91 [0.88, 0.94] | 0.065 | 0.647 [0.559, 0.745] | 0.147 | 2.18 |
+| FT2 LoRA v2 | 0.945 [0.92, 0.97] | 0.0025 | 0.863 [0.794, 0.931] | 0.049 | 3.16 |
 
-FT2 vs FT1 on the same 400 lines: 14 exact-match fixes, 0 regressions. Form/kind/taper/every_n_days/strength are 1.0 after v2. B0 emits JSON-shaped guesses that fail the MedLine schema (`dose` as `"1-0-1"`, `kind="regular"`).
+FT2 vs FT1 on the same 400 SYNTH lines: 14 exact-match fixes, 0 regressions. On the same 102 REAL-style lines: 25 exact-match fixes, 3 regressions; danger 15 → 5. Form/kind/taper/every_n_days/strength are 1.0 on new SYNTH after v2. REAL food is 0.990, form 0.971, dose 0.951. B0 emits JSON-shaped guesses that fail the MedLine schema (`dose` as `"1-0-1"`, `kind="regular"`).
 
 ## What is real
 

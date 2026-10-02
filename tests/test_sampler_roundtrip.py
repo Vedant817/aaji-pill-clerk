@@ -8,10 +8,10 @@ import pytest
 
 from pillclerk.filters import drug_present, rule_ok
 from pillclerk.render import to_chat_row
-from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_line, sample_prn
+from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_hard_negative, sample_line, sample_prn
 from pillclerk.schema import MedLine
 from pillclerk.templates import STYLES, dose_code, render_template
-from train.build_dataset import generate_pairs, generate_targeted, main as build_main
+from train.build_dataset import generate_form_dose_food, generate_pairs, generate_targeted, main as build_main
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -206,6 +206,25 @@ def test_prn_gold_food_is_any() -> None:
         assert gold.food == "any"
         line = render_template(gold, "doctor_short", rng)
         assert "AC" not in line and "PC" not in line and "WF" not in line and "ES" not in line
+
+
+def test_hard_negative_without_food_token_is_any() -> None:
+    drugs = load_drugs()
+    patterns = load_patterns()
+    rng = random.Random(8)
+    for _ in range(30):
+        gold = sample_hard_negative(rng, rng.choice(drugs), patterns)
+        if gold.note == "partially illegible" or gold.note == "as directed" or gold.note == "frequency not written":
+            assert gold.food == "any"
+
+
+def test_generate_form_dose_food_stresses_ft1_weak_fields() -> None:
+    drugs = load_drugs()
+    patterns = load_patterns()
+    rows = generate_form_dose_food(30, drugs=drugs, patterns=patterns, seed=21)
+    assert len(rows) == 30
+    tags = {r["targeted"] for r in rows}
+    assert any(t.startswith("fdf_") for t in tags)
 
 
 def test_generate_targeted_covers_ft1_buckets() -> None:

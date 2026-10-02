@@ -13,14 +13,16 @@ Fixes in the product and in v2 data:
 
 **Comparability:** train/val/synth_test were regenerated with form-in-line. B0 / FT1 / FT2 below are scored on this **new** held-out synth_test (n=400, 38 held-out drugs). The old FT1 row (exact 0.80 on the old test) is a footnote, not the headline.
 
-REAL photos are gitignored and not scored here. B1 (Gemma E4B) and T (Gemma 31B) stay TODO without DigitalOcean / local Gemma.
+**REAL-style held-out set** is `data/heldout/real_style.jsonl` (n=102, never used in training). Gold is typed against the written line. These are de-identified typical family / caregiver slips (20 Rx groups + 20 WhatsApp + ASK). Photographed family files stay gitignored in `data/real/raw/` and were not on this laptop. B1 (Gemma E4B) and T (Gemma 31B) stay TODO without DigitalOcean / local Gemma.
+
+JSON-valid in the headline table is SYNTH. REAL json_valid is in the REAL section.
 
 | System | JSON valid | Exact match (REAL) [95% CI] | Dangerous errors (REAL) | Exact match (SYNTH) [95% CI] | Dangerous errors (SYNTH) | p50 s/line (Tinker) | ₹ / 1k lines |
 |---|---|---|---|---|---|---|---|
-| B0 Qwen3-8B base | 0.0 | TODO | TODO | 0.00 [0.00, 0.00] | 1.0 | 2.15 | 0 (Tinker hosted) |
+| B0 Qwen3-8B base | 0.0 | 0.00 [0.00, 0.00] | 1.0 | 0.00 [0.00, 0.00] | 1.0 | 2.15 | 0 (Tinker hosted) |
 | B1 Gemma 4 E4B | TODO | TODO | TODO | TODO | TODO | TODO | 0 |
-| FT1 Qwen3-8B + LoRA v1 | 0.97 | TODO | TODO | 0.91 [0.88, 0.9375] | 0.065 | 2.18 | 0 (Tinker hosted) |
-| FT2 Qwen3-8B + LoRA v2 | 1.0 | TODO | TODO | 0.945 [0.9225, 0.9675] | 0.0025 | 3.16 | 0 (Tinker hosted) |
+| FT1 Qwen3-8B + LoRA v1 | 0.97 | 0.647 [0.559, 0.745] | 0.147 | 0.91 [0.88, 0.9375] | 0.065 | 2.18 | 0 (Tinker hosted) |
+| FT2 Qwen3-8B + LoRA v2 | 1.0 | 0.863 [0.794, 0.931] | 0.049 | 0.945 [0.9225, 0.9675] | 0.0025 | 3.16 | 0 (Tinker hosted) |
 | T Gemma 4 31B (DO) | TODO | TODO | TODO | TODO | TODO | n/a (API) | TODO |
 
 ## SYNTH per-field (n=400, new held-out test)
@@ -59,7 +61,51 @@ B0 **does** emit JSON-shaped text (spot-check: Glycomet line, 165 chars). It fai
 
 FT1 on the previous 400-line file, after `0` vs `0.0` rescore: json_valid 0.99, exact 0.80 [0.76, 0.84], danger 0.105, form 0.8875, dose 0.8925, food 0.9125, p50 2.17 s. Saved as `eval/out/ft1_synth_test_old.json`.
 
-Per-field accuracy (REAL), FT2 vs B0: drug `TODO` · strength `TODO` · dose `TODO` · food `TODO` · duration `TODO` · taper `TODO` · prn `TODO`.
+## REAL-style held-out (n=102, never trained)
+
+Scored with `eval/eval.py` on `data/heldout/real_style.jsonl`. Predictions are gitignored (`eval/out/*real*`).
+
+| Field | B0 | FT1 | FT2 |
+|---|---|---|---|
+| json_valid | 0.0 | 0.941 | 0.990 |
+| exact | 0.0 | 0.647 | 0.863 |
+| danger | 1.0 | 0.147 | 0.049 |
+| drug | 0.0 | 0.882 | 0.931 |
+| strength | 0.0 | 0.725 | 0.922 |
+| form | 0.0 | 0.922 | 0.971 |
+| kind | 0.0 | 0.941 | 0.990 |
+| dose | 0.0 | 0.912 | 0.951 |
+| every_n_days | 0.0 | 0.922 | 0.990 |
+| taper | 0.0 | 0.941 | 0.990 |
+| food | 0.0 | 0.941 | 0.990 |
+| duration_days | 0.0 | 0.873 | 0.990 |
+| prn_max_per_day | 0.0 | 0.922 | 0.990 |
+
+p50 s/line on REAL: B0 2.21 · FT1 2.22 · FT2 3.20. p95: B0 3.23 · FT1 3.48 · FT2 4.22.
+
+Paired FT2 vs FT1 on the same 102 lines: **25** exact-match fixes, **3** regressions (McNemar n01=25, n10=3). Dangerous errors: 15 → 5.
+
+FT2 remaining REAL misses: 14 inexact lines. Error-field counts: strength 8, drug 7, dose 5, form 3. Hindi/Marathi Devanagari brand names vs Latin gold, combo brands, and insulin units are the main buckets. Food is 0.990 (1 miss).
+
+**Limits:** no second labeller, no photographed originals in-repo, one author typed gold. IDEA.md §8.1 still wants a second human on family photos. This set is the Tinker-category number until those photos exist.
+
+Extra synthetic form/dose/food stress: 400 rows in `data/synth/targeted_form_dose_food.jsonl`, 396 unique lines appended to `train.jsonl` (now 2896). FT2 weights were trained on the 2500-row mix; the extra 396 are for a later v3 run.
+
+```mermaid
+xychart-beta
+    title "Whole-line exact match on REAL-style held-out (%)"
+    x-axis ["B0 base", "FT1", "FT2"]
+    y-axis "Exact match (%)" 0 --> 100
+    bar [0, 64.7, 86.3]
+```
+
+```mermaid
+xychart-beta
+    title "Dangerous-error rate on REAL-style (%), lower is better"
+    x-axis ["B0 base", "FT1", "FT2"]
+    y-axis "Dangerous errors (%)" 0 --> 100
+    bar [100, 14.7, 4.9]
+```
 
 ```mermaid
 xychart-beta
