@@ -1,0 +1,4 @@
+# Unused this weekend. Local GGUF export is skipped (low disk).
+# PARSER_BACKEND=tinker serves the fine-tune via Tinker's hosted API.
+# FROM ../export/pillclerk-q4_k_m.gguf
+# PARAMETER temperature 0

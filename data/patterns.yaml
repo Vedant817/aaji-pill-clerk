@@ -1,0 +1,9 @@
+# Weights match IDEA.md §7. Filled out with the sampler implementation.
+schedules:
+  - pattern: [1, 0, 1]
+    weight: 25
+styles:
+  clinic_print: 25
+hard_negative_rate: 0.05
+llm_render_rate: 0.70
+template_render_rate: 0.30

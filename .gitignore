@@ -1,0 +1,29 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
+
+# Real prescriptions, photos, and labels never leave the laptop
+data/real/
+
+# Local model export artifacts (this build does not download/merge/GGUF)
+export/
+
+# Eval predictions on real lines
+eval/out/*real*
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp

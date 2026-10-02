@@ -1,0 +1,25 @@
+Aaji's Pill Clerk
+Copyright 2026 Vedant
+
+This product includes software and model weights licensed as follows.
+
+Qwen3-8B
+Copyright Alibaba Cloud
+Licensed under the Apache License, Version 2.0
+https://huggingface.co/Qwen/Qwen3-8B
+
+Gemma 4
+Copyright Google LLC
+Licensed under the Apache License, Version 2.0
+https://ai.google.dev/gemma/docs/core
+
+llama.cpp
+Copyright (c) llama.cpp contributors
+Licensed under the MIT License
+https://github.com/ggml-org/llama.cpp
+
+This weekend build trains and serves the fine-tuned Qwen3-8B through
+Tinker's hosted API only. Local adapter download, Hugging Face merge,
+GGUF conversion, and llama.cpp quantisation are skipped (low disk).
+llama.cpp remains listed because IDEA.md originally planned a local
+export path; that path is not executed in this repository.
