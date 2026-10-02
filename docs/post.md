@@ -1,6 +1,6 @@
 # Aaji's Pill Clerk — post draft
 
-**Status:** draft. Every number below is copied from `eval/out/` (see `eval/results.md`). The T (Gemma 4 31B) row stays TODO until `eval/out/gemma31_synth_test.json` and `eval/out/gemma31_handwritten_realistic.json` exist with full n. Local demo: http://localhost:8501. Public demo: **render.yaml provided; not deployed**.
+**Status:** draft. Every number below is copied from `eval/out/` (see `eval/results.md`). Local demo: http://localhost:8501. Public demo: **render.yaml provided; not deployed**.
 
 ## Problem and persona
 
@@ -23,14 +23,14 @@ Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `ev
 | B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3073 | 0.3529 [0.2549, 0.4510] | 0.4510 | 0.4020 |
 | FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.0504 | 0.6471 [0.5588, 0.7451] | 0.1471 | 0.2843 |
 | FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 0.8627 [0.7941, 0.9314] | 0.0490 | 0.1275 |
-| T Gemma 4 31B | TODO | TODO | TODO | TODO | TODO | TODO |
+| T Gemma 4 31B | 0.8715 [0.8363, 0.9043] | 0.1209 | 0.0101 | 0.6275 [0.5196, 0.7255] | 0.3137 | 0.0196 |
 | FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.0202 | 0.8824 [0.8235, 0.9412] | 0.0686 | 0.0686 |
 
-McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 8/6 p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0); `.env` stays on v2. Sources: `eval/out/ft3_synth_test.json`, `eval/out/ft3_handwritten_realistic.json`.
+McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 8/6 p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0); `.env` stays on v2. FT2 vs T SYNTH 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09. T is **not** the exact-match ceiling on these sets: SYNTH `parse_fail` 0.1184 (4 Gemini HTTP 500 after retries plus schema misses). Sources: `eval/out/gemma31_synth_test.json`, `eval/out/gemma31_handwritten_realistic.json`.
 
 **Public real-world set: HMR-100 (India)** is parser-only, gold from Label REAL while looking at the image. n=0 labelled lines so far. At n≈100, 95% CIs are about ±8–9 points; do not claim a winner unless the gap exceeds that interval.
 
-Gemma 4 31B is the eval ceiling on de-identified text (`synth_test`, `handwritten_realistic`, public gold text). It did **not** write `train.jsonl` (all 3096 rows `renderer=template`). Local OCR (`gemma4:e4b`) is not claimed.
+Gemma 4 31B is the measured 31B teacher on de-identified text (`synth_test`, `handwritten_realistic`). It did **not** write `train.jsonl` (all 3096 rows `renderer=template`). On these schema-constrained sets the LoRA (FT2) has higher exact match than T. Local OCR (`gemma4:e4b`) is not claimed.
 
 ## Honest limits
 

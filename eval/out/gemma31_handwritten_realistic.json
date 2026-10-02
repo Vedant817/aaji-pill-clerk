@@ -1,0 +1,66 @@
+{
+  "system": "gemma31",
+  "set": "data/heldout/handwritten_realistic.jsonl",
+  "n": 102,
+  "json_valid": 0.6862745098039216,
+  "parse_fail": 0.3137254901960784,
+  "exact": 0.6274509803921569,
+  "exact_ci95": [
+    0.5196078431372549,
+    0.7254901960784313
+  ],
+  "exact_norm": 0.6372549019607843,
+  "exact_norm_ci95": [
+    0.5392156862745098,
+    0.7352941176470589
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.3137254901960784,
+  "danger_v1": 0.3137254901960784,
+  "danger_v2": 0.0196078431372549,
+  "ask_recall": 0.6,
+  "false_ask_rate": 0.29896907216494845,
+  "n_gold_ask": 5,
+  "per_field": {
+    "drug": 0.6862745098039216,
+    "strength": 0.6666666666666666,
+    "form": 0.6470588235294118,
+    "kind": 0.6862745098039216,
+    "dose": 0.6568627450980392,
+    "every_n_days": 0.6862745098039216,
+    "taper": 0.6862745098039216,
+    "food": 0.6862745098039216,
+    "duration_days": 0.6862745098039216,
+    "prn_max_per_day": 0.6862745098039216
+  },
+  "p50_s": 40.767244935035706,
+  "p95_s": 115.02472710609436,
+  "error_fields": {
+    "drug": 32,
+    "strength": 34,
+    "form": 36,
+    "kind": 32,
+    "dose": 35,
+    "every_n_days": 32,
+    "taper": 32,
+    "food": 32,
+    "duration_days": 32,
+    "prn_max_per_day": 32
+  },
+  "dropped_train_duplicates": 0,
+  "payload_summary": {
+    "count": 499,
+    "sets": {
+      "synth_test.jsonl": 397,
+      "handwritten_realistic.jsonl": 102
+    },
+    "models": {
+      "gemma-4-31b-it": 499
+    },
+    "systems": {
+      "gemma31": 499
+    },
+    "sha256": "d9d70be31e51c9209725ddc1209c19ea0c43518eb45f647dbce1164759c64ad6",
+    "log": "eval\\out\\sent_payload_log.jsonl"
+  }
+}

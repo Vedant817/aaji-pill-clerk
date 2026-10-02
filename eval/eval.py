@@ -245,7 +245,12 @@ def main() -> None:
 
         def _one(i: int, row: dict) -> tuple[int, MedLine | None, float]:
             t0 = time.time()
-            pred = parse(row["line"])
+            try:
+                pred = parse(row["line"])
+            except Exception as exc:
+                # One Gemini 500 after retries must not throw away the rest of the set.
+                print(f"{a.system} line {i} error: {type(exc).__name__}: {exc}", flush=True)
+                pred = None
             return i, pred, time.time() - t0
 
         if workers <= 1:
