@@ -1,7 +1,8 @@
-"""LLM renderer: DigitalOcean Gemma 4 31B, optional Backboard. Same ChatBackend interface.
+"""LLM renderer: Google AI Studio Gemma 4 31B, optional Backboard.
 
-Paid calls happen only when a backend method is invoked. Do not call this module
-until TINKER / DO / Backboard keys are in .env and the user has agreed to spend.
+Paid calls happen only when a backend method is invoked. Do not call this
+module until GEMINI / Backboard keys are in .env and the user has agreed to spend.
+DigitalOcean is dropped.
 """
 
 from __future__ import annotations
@@ -11,12 +12,11 @@ import re
 from typing import Protocol
 
 import httpx
-from openai import OpenAI
 
 from pillclerk import config
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 
-TEACHER = config.DO_TEACHER_MODEL
+TEACHER = config.GEMINI_MODEL
 STYLES = {
     "clinic_print": "Printed clinic software line, e.g. 'TAB. X 500MG  1-0-1  AFTER FOOD  x 30 DAYS'",
     "doctor_short": "Indian doctor's handwritten shorthand: OD/BD/TDS/HS/SOS, AC/PC, 1-0-1, x5d, 1/12",
@@ -42,15 +42,13 @@ class ChatBackend(Protocol):
     ) -> str: ...
 
 
-class DigitalOceanBackend:
-    """OpenAI-compatible client for https://inference.do-ai.run/v1."""
+class GeminiBackend:
+    """Google AI Studio / Gemini API. Model id gemma-4-31b-it (official list)."""
 
-    def __init__(self, api_key: str | None = None, base_url: str | None = None, model: str | None = None) -> None:
-        self.model = model or config.DO_TEACHER_MODEL
-        self.client = OpenAI(
-            base_url=(base_url or config.DO_BASE_URL),
-            api_key=api_key or config.require_env("DO_MODEL_ACCESS_KEY"),
-        )
+    def __init__(self, api_key: str | None = None, model: str | None = None) -> None:
+        self.api_key = api_key or config.require_env("GEMINI_API_KEY")
+        self.model = model or config.GEMINI_MODEL
+        self.base = config.GEMINI_API_BASE.rstrip("/")
 
     def complete(
         self,
@@ -60,14 +58,29 @@ class DigitalOceanBackend:
         max_tokens: int,
         model: str | None = None,
     ) -> str:
-        r = self.client.chat.completions.create(
-            model=model or self.model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            messages=messages,  # type: ignore[arg-type]
-        )
-        content = r.choices[0].message.content
-        return (content or "").strip()
+        system = " ".join(m["content"] for m in messages if m["role"] == "system")
+        contents: list[dict] = []
+        for m in messages:
+            if m["role"] == "system":
+                continue
+            role = "model" if m["role"] == "assistant" else "user"
+            contents.append({"role": role, "parts": [{"text": m["content"]}]})
+        payload: dict = {
+            "contents": contents,
+            "generationConfig": {
+                "temperature": temperature,
+                "maxOutputTokens": max_tokens,
+            },
+        }
+        if system:
+            payload["systemInstruction"] = {"parts": [{"text": system}]}
+        url = f"{self.base}/models/{model or self.model}:generateContent"
+        with httpx.Client(timeout=90.0) as client:
+            r = client.post(url, params={"key": self.api_key}, json=payload)
+            r.raise_for_status()
+            data = r.json()
+        parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+        return "".join(str(p.get("text") or "") for p in parts).strip()
 
 
 class BackboardBackend:
@@ -111,17 +124,17 @@ def get_llm_backend() -> ChatBackend:
     if name == "template":
         raise RuntimeError(
             "LLM_BACKEND=template uses the free Python renderer only. "
-            "It does not call DigitalOcean, Backboard, or Tinker for messy text. "
-            "Set LLM_BACKEND=backboard or tinker if you want an LLM renderer without DigitalOcean."
+            "It does not call Gemini, Backboard, or Tinker for messy text. "
+            "Set LLM_BACKEND=gemini or backboard if you want an LLM renderer."
         )
     if name == "backboard":
         return BackboardBackend()
     if name == "tinker":
         raise RuntimeError(
             "LLM_BACKEND=tinker for synthetic render is not wired yet. "
-            "Use --renderer template (free) or LLM_BACKEND=backboard."
+            "Use --renderer template (free) or LLM_BACKEND=gemini."
         )
-    return DigitalOceanBackend()
+    return GeminiBackend()
 
 
 def render(gold: MedLine, style: str, backend: ChatBackend | None = None) -> str:

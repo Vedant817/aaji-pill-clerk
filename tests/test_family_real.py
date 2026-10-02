@@ -1,7 +1,8 @@
 from collections import Counter
+from pathlib import Path
 
 from pillclerk.schema import MedLine
-from eval.family_real import rows, SPECS
+from eval.family_real import HELD, rows, SPECS
 
 
 def test_real_set_meets_idea_size() -> None:
@@ -39,3 +40,12 @@ def test_real_gold_validates_and_matches_written_food() -> None:
 
 def test_specs_roundtrip() -> None:
     assert len(SPECS) == len(rows())
+
+
+def test_heldout_file_is_handwritten_realistic_not_real() -> None:
+    assert HELD.name == "handwritten_realistic.jsonl"
+    assert HELD.is_file()
+    assert "real_style" not in HELD.name
+    text = HELD.read_text(encoding="utf-8")
+    assert text.count("\n") >= 80
+    assert Path("eval/results.md").read_text(encoding="utf-8").count("Hand-written realistic") >= 1

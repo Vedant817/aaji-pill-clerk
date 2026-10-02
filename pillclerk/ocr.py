@@ -2,7 +2,8 @@
 
 EXTRACT_BACKEND=manual: split pasted text (default, no model).
 EXTRACT_BACKEND=ollama: local gemma4:e4b (optional, needs disk).
-EXTRACT_BACKEND=hosted: DigitalOcean Gemma (optional, needs a card).
+EXTRACT_BACKEND=gemini: Google AI Studio Gemma 4 31B (needs GEMINI_API_KEY).
+DigitalOcean is dropped.
 """
 
 from __future__ import annotations
@@ -20,10 +21,10 @@ def extract_from_image(path: str) -> list[str]:
         raise RuntimeError(
             "EXTRACT_BACKEND=manual: paste the lines instead of sending a photo to a model."
         )
-    if backend == "hosted":
+    if backend == "gemini":
         raise RuntimeError(
-            "EXTRACT_BACKEND=hosted needs DigitalOcean. This weekend we skip DO. "
-            "Paste the transcribed lines, or set EXTRACT_BACKEND=ollama if gemma4:e4b is pulled."
+            "EXTRACT_BACKEND=gemini photo OCR is not wired in this path yet. "
+            "Paste the transcribed lines, or use scripts/ingest_real.py once photos exist."
         )
     import ollama
 

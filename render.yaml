@@ -1,0 +1,22 @@
+# Render free-tier public demo. Synthetic data only. No photographed prescriptions.
+# Start command reads $PORT. If Render asks for a card, stop and tell the owner.
+services:
+  - type: web
+    name: aaji-pill-clerk
+    runtime: python
+    plan: free
+    buildCommand: pip install -U uv && uv sync --frozen --no-dev
+    startCommand: uv run streamlit run app/Home.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: LLM_BACKEND
+        value: template
+      - key: EXTRACT_BACKEND
+        value: manual
+      - key: PARSER_BACKEND
+        value: tinker
+      - key: TINKER_API_KEY
+        sync: false
+      - key: PILLCLERK_TINKER_PATH
+        sync: false

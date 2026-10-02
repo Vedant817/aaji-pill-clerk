@@ -1,0 +1,38 @@
+{
+  "system": "ft2",
+  "set": "data/heldout/handwritten_realistic.jsonl",
+  "n": 102,
+  "json_valid": 0.9901960784313726,
+  "exact": 0.8627450980392157,
+  "exact_ci95": [
+    0.7941176470588235,
+    0.9313725490196079
+  ],
+  "danger": 0.049019607843137254,
+  "per_field": {
+    "drug": 0.9313725490196079,
+    "strength": 0.9215686274509803,
+    "form": 0.9705882352941176,
+    "kind": 0.9901960784313726,
+    "dose": 0.9509803921568627,
+    "every_n_days": 0.9901960784313726,
+    "taper": 0.9901960784313726,
+    "food": 0.9901960784313726,
+    "duration_days": 0.9901960784313726,
+    "prn_max_per_day": 0.9901960784313726
+  },
+  "p50_s": 3.2017425298690796,
+  "p95_s": 4.216115951538086,
+  "error_fields": {
+    "drug": 7,
+    "strength": 8,
+    "dose": 5,
+    "form": 3,
+    "kind": 1,
+    "every_n_days": 1,
+    "taper": 1,
+    "food": 1,
+    "duration_days": 1,
+    "prn_max_per_day": 1
+  }
+}

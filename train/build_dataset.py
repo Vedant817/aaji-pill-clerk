@@ -44,7 +44,7 @@ def generate_pairs(
 ) -> list[dict]:
     if renderer == "llm":
         raise SystemExit(
-            "LLM renderer is off (no DigitalOcean). Use --renderer template."
+            "LLM renderer is off (template only unless LLM_BACKEND=gemini and you accept cost). Use --renderer template."
         )
     rng = random.Random(seed)
     drugs = drugs if drugs is not None else load_drugs()
@@ -284,7 +284,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     if args.renderer == "llm":
-        print("LLM renderer is off (no DigitalOcean). Use --renderer template.", file=sys.stderr)
+        print("LLM renderer is off. Use --renderer template (free).", file=sys.stderr)
         return 2
 
     if args.append_form_dose_food:

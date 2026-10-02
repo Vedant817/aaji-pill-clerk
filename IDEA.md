@@ -7,7 +7,7 @@
 > **Weekend overrides (source of truth over later sections):**
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
 > 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Optional local Ollama `gemma4:e4b` or hosted Gemma.
-> 3. DigitalOcean is **optional** (no card required). Default `LLM_BACKEND=template` (free Python messy-text). Optional Backboard or Tinker for an LLM renderer. Skip the DO partner category if DO is unused. The 31B teacher baseline stays TODO until an LLM backend is chosen.
+> 3. DigitalOcean is **dropped**. No card. Default `LLM_BACKEND=template` (free Python messy-text). Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Optional Backboard. Public demo is Render free (`render.yaml`, `$PORT`, synthetic data only). If Render asks for a card, stop.
 
 ---
 
@@ -48,7 +48,7 @@
 - **The headline result** is a measured table on **real, held-out prescription lines from your family**: base Qwen3-8B vs **fine-tuned Qwen3-8B** vs Gemma 4 E4B vs Gemma 4 31B. It reports exact match, **dangerous-error rate**, and latency/cost on the laptop. This is precisely what the Tinker category asks for: *"show a clear improvement in performance, latency, or cost over a baseline."*
 - **A human signs off on every line.** The tool copies what the doctor wrote. It never advises on doses.
 
-**Categories entered:** Best Use of **Tinker** (featured, $200, core), Best Use of **Gemma** (featured, $200), Best Use of **DigitalOcean** (featured, $200; enter **only** if the DO demo is live at submission), plus the **overall** prize ($250 + DEV++).
+**Categories entered:** Best Use of **Tinker** (featured, $200, core), Best Use of **Gemma** (featured, $200), Best Use of **Render** (featured, $200; free-tier demo), plus the **overall** prize ($250 + DEV++). DigitalOcean is not entered.
 **Cost:** ≈ **$2–6 total** (DO tokens ≈ $0.50, Tinker training ≈ $1, App Platform ≈ $1–2, and a little extra for a v2 run).
 **Why this idea over the forecasting one:** it needs **no historical data from the friend**. The family already has everything required: a file of prescriptions.
 

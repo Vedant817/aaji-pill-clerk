@@ -1,4 +1,4 @@
-"""Append a human-transcribed family line to gitignored data/real/real_test.jsonl."""
+"""Append a photographed family line to gitignored data/real/gt.jsonl."""
 
 from __future__ import annotations
 
@@ -20,12 +20,16 @@ import streamlit as st
 
 st.title("Label REAL")
 st.caption(
-    "Paste one transcribed family line. Gold must copy the slip. Photos stay in data/real/raw/ (gitignored)."
+    "Photographed family lines only. Gold must copy the slip. Photos stay in data/real/raw/ (gitignored). "
+    "The bundled hand-written realistic set is not REAL."
 )
 
-if st.button("Write bundled family-style set to data/real/real_test.jsonl"):
+if st.button("Write bundled hand-written realistic set (not photographed)"):
     stats = write()
-    st.success(f"Wrote {stats['n']} lines ({stats['sources']} slips, {stats['whatsapp']} WhatsApp).")
+    st.success(
+        f"Wrote {stats['n']} hand-written realistic lines "
+        f"({stats['sources']} slips, {stats['whatsapp']} WhatsApp). Not REAL."
+    )
 
 line = st.text_area("Transcribed line", height=80)
 c1, c2, c3 = st.columns(3)

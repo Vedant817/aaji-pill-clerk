@@ -14,9 +14,10 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Real prescription photos stay on the laptop. Bundled de-identified
-# family-style labels live in data/heldout/ (committed).
+# Photographed prescriptions stay on the laptop. Hand-written realistic
+# labels live in data/heldout/handwritten_realistic.jsonl (committed).
 data/real/real_test.jsonl
+data/real/gt.jsonl
 data/real/raw/
 data/real/*.jpg
 data/real/*.jpeg
@@ -30,8 +31,11 @@ data/pillclerk.db
 # Local model export artifacts (this build does not download/merge/GGUF)
 export/
 
-# Eval predictions on real lines
-eval/out/*real*
+# Photographed REAL eval dumps (when they exist). Hand-written realistic
+# summaries are committed; do not use *real* here (it matches handwritten_realistic).
+eval/out/*photographed*
+eval/out/*_gt.json
+eval/out/*_gt_preds.jsonl
 
 # Editor / OS
 .idea/

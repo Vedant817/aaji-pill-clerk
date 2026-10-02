@@ -169,7 +169,7 @@ def test_generate_ten_pairs_is_deterministic() -> None:
 def test_llm_renderer_is_gated(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as exc:
         generate_pairs(1, renderer="llm")
-    assert "DigitalOcean" in str(exc.value) or "template" in str(exc.value).lower()
+    assert "template" in str(exc.value).lower()
     code = build_main(["--n", "1", "--renderer", "llm"])
     assert code == 2
 

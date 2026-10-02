@@ -1,5 +1,5 @@
-# Public demo image. No torch, no local GGUF.
-# Parser = Tinker hosted sampling. Teacher/compare = DigitalOcean Gemma.
+# Public demo image. No torch, no local GGUF. Synthetic data only.
+# Parser = Tinker hosted sampling. Teacher/compare = Google AI Studio Gemma (not in this image).
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -13,11 +13,10 @@ RUN pip install --no-cache-dir uv \
  && uv sync --frozen --no-dev --no-install-project \
  && uv pip install --system .
 
-EXPOSE 8080
-ENV STREAMLIT_SERVER_PORT=8080 \
-    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
+ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
     PARSER_BACKEND=tinker \
-    LLM_BACKEND=digitalocean \
-    EXTRACT_BACKEND=hosted
+    LLM_BACKEND=template \
+    EXTRACT_BACKEND=manual
 
-CMD ["uv", "run", "streamlit", "run", "app/Home.py", "--server.port=8080", "--server.address=0.0.0.0"]
+# Render sets $PORT. Local default 8080.
+CMD ["sh", "-c", "uv run streamlit run app/Home.py --server.port ${PORT:-8080} --server.address 0.0.0.0 --server.headless true"]

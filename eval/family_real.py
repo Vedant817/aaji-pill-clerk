@@ -1,8 +1,11 @@
-"""Hand-labeled held-out family-style slips. Never used in training.
+"""Hand-written realistic held-out slips. Never used in training.
 
-These are de-identified typical Indian family / caregiver lines (Aaji OPD +
-WhatsApp), gold-typed against what is written. No raw photos were on this
-laptop. Photos stay in gitignored data/real/raw/ when the family adds them.
+These are de-identified typical Indian family / caregiver lines (clinic print,
+doctor shorthand, WhatsApp), gold-typed against what is written. They are
+NOT photographed prescriptions and must not be reported as REAL.
+
+Photographed family files stay in gitignored data/real/raw/. Ground truth
+for those photos is gitignored data/real/gt.jsonl.
 """
 
 from __future__ import annotations
@@ -13,8 +16,8 @@ from pathlib import Path
 from pillclerk.schema import MedLine
 
 ROOT = Path(__file__).resolve().parents[1]
-HELD = ROOT / "data" / "heldout" / "real_style.jsonl"
-REAL = ROOT / "data" / "real" / "real_test.jsonl"
+HELD = ROOT / "data" / "heldout" / "handwritten_realistic.jsonl"
+REAL = ROOT / "data" / "real" / "gt.jsonl"
 
 
 def _d(morning=0.0, afternoon=0.0, night=0.0, unit="tab") -> dict:

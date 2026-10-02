@@ -95,6 +95,33 @@ def test_invalid_backend_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
         config.llm_backend()
 
 
+def test_digitalocean_backend_is_dropped(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LLM_BACKEND", "digitalocean")
+    with pytest.raises(ValueError, match="dropped"):
+        config.llm_backend()
+    monkeypatch.setenv("EXTRACT_BACKEND", "hosted")
+    with pytest.raises(ValueError, match="dropped"):
+        config.extract_backend()
+
+
+def test_render_yaml_uses_port_and_free_plan() -> None:
+    from pathlib import Path
+
+    text = Path("render.yaml").read_text(encoding="utf-8")
+    assert "$PORT" in text
+    assert "plan: free" in text
+    assert "LLM_BACKEND" in text
+    assert "digitalocean" not in text.lower()
+
+
+def test_gemini_key_status_presence_only(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "secret-should-not-leak")
+    status = config.key_status()
+    assert status["GEMINI_API_KEY"] is True
+    assert "secret-should-not-leak" not in str(status)
+    assert "DO_MODEL_ACCESS_KEY" not in status
+
+
 def test_template_backend_skips_paid_llm(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("LLM_BACKEND", "template")
     from pillclerk.render import get_llm_backend

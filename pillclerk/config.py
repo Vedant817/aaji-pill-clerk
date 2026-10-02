@@ -7,8 +7,8 @@ import os
 from pathlib import Path
 from typing import Literal
 
-LlmBackend = Literal["template", "digitalocean", "backboard", "tinker"]
-ExtractBackend = Literal["manual", "ollama", "hosted"]
+LlmBackend = Literal["template", "gemini", "backboard", "tinker"]
+ExtractBackend = Literal["manual", "ollama", "gemini"]
 ParserBackend = Literal["tinker", "ollama"]
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,9 +40,14 @@ def _get(name: str, default: str = "") -> str:
 
 def llm_backend() -> LlmBackend:
     value = _get("LLM_BACKEND", "template").lower()
-    if value not in ("template", "digitalocean", "backboard", "tinker"):
+    if value in ("digitalocean", "do"):
         raise ValueError(
-            "LLM_BACKEND must be template, digitalocean, backboard, or tinker, "
+            "DigitalOcean is dropped. Use LLM_BACKEND=template (free) or "
+            "LLM_BACKEND=gemini (Google AI Studio, GEMINI_API_KEY)."
+        )
+    if value not in ("template", "gemini", "backboard", "tinker"):
+        raise ValueError(
+            "LLM_BACKEND must be template, gemini, backboard, or tinker, "
             f"got {value!r}"
         )
     return value  # type: ignore[return-value]
@@ -50,8 +55,13 @@ def llm_backend() -> LlmBackend:
 
 def extract_backend() -> ExtractBackend:
     value = _get("EXTRACT_BACKEND", "manual").lower()
-    if value not in ("manual", "ollama", "hosted"):
-        raise ValueError(f"EXTRACT_BACKEND must be manual, ollama, or hosted, got {value!r}")
+    if value in ("hosted", "digitalocean", "do"):
+        raise ValueError(
+            "DigitalOcean is dropped. Use EXTRACT_BACKEND=manual (paste) or "
+            "EXTRACT_BACKEND=gemini (Google AI Studio)."
+        )
+    if value not in ("manual", "ollama", "gemini"):
+        raise ValueError(f"EXTRACT_BACKEND must be manual, ollama, or gemini, got {value!r}")
     return value  # type: ignore[return-value]
 
 
@@ -78,7 +88,7 @@ def key_status() -> dict[str, bool]:
     return {
         "TINKER_API_KEY": bool(_get("TINKER_API_KEY")),
         "PILLCLERK_TINKER_PATH": bool(_get("PILLCLERK_TINKER_PATH")),
-        "DO_MODEL_ACCESS_KEY": bool(_get("DO_MODEL_ACCESS_KEY")),
+        "GEMINI_API_KEY": bool(_get("GEMINI_API_KEY")),
         "BACKBOARD_API_KEY": bool(_get("BACKBOARD_API_KEY")),
     }
 
@@ -121,8 +131,8 @@ def apply_tinker_checkpoint(checkpoint: Path | None = None) -> bool:
     return True
 
 
-DO_BASE_URL = _get("DO_BASE_URL", "https://inference.do-ai.run/v1")
-DO_TEACHER_MODEL = _get("DO_TEACHER_MODEL", "gemma-4-31B-it")
+GEMINI_MODEL = _get("GEMINI_MODEL", "gemma-4-31b-it")
+GEMINI_API_BASE = _get("GEMINI_API_BASE", "https://generativelanguage.googleapis.com/v1beta")
 BACKBOARD_BASE_URL = _get("BACKBOARD_BASE_URL", "https://app.backboard.io/api")
 BACKBOARD_LLM_PROVIDER = _get("BACKBOARD_LLM_PROVIDER", "google")
 BACKBOARD_MODEL_NAME = _get("BACKBOARD_MODEL_NAME", "gemma-4-31b-it")

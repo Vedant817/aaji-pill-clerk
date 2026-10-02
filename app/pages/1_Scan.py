@@ -11,7 +11,7 @@ DEMO = ROOT / "data" / "demo" / "prescriptions" / "aaji_sample.txt"
 
 stepper("Scan")
 st.title("Scan")
-st.caption("Paste one medicine line per row. Photo OCR is off (no DigitalOcean, no local Gemma).")
+st.caption("Paste one medicine line per row. Photo OCR is off until family photos are labelled.")
 
 text = st.text_area(
     "Prescription lines",
