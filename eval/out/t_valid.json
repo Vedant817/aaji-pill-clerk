@@ -1,0 +1,53 @@
+{
+  "note": "Exact on lines where T (gemma31, no JSON mode) produced valid JSON. From preds after rescore.",
+  "synth": {
+    "n": 397,
+    "n_valid": 350,
+    "t_exact_on_valid": 346,
+    "t_exact_on_valid_rate": 0.9885714285714285,
+    "other_exact_on_valid": 342,
+    "mcnemar": {
+      "n": 350,
+      "n01_b_fixes": 8,
+      "n10_b_regresses": 4,
+      "both_right": 338,
+      "both_wrong": 0,
+      "p_two_sided": 0.3876953125,
+      "field": "exact"
+    }
+  },
+  "hw": {
+    "n": 102,
+    "n_valid": 70,
+    "t_exact_on_valid": 64,
+    "t_exact_on_valid_rate": 0.9142857142857143,
+    "other_exact_on_valid": 64,
+    "mcnemar": {
+      "n": 70,
+      "n01_b_fixes": 3,
+      "n10_b_regresses": 3,
+      "both_right": 61,
+      "both_wrong": 3,
+      "p_two_sided": 1.0,
+      "field": "exact"
+    }
+  },
+  "synth_whole_set_mcnemar_ft2_vs_t": {
+    "n": 397,
+    "n01_b_fixes": 8,
+    "n10_b_regresses": 51,
+    "both_right": 338,
+    "both_wrong": 0,
+    "p_two_sided": 9.052391166525231e-09,
+    "field": "exact"
+  },
+  "hw_whole_set_mcnemar_ft2_vs_t": {
+    "n": 102,
+    "n01_b_fixes": 3,
+    "n10_b_regresses": 27,
+    "both_right": 61,
+    "both_wrong": 11,
+    "p_two_sided": 8.430331945419312e-06,
+    "field": "exact"
+  }
+}

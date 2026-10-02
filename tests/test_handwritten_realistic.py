@@ -47,18 +47,30 @@ def test_authorship_and_train_drug_overlap() -> None:
     from pathlib import Path
 
     src = Path("eval/handwritten_realistic.py").read_text(encoding="utf-8")
-    assert "Authored by Vedant" in src
+    assert "generated in code" in src
+    assert "not handwritten by Vedant" in src
     assert "5619cee" in src
+    data = rows()
+    assert all(r["authored"] == "code:eval/handwritten_realistic.py" for r in data)
     train_drugs = {
         (json.loads(l).get("gold") or {}).get("drug")
         for l in Path("data/synth/train.jsonl").read_text(encoding="utf-8").splitlines()
         if l.strip()
     }
     train_drugs = {d.lower() for d in train_drugs if d}
-    n = sum(1 for r in rows() if (r["gold"].get("drug") or "").lower() in train_drugs)
+    n = sum(1 for r in data if (r["gold"].get("drug") or "").lower() in train_drugs)
     assert n == 67
     results = Path("eval/results.md").read_text(encoding="utf-8")
     assert "67/102" in results
+    assert "generated in code" in results
+
+
+def test_heldout_jsonl_has_authored_field() -> None:
+    import json
+
+    lines = [json.loads(l) for l in HELD.read_text(encoding="utf-8").splitlines() if l.strip()]
+    assert len(lines) == 102
+    assert all(r.get("authored") == "code:eval/handwritten_realistic.py" for r in lines)
 
 
 def test_heldout_file_is_handwritten_realistic_not_real() -> None:

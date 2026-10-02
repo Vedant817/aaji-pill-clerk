@@ -10,13 +10,14 @@ from __future__ import annotations
 import json
 import re
 import time
+from dataclasses import dataclass, field
 from typing import Protocol
 
 import httpx
 
 from pillclerk import config
 from pillclerk.privacy import log_sent_payload, redact_secret, strip_pii
-from pillclerk.schema import SYSTEM_PROMPT, MedLine
+from pillclerk.schema import MEDLINE_GEMINI_SCHEMA, SYSTEM_PROMPT, MedLine
 
 TEACHER = config.GEMINI_MODEL
 STYLES = {
@@ -44,6 +45,45 @@ class ChatBackend(Protocol):
     ) -> str: ...
 
 
+@dataclass
+class GeminiResult:
+    text: str
+    raw: dict = field(default_factory=dict)
+    finish_reason: str | None = None
+    accepted_config: dict = field(default_factory=dict)
+    error: str | None = None
+
+
+def gemini_generation_configs(*, temperature: float, max_tokens: int, json_mode: bool) -> list[dict]:
+    """Configs to try. JSON mode prefers mime+schema; 400 falls through."""
+    base = {"temperature": temperature, "maxOutputTokens": max_tokens}
+    think = {**base, "thinkingConfig": {"thinkingLevel": "minimal"}}
+    if not json_mode:
+        return [think, base]
+    schema = {
+        **think,
+        "responseMimeType": "application/json",
+        "responseSchema": MEDLINE_GEMINI_SCHEMA,
+    }
+    schema_no_think = {
+        **base,
+        "responseMimeType": "application/json",
+        "responseSchema": MEDLINE_GEMINI_SCHEMA,
+    }
+    mime_only = {**base, "responseMimeType": "application/json"}
+    return [schema, schema_no_think, mime_only, think, base]
+
+
+def accepted_config_flags(cfg: dict) -> dict:
+    return {
+        "thinkingConfig": "thinkingConfig" in cfg,
+        "responseMimeType": cfg.get("responseMimeType"),
+        "responseSchema": "responseSchema" in cfg,
+        "maxOutputTokens": cfg.get("maxOutputTokens"),
+        "temperature": cfg.get("temperature"),
+    }
+
+
 class GeminiBackend:
     """Google AI Studio / Gemini API. Model id gemma-4-31b-it (official list)."""
 
@@ -59,7 +99,28 @@ class GeminiBackend:
         temperature: float,
         max_tokens: int,
         model: str | None = None,
+        json_mode: bool = False,
     ) -> str:
+        result = self.complete_detailed(
+            messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            model=model,
+            json_mode=json_mode,
+        )
+        if result.error:
+            raise RuntimeError(f"Gemini generateContent failed: {result.error}")
+        return result.text
+
+    def complete_detailed(
+        self,
+        messages: list[dict[str, str]],
+        *,
+        temperature: float,
+        max_tokens: int,
+        model: str | None = None,
+        json_mode: bool = False,
+    ) -> GeminiResult:
         system = " ".join(m["content"] for m in messages if m["role"] == "system")
         contents: list[dict] = []
         for m in messages:
@@ -67,31 +128,29 @@ class GeminiBackend:
                 continue
             role = "model" if m["role"] == "assistant" else "user"
             contents.append({"role": role, "parts": [{"text": m["content"]}]})
-        payload: dict = {
-            "contents": contents,
-            "generationConfig": {
-                "temperature": temperature,
-                "maxOutputTokens": max_tokens,
-                "thinkingConfig": {"thinkingLevel": "minimal"},
-            },
-        }
-        if system:
-            payload["systemInstruction"] = {"parts": [{"text": system}]}
+        configs = gemini_generation_configs(
+            temperature=temperature, max_tokens=max_tokens, json_mode=json_mode
+        )
         url = f"{self.base}/models/{model or self.model}:generateContent"
         headers = {"x-goog-api-key": self.api_key, "Content-Type": "application/json"}
         last_err: Exception | None = None
-        for attempt in range(6):
+        cfg_i = 0
+        cfg = configs[0]
+        for attempt in range(8):
+            payload: dict = {"contents": contents, "generationConfig": cfg}
+            if system:
+                payload["systemInstruction"] = {"parts": [{"text": system}]}
             try:
                 with httpx.Client(timeout=120.0) as client:
                     r = client.post(url, headers=headers, json=payload)
-                    if r.status_code == 400 and "generationConfig" in payload:
-                        cfg = dict(payload["generationConfig"])
-                        cfg.pop("thinkingConfig", None)
-                        cfg.pop("responseMimeType", None)
-                        payload["generationConfig"] = cfg
+                    if r.status_code == 400:
                         last_err = httpx.HTTPStatusError(
                             r.text[:200], request=r.request, response=r
                         )
+                        cfg_i += 1
+                        if cfg_i >= len(configs):
+                            break
+                        cfg = configs[cfg_i]
                         continue
                     if r.status_code in {429, 500, 503}:
                         time.sleep(min(2**attempt, 30))
@@ -101,11 +160,39 @@ class GeminiBackend:
                         continue
                     r.raise_for_status()
                     data = r.json()
-                parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-                return "".join(str(p.get("text") or "") for p in parts).strip()
+                cand = (data.get("candidates") or [{}])[0]
+                parts = (cand.get("content") or {}).get("parts") or []
+                text = "".join(str(p.get("text") or "") for p in parts).strip()
+                finish = cand.get("finishReason") or cand.get("finish_reason")
+                return GeminiResult(
+                    text=text,
+                    raw=data,
+                    finish_reason=str(finish) if finish else None,
+                    accepted_config=accepted_config_flags(cfg),
+                    error=None,
+                )
             except httpx.HTTPError as exc:
                 last_err = exc
                 time.sleep(min(2**attempt, 30))
+        code = None
+        if isinstance(last_err, httpx.HTTPStatusError) and last_err.response is not None:
+            code = last_err.response.status_code
+        elif last_err is not None:
+            msg = str(last_err)
+            if "503" in msg:
+                code = 503
+            elif "500" in msg:
+                code = 500
+            elif "429" in msg:
+                code = 429
+        err = {500: "http_500", 503: "http_503", 429: "http_503"}.get(code or 0)
+        if err:
+            return GeminiResult(
+                text="",
+                raw={},
+                accepted_config=accepted_config_flags(cfg),
+                error=err,
+            )
         raise RuntimeError(f"Gemini generateContent failed: {redact_secret(last_err, self.api_key)}")
 
 

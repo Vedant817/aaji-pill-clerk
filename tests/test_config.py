@@ -45,6 +45,9 @@ def test_b0_fair_few_shot_not_in_eval_sets() -> None:
             if line.strip():
                 eval_lines.add(json.loads(line)["line"])
     assert len(FEW_SHOT) == 3
+    from pillclerk.infer import GEMINI_EXTRA_FEW_SHOT
+
+    assert len(GEMINI_EXTRA_FEW_SHOT) == 3
     for user, gold in FEW_SHOT:
         assert user not in eval_lines
         gold.model_dump_json()

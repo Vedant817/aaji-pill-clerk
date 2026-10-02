@@ -13,12 +13,17 @@ import re
 import unicodedata
 
 # Devanagari (or mixed) brand -> Latin alias. Keys are lowercased NFKC.
+# Halant spellings (टेल्मा, पैन, …) were added after seeing eval errors. Disclose that.
 BRAND_ALIASES: dict[str, str] = {
     "ग्लाइकोमेट": "glycomet",
     "ग्लायकोमेट": "glycomet",
     "ग्लुकोमेट": "glycomet",
     "टेलमा": "telma",
+    "टेल्मा": "telma",
     "टेलमा एएम": "telma am",
+    "टेल्मा एएम": "telma am",
+    "पैन": "pan",
+    "पैन": "pan",
     "इकोस्प्रिन": "ecosprin",
     "इकोस्प्रिन एव्ही": "ecosprin av",
     "थायरोनॉर्म": "thyronorm",

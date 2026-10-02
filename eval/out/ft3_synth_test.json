@@ -4,6 +4,7 @@
   "n": 397,
   "json_valid": 1.0,
   "parse_fail": 0.0,
+  "http_fail": 0.0,
   "exact": 0.9798488664987406,
   "exact_ci95": [
     0.964735516372796,
@@ -18,6 +19,10 @@
   "danger": 0.0025188916876574307,
   "danger_v1": 0.0025188916876574307,
   "danger_v2": 0.020151133501259445,
+  "danger_v2_strict": 0.020151133501259445,
+  "danger_v2_norm": 0.020151133501259445,
+  "n_valid": 397,
+  "exact_on_valid": 0.9798488664987406,
   "ask_recall": 0.9411764705882353,
   "false_ask_rate": 0.0,
   "n_gold_ask": 17,
@@ -33,11 +38,12 @@
     "duration_days": 1.0,
     "prn_max_per_day": 1.0
   },
-  "p50_s": 3.1154592037200928,
-  "p95_s": 3.5713348388671875,
   "error_fields": {
     "drug": 8,
     "dose": 1
   },
-  "dropped_train_duplicates": 3
+  "dropped_train_duplicates": 3,
+  "p50_s": 3.1154592037200928,
+  "p95_s": 3.5713348388671875,
+  "rescored_from_preds": true
 }

@@ -24,9 +24,9 @@ This is a DEV Hacktoberfest 2026 Weekend Challenge entry ("Build for a Friend").
 | Synthetic eval lines (`data/synth/synth_test.jsonl`) | Yes, after PII strip | Tinker (FT eval). Gemma 4 31B teacher only when we run `--system gemma31` |
 | Hand-written realistic text (n=102, not photos) | Yes, after PII strip | Tinker (FT eval); 31B teacher on the same allowlist |
 | Public gold text (`data/public_labels/*.jsonl`, once labelled) | Yes, after PII strip | Tinker (FT eval) and 31B teacher. Logged in `eval/out/sent_payload_log.jsonl` |
-| Confirmed clerk parse in the app | Yes, the medicine line only | Tinker hosted LoRA (`PARSER_BACKEND=tinker`) |
+| Confirmed clerk parse in the app | Yes, after PII strip | Tinker hosted LoRA (`PARSER_BACKEND=tinker`). `make_tinker_parser` calls `strip_pii` before sampling. |
 
-GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl`, `data/heldout/handwritten_realistic.jsonl`, and de-identified public gold jsonl. Images never leave the laptop. The code refuses `data/real/*` and `data/public/*` image paths. Synthetic training text was rendered with the Python template backend; it never went to Gemini.
+GEMINI_API_KEY is **text-only** for the 31B teacher on `data/synth/synth_test.jsonl`, `data/heldout/handwritten_realistic.jsonl`, and de-identified public gold jsonl. Images never leave the laptop. The code refuses `data/real/*` and `data/public/*` image paths. Synthetic training text was rendered with the Python template backend; it never went to Gemini. Tinker **eval and app** sampling now strip PII on the line; Tinker **SFT** still sends the synthetic `train.jsonl` rows as written (no patient PII in that file).
 
 ## MVP line
 
@@ -46,7 +46,7 @@ Every model call sits behind an env switch:
 | `EXTRACT_BACKEND` | `manual` | Paste/type lines. Photos never leave the laptop. Local `gemma4:e4b` OCR is not installed and is not claimed. |
 | `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
-DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. The public demo is Render free: **render.yaml provided; not deployed** (`$PORT`, synthetic data only).
+DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. Public demo: **render.yaml provided; not deployed** (`$PORT`, synthetic data only).
 
 ## Setup
 
@@ -88,21 +88,22 @@ uv run python -m eval.eval --system ft2 --set data/synth/synth_test.jsonl
 uv run python -m eval.eval --system ft2 --set data/heldout/handwritten_realistic.jsonl
 ```
 
-SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train and was trained on the **2500-row** `train.jsonl` at git `5619cee`. Later appends added 396 unique form/dose/food stress rows then 200 drug/strength rows; **`data/synth/train.jsonl` is 3096 rows**, all `renderer=template`. Those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`. FT3 mixes `targeted_ft3_danger.jsonl` (200 rows) at SFT time via `--extra`; it does **not** rewrite `train.jsonl`. v3 is not written to `.env` unless `--apply-env` after the keep-rule (exact up on SYNTH+HMR, McNemar p<0.05, danger_v2 not up).
+SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500 targeted rows (form/unit, food, half-tab, taper, PRN, ASK) into train and was trained on the **2500-row** `train.jsonl` at git `5619cee`. Later appends added 396 unique form/dose/food stress rows then 200 drug/strength rows; **`data/synth/train.jsonl` is 3096 rows**, all `renderer=template`. Those extras are not in the v2 weights. Sampler path is written to `train/checkpoint_v2.json` and `.env` `PILLCLERK_TINKER_PATH`. FT3 mixes `targeted_ft3_danger.jsonl` (200 rows) at SFT time via `--extra`; it does **not** rewrite `train.jsonl`. v3 is not written to `.env` unless `--apply-env` after the keep-rule (exact up on SYNTH+HMR, McNemar p<0.05, normalised danger_v2 not up).
 
 ## Results
 
 Headline numbers: SYNTH held-out drugs (n=400) and **Hand-written realistic (n=102)** (never trained, not photographed). **Public real-world set: HMR-100 (India), n=…** is scored after labelling; numbers stay TODO until `eval/out/` has a run. Full table and file paths in `eval/results.md`. Public images stay gitignored in `data/public/`.
 
-| System | Exact SYNTH n=397 [95% CI] | Danger_v1 SYNTH | Exact hand-written realistic [95% CI] | Danger_v1 hand-written realistic | p50 s/line | Files |
+| System | Exact SYNTH n=397 [95% CI] | Danger_v2_norm SYNTH | parse_fail / http_fail SYNTH | Exact HW n=102 [95% CI] | Danger_v2_norm HW | Files |
 |---|---|---|---|---|---|---|
-| B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3778 | 0.3529 [0.2549, 0.4510] | 0.4510 | 3.20 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
-| FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0605 | 0.6471 [0.5588, 0.7451] | 0.1471 | 2.18 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
-| FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.8627 [0.7941, 0.9314] | 0.0490 | 3.16 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
-| FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0025 | 0.8824 [0.8235, 0.9412] | 0.0686 | 3.12 | `eval/out/ft3_synth_test.json` · `eval/out/ft3_handwritten_realistic.json` |
-| T Gemma 4 31B | 0.8715 [0.8363, 0.9043] | 0.1209 | 0.6275 [0.5196, 0.7255] | 0.3137 | 36.55 | `eval/out/gemma31_synth_test.json` · `eval/out/gemma31_handwritten_realistic.json` |
+| B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3073 | 0.1940 / 0 | 0.3529 [0.2549, 0.4510] | 0.3431 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
+| FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0504 | 0.0252 / 0 | 0.6471 [0.5588, 0.7451] | 0.1078 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
+| FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8627 [0.7941, 0.9314] | 0.0588 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
+| FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8824 [0.8235, 0.9412] | 0.0588 | `eval/out/ft3_synth_test.json` · `eval/out/ft3_handwritten_realistic.json` |
+| T Gemma 4 31B (no JSON mode) | 0.8715 [0.8363, 0.9043] | 0.0101 | 0.1083 / 0.0101 | 0.6275 [0.5196, 0.7255] | 0.0098 | `eval/out/gemma31_synth_test.json` · `eval/out/gemma31_handwritten_realistic.json` |
+| T JSON mode (`gemma31_json`) | TODO | TODO | TODO | TODO | TODO | not run; ask before quota |
 
-Corrected SYNTH: gold aligned to the written line; 3 exact train duplicates dropped (n=397). Old n=400 scores live in `eval/out/*_synth_test_gold_v1.json`. FT2 vs FT1 on the same 397 SYNTH lines: 22 exact-match fixes, 0 regressions, McNemar p = 4.76837158203125e-07. On the same 102 hand-written realistic lines: 25 exact-match fixes, 3 regressions, p = 2.744048833847046e-05. FT3 vs FT2 SYNTH: 0/0, p=1.0 (tied exact; ASK recall 0.7059 → 0.9412). FT3 vs FT2 HW (dev): 8/6, p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0); v3 is not in `.env`. FT2 vs T SYNTH: 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09. T `parse_fail` SYNTH 0.1184 (4 Gemini HTTP 500 after retries). Full table, danger_v2, ASK metrics, and exact_norm in `eval/results.md`. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
+Corrected SYNTH: gold aligned to the written line; 3 exact train duplicates dropped (n=397). Old n=400 scores live in `eval/out/*_synth_test_gold_v1.json`. FT2 vs FT1 on the same 397 SYNTH lines: 22 exact-match fixes, 0 regressions, McNemar p = 4.76837158203125e-07. On the same 102 hand-written realistic lines (generated in code, not handwritten by Vedant): 25 exact-match fixes, 3 regressions, p = 2.744048833847046e-05. FT3 vs FT2 SYNTH: 0/0, p=1.0 (tied exact; ASK recall 0.7059 → 0.9412). FT3 vs FT2 HW (dev): 8/6, p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0; normalised danger_v2); v3 is not in `.env`. Whole-set FT2 vs T SYNTH: 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09 — that gap is **schema validity** (`parse_fail` 0.1083 + `http_fail` 0.0101). On T-valid lines: **346/350** vs FT2 **342/350**, McNemar 8/4, p = 0.3876953125 (`eval/out/t_valid.json`). HW T-valid **64/70** vs **64/70**, p = 1.0. T p50 includes HTTP retries; do not compare it to Tinker latency. `gemma31_json` is the fairness rerun and has not been started. Full table in `eval/results.md`. Old B0 (no few-shot) scored json_valid 0.0 because it emitted `dose="1-0-1"` and `kind="regular"`; B0-fair is the comparable baseline.
 
 ## What is real
 

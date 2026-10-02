@@ -27,6 +27,7 @@ def test_parse_fail_is_separate_from_danger_v2() -> None:
     gold = MedLine(drug="Glycomet", dose={"morning": 1.0, "unit": "tab"})
     s = score(None, gold)
     assert s["parse_fail"] == 1
+    assert s["http_fail"] == 0
     assert s["valid"] == 0
     assert s["danger_v1"] == 1
     assert s["danger"] == 1
@@ -60,6 +61,8 @@ def test_strength_and_devanagari_norm() -> None:
     assert strength_eq("40mg/5mg", "40 mg / 5 mg")
     assert not strength_eq("500mg", "250mg")
     assert drug_eq("टेलमा", "Telma")
+    assert drug_eq("टेल्मा", "Telma")
+    assert drug_eq("पैन", "Pan")
     gold = MedLine(drug="Telma", strength="40", dose={"morning": 1.0, "unit": "tab"})
     pred = MedLine(drug="टेलमा", strength="40 mg", dose={"morning": 1.0, "afternoon": 0.0, "night": 0.0, "unit": "tab"})
     s = score(pred, gold)
@@ -67,6 +70,81 @@ def test_strength_and_devanagari_norm() -> None:
     assert s["strength"] == 0
     assert s["exact"] == 0
     assert s["exact_norm"] == 1
+
+
+def test_rescore_matches_already_dropped_preds_by_line(tmp_path, monkeypatch) -> None:
+    import json
+    import sys
+
+    from eval import eval as ev
+
+    gold = tmp_path / "gold.jsonl"
+    train = tmp_path / "train.jsonl"
+    preds = tmp_path / "preds.jsonl"
+    train.write_text(json.dumps({"line": "dup-train-line", "gold": {}}) + "\n", encoding="utf-8")
+    gold.write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "line": "dup-train-line",
+                        "gold": {
+                            "drug": "X",
+                            "form": "tab",
+                            "kind": "daily",
+                            "food": "any",
+                            "needs_check": ["dose"],
+                        },
+                    }
+                ),
+                json.dumps(
+                    {
+                        "line": "keep-me",
+                        "gold": {
+                            "drug": "Glycomet",
+                            "form": "tab",
+                            "kind": "daily",
+                            "dose": {"morning": 1, "afternoon": 0, "night": 0, "unit": "tab"},
+                            "food": "any",
+                        },
+                    }
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    preds.write_text(
+        json.dumps(
+            {
+                "line": "keep-me",
+                "pred": {
+                    "drug": "Glycomet",
+                    "form": "tab",
+                    "kind": "daily",
+                    "dose": {"morning": 1, "afternoon": 0, "night": 0, "unit": "tab"},
+                    "food": "any",
+                    "taper": [],
+                    "needs_check": [],
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(ev, "TRAIN_JSONL", train)
+    monkeypatch.setattr(ev, "ROOT", tmp_path)
+    (tmp_path / "eval" / "out").mkdir(parents=True)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["eval", "--system", "ft2", "--set", str(gold), "--preds", str(preds)],
+    )
+    ev.main()
+    out = json.loads((tmp_path / "eval" / "out" / "ft2_gold.json").read_text(encoding="utf-8"))
+    assert out["n"] == 1
+    assert out["dropped_train_duplicates"] == 1
+    assert out["exact"] == 1.0
 
 
 def test_drop_train_duplicates() -> None:
@@ -126,7 +204,33 @@ def test_b0_fair_is_registered() -> None:
     src = Path(ev.__file__).read_text(encoding="utf-8")
     assert '"b0_fair"' in src
     assert '"ft3"' in src
+    assert '"gemma31_json"' in src
     assert "few_shot=True" in src
+
+
+def test_exact_on_valid_uses_t_valid_subset() -> None:
+    from eval.report import exact_on_valid, mcnemar_p_two_sided
+
+    t = [
+        {"valid": 1, "pred": {"drug": "A"}, "exact": 1},
+        {"valid": 0, "pred": None, "exact": 0},
+        {"valid": 1, "pred": {"drug": "C"}, "exact": 0},
+        {"valid": 1, "pred": {"drug": "D"}, "exact": 1},
+    ]
+    other = [
+        {"valid": 1, "exact": 1},
+        {"valid": 1, "exact": 1},
+        {"valid": 1, "exact": 1},
+        {"valid": 1, "exact": 0},
+    ]
+    out = exact_on_valid(t, other)
+    assert out["n"] == 4
+    assert out["n_valid"] == 3
+    assert out["t_exact_on_valid"] == 2
+    assert out["other_exact_on_valid"] == 2
+    assert out["mcnemar"]["n01_b_fixes"] == 1  # T right, other wrong
+    assert out["mcnemar"]["n10_b_regresses"] == 1  # T wrong, other right
+    assert out["mcnemar"]["p_two_sided"] == mcnemar_p_two_sided(1, 1)
 
 
 def test_mcnemar_counts_discordant_pairs() -> None:
@@ -160,6 +264,24 @@ def test_parse_medline_blob_skips_inner_dose_object() -> None:
     assert med is not None
     assert med.drug == "Nitrofurantoin"
     assert med.form == "cap"
+
+
+def test_t_valid_json_matches_preds() -> None:
+    t = json.loads(Path("eval/out/t_valid.json").read_text(encoding="utf-8"))
+    assert t["synth"]["n_valid"] == 350
+    assert t["synth"]["t_exact_on_valid"] == 346
+    assert t["synth"]["other_exact_on_valid"] == 342
+    assert t["synth"]["mcnemar"]["n01_b_fixes"] == 8
+    assert t["synth"]["mcnemar"]["n10_b_regresses"] == 4
+    assert t["hw"]["n_valid"] == 70
+    assert t["hw"]["t_exact_on_valid"] == 64
+    assert t["hw"]["other_exact_on_valid"] == 64
+    results = Path("eval/results.md").read_text(encoding="utf-8")
+    assert "346/350" in results
+    assert "64/70" in results
+    assert "schema-validity" in results
+    assert "danger_v2_norm" in results
+    assert "generated in code" in results
 
 
 def test_b0_fair_saved_run_beats_schema_fail_b0() -> None:

@@ -1,0 +1,1831 @@
+{
+  "ft2_synth_test": {
+    "n": 397,
+    "exact": 0.9798488664987406,
+    "parse_fail": 0.0,
+    "http_fail": 0.0,
+    "danger_v2": 0.020151133501259445,
+    "danger_v2_norm": 0.020151133501259445,
+    "danger_v2_strict": 0.020151133501259445,
+    "danger_v2_lines": [
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-0 सुबह एक khane se pehle cont",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ ℞ TAB. Telma AM 40 mg/5 mg SOS / PRN max 2/d x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-1 सुबह एक रात एक khane ke baad x7d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ TAB Telma AM 40 mg/5 mg 1-1-1 AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg OD PC x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB. Telma AM 40mg/5mg 1-0-0 BEFORE FOOD x 60 DAYS WEEKLY",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg raat ko ek 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40mg/5mg सकाळी एक रात्री एक जेवणानंतर 7 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-0 सुबह एक khane se pehle cont",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ ℞ TAB. Telma AM 40 mg/5 mg SOS / PRN max 2/d x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-1 सुबह एक रात एक khane ke baad x7d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ TAB Telma AM 40 mg/5 mg 1-1-1 AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg OD PC x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB. Telma AM 40mg/5mg 1-0-0 BEFORE FOOD x 60 DAYS WEEKLY",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg raat ko ek 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40mg/5mg सकाळी एक रात्री एक जेवणानंतर 7 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "fail_lines": []
+  },
+  "ft2_handwritten_realistic": {
+    "n": 102,
+    "exact": 0.8627450980392157,
+    "parse_fail": 0.00980392156862745,
+    "http_fail": 0.0,
+    "danger_v2": 0.058823529411764705,
+    "danger_v2_norm": 0.058823529411764705,
+    "danger_v2_strict": 0.12745098039215685,
+    "danger_v2_lines": [
+      {
+        "line": "Tab Telma AM 40mg/5mg OD ES 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Lantus 12 unit raat ko",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Lantus",
+        "pred_strength": "12 unit",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "unit"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "SYR. Ascoril LS AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ascoril LS",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "ml"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "aaji ki BP ki dawai Telma AM 40/5 subah khali pet 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40/5",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Refresh Tears drops subah dopahar raat 15 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Refresh Tears",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "drop"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Novorapid 6 unit subah dopahar raat khane se pehle",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Novorapid",
+        "pred_strength": "6 unit",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "Tab Telma AM 40mg/5mg OD ES 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Dolo 650 zarurat pe max 3/d 3 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Lantus 12 unit raat ko",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Lantus",
+        "pred_strength": "12 unit",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "unit"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "टेल्मा 40 सुबह एक खाली पेट 30 दिन",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "इकोस्प्रिन 75 रात एक खाने के बाद",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ecosprin",
+        "pred_strength": "75 mg",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "पैन 40 सुबह एक खाने से पहले 14 दिन",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": "40",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "डोलो 650 जरूरत पर",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Ecosprin 75 रात्री एक जेवणानंतर",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ecosprin",
+        "pred_strength": "75 mg",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Dolo 650 गरजेनुसार दिवसाला 3",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "SYR. Ascoril LS AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ascoril LS",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "ml"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "aaji ki BP ki dawai Telma AM 40/5 subah khali pet 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40/5",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Refresh Tears drops subah dopahar raat 15 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Refresh Tears",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "drop"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Novorapid 6 unit subah dopahar raat khane se pehle",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Novorapid",
+        "pred_strength": "6 unit",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "fail_lines": [
+      {
+        "line": "Duphalac 15ml subah 15ml raat khane ke baad 7 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      }
+    ]
+  },
+  "ft3_synth_test": {
+    "n": 397,
+    "exact": 0.9798488664987406,
+    "parse_fail": 0.0,
+    "http_fail": 0.0,
+    "danger_v2": 0.020151133501259445,
+    "danger_v2_norm": 0.020151133501259445,
+    "danger_v2_strict": 0.020151133501259445,
+    "danger_v2_lines": [
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-0 सुबह एक khane se pehle cont",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ ℞ TAB. Telma AM 40 mg/5 mg SOS / PRN max 2/d x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-1 सुबह एक रात एक khane ke baad x7d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ TAB Telma AM 40 mg/5 mg 1-1-1 AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg OD PC x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB. Telma AM 40mg/5mg 1-0-0 BEFORE FOOD x 60 DAYS WEEKLY",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg raat ko ek 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40mg/5mg सकाळी एक रात्री एक जेवणानंतर 7 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-0 सुबह एक khane se pehle cont",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ ℞ TAB. Telma AM 40 mg/5 mg SOS / PRN max 2/d x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB Telma AM 40 mg/5 mg 1-0-1 सुबह एक रात एक khane ke baad x7d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "℞ TAB Telma AM 40 mg/5 mg 1-1-1 AFTER FOOD x 5 DAYS",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg OD PC x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "TAB. Telma AM 40mg/5mg 1-0-0 BEFORE FOOD x 60 DAYS WEEKLY",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40 mg/5 mg raat ko ek 30 din",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Telma AM 40mg/5mg सकाळी एक रात्री एक जेवणानंतर 7 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "fail_lines": []
+  },
+  "ft3_handwritten_realistic": {
+    "n": 102,
+    "exact": 0.8823529411764706,
+    "parse_fail": 0.029411764705882353,
+    "http_fail": 0.0,
+    "danger_v2": 0.058823529411764705,
+    "danger_v2_norm": 0.058823529411764705,
+    "danger_v2_strict": 0.06862745098039216,
+    "danger_v2_lines": [
+      {
+        "line": "Tab Telma AM 40mg/5mg OD ES 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Ecosprin 75 raat ko ek khane ke baad",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ecosprin",
+        "pred_strength": "75",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Wysolone 10 1-0-1 5 din then 0-0-1 5 din khane ke baad",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Wysolone",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "taper",
+        "pred_taper": [
+          {
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          },
+          {
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          }
+        ],
+        "needs_check": []
+      },
+      {
+        "line": "पैन 40 सुबह एक खाने से पहले 14 दिन",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": "40",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Pan 40 सकाळी एक जेवणाआधी 14 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Dolo 650 गरजेनुसार दिवसाला 3",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "Tab Telma AM 40mg/5mg OD ES 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Telma",
+        "pred_strength": "40 mg/5 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Ecosprin 75 raat ko ek khane ke baad",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Ecosprin",
+        "pred_strength": "75",
+        "pred_dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Wysolone 10 1-0-1 5 din then 0-0-1 5 din khane ke baad",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Wysolone",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "taper",
+        "pred_taper": [
+          {
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          },
+          {
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          }
+        ],
+        "needs_check": []
+      },
+      {
+        "line": "पैन 40 सुबह एक खाने से पहले 14 दिन",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": "40",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "डोलो 650 जरूरत पर",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Pan 40 सकाळी एक जेवणाआधी 14 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": null,
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "cap"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Dolo 650 गरजेनुसार दिवसाला 3",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Dolo",
+        "pred_strength": "650",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": []
+      }
+    ],
+    "fail_lines": [
+      {
+        "line": "aaji ki BP ki dawai Telma AM 40/5 subah khali pet 30 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Duphalac 15ml subah 15ml raat khane ke baad 7 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "aaji ko Atorva 10 raat ko khane ke baad dena",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      }
+    ]
+  },
+  "gemma31_synth_test": {
+    "n": 397,
+    "exact": 0.871536523929471,
+    "parse_fail": 0.10831234256926953,
+    "http_fail": 0.010075566750629723,
+    "danger_v2": 0.010075566750629723,
+    "danger_v2_norm": 0.010075566750629723,
+    "danger_v2_strict": 0.010075566750629723,
+    "danger_v2_lines": [
+      {
+        "line": "Tab Flexon HS ES x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Flexon HS",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "strength",
+          "dose"
+        ]
+      },
+      {
+        "line": "Tab Atorva 10mg BD 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Atorva",
+        "pred_strength": "10mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Meftal Spas 250mg as directed",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Meftal Spas",
+        "pred_strength": "250mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": [
+          "duration_days"
+        ]
+      },
+      {
+        "line": "3. Tab Flexon HS AC 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Flexon HS",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "strength",
+          "dose"
+        ]
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "Tab Flexon HS ES x90d",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Flexon HS",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "strength",
+          "dose"
+        ]
+      },
+      {
+        "line": "Tab Atorva 10mg BD 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Atorva",
+        "pred_strength": "10mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Tab Meftal Spas 250mg as directed",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Meftal Spas",
+        "pred_strength": "250mg",
+        "pred_dose": null,
+        "pred_kind": "prn",
+        "pred_taper": [],
+        "needs_check": [
+          "duration_days"
+        ]
+      },
+      {
+        "line": "3. Tab Flexon HS AC 1/12",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Flexon HS",
+        "pred_strength": null,
+        "pred_dose": null,
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "strength",
+          "dose"
+        ]
+      }
+    ],
+    "fail_lines": [
+      {
+        "line": "Tab Flexon HS AC x10d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Tab [?] 50 mg/1000 mg 1-[?]-[?] cont",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Albendazole 400 mg 1-0-1 x 5d then 0-0-1 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "7. TAB Albendazole 400 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Refresh Tears 2-2-2 सुबह दो दोपहर दो रात दो khali pet cont",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "℞ Tab Glycomet GP1 500 mg/1 mg BD PC cont",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Seroflo 250 mcg 2-0-2 x 5d then 0-0-2 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Crocin Drops 100 mg/ml 2-0-0 सुबह दो khane se pehle x5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Crocin Drops 100 mg/ml 0-0-2 रात दो khane ke baad cont",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Asthalin 100 mcg 0-0-2 AFTER FOOD x 90 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "℞ TAB. Glycomet GP1 500 mg/1 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "SYR. Mucaine 5-0-5 x 5d then 0-0-5 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Deriphyllin 150mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Cap Vizylac HS AC x60d WEEKLY",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Clavam 625 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "Tab Olmesar 40 mg सकाळी एक रात्री एक 60 दिवस",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "TAB. Clopitab 75mg 1-0-1 x 5d then 0-0-1 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Tab [?] 500mg/1mg 1-[?]-[?] cont",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Amaryl 2 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB Flexon 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "4. TAB. Nicorandil 10 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Augmentin 625 mg 1-0-1 x 5d then 0-0-1 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Drops Crocin Drops 100mg/ml subah do raat ko do khane se pehle continue",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Crocin Drops 100 mg/ml 2-0-2 x 30 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "℞ Tab Neurobion Forte BD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "1. INH. Foracort 200 mcg 1-0-0 WITH FOOD x 60 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Crocin Drops 100 mg/ml 2-0-2 x 5d then 0-0-2 x 5d BEFORE FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Seroflo 250mcg 2-0-2 AFTER FOOD x 5 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Foracort 200 mcg 0-0-2 BEFORE FOOD x 3 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Deriphyllin 150 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Drops Refresh Tears 0-0-2 PC x7d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Nucoxia 60 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Drops Refresh Tears 0-0-2 AC x60d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Drops Refresh Tears सुबह दो दोपहर दो रात दो खाली पेट 5 दिन",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "℞ Tab Olmesar 20 mg सुबह एक रात एक 90 दिन",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "TAB. Xarelto 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "SYR. Duphalac 5-0-5 x 5d then 0-0-5 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Olmesar 20 mg 1-0-1 x 5d then 0-0-1 x 5d EMPTY STOMACH",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Tab Paracetamol 500 mg सुबह एक खाने के बाद 90 दिन",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "SYR. Mucaine 5-0-5 x 5d then 0-0-5 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Refresh Tears 2-0-0 AFTER FOOD x 90 DAYS WEEKLY",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "TAB. Xarelto 10 mg 1-0-1 x 5d then 0-0-1 x 5d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "6. TAB. Nucoxia 90 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Foracort 200mcg 0-2-0 AFTER FOOD x 3 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Drops Crocin Drops 100 mg/ml रात दो 3 दिन",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "℞ TAB. Olmesar 20 mg 1-0-1 x 5d then 0-0-1 x 5d WITH FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      }
+    ]
+  },
+  "gemma31_handwritten_realistic": {
+    "n": 102,
+    "exact": 0.6274509803921569,
+    "parse_fail": 0.27450980392156865,
+    "http_fail": 0.0392156862745098,
+    "danger_v2": 0.00980392156862745,
+    "danger_v2_norm": 0.00980392156862745,
+    "danger_v2_strict": 0.0196078431372549,
+    "danger_v2_lines": [
+      {
+        "line": "Novorapid 6 unit subah dopahar raat khane se pehle",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Novorapid",
+        "pred_strength": "6 unit",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "unit"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "duration_days"
+        ]
+      }
+    ],
+    "danger_v2_strict_lines": [
+      {
+        "line": "Pan 40 सकाळी एक जेवणाआधी 14 दिवस",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Pan",
+        "pred_strength": "40 mg",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.0,
+          "unit": "tab"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": []
+      },
+      {
+        "line": "Novorapid 6 unit subah dopahar raat khane se pehle",
+        "parse_fail": 0,
+        "http_fail": 0,
+        "error": null,
+        "pred_drug": "Novorapid",
+        "pred_strength": "6 unit",
+        "pred_dose": {
+          "morning": 1.0,
+          "afternoon": 1.0,
+          "night": 1.0,
+          "unit": "unit"
+        },
+        "pred_kind": "daily",
+        "pred_taper": [],
+        "needs_check": [
+          "duration_days"
+        ]
+      }
+    ],
+    "fail_lines": [
+      {
+        "line": "TAB. Wysolone 10 mg  1-0-1 x 5d then 0-0-1 x 5d  AFTER FOOD",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INH. Foracort 200MCG  1-0-1  x 30 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INJ. Lantus 100 IU/ml  0-0-12  NIGHT",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INJ. Novorapid 100 IU/ml  6-6-6  BEFORE FOOD  CONTINUE",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Refresh Tears  1-1-1  x 15 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Ciplox D  1-0-1  x 7 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "CREAM Betnovate  0-0-1  x 7 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "CREAM Volini  0-0-1  x 10 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "aaji ko Glycomet 500 subah ek raat ko ek khane ke baad 30 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Telma 40 subah ek khali pet dena continue",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Ecosprin 75 raat ko ek khane ke baad",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "Pan 40 subah ek khane se pehle 14 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Lantus 12 unit raat ko",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Wysolone 10 1-0-1 5 din then 0-0-1 5 din khane ke baad",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "टेल्मा 40 सुबह एक खाली पेट 30 दिन",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "इकोस्प्रिन 75 रात एक खाने के बाद",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "डोलो 650 जरूरत पर",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "थाइरोनॉर्म 50 सुबह एक खाली पेट",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Telma 40 सकाळी एक उपाशीपोटी continue",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Ecosprin 75 रात्री एक जेवणानंतर",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Dolo 650 गरजेनुसार दिवसाला 3",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "DROPS Zincovit  0.5-0-0.5  AFTER FOOD  x 10 DAYS",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "INJ. Mixtard 30/70  10-0-8  BEFORE FOOD  CONTINUE",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Tab Cardace 5mg OD AC x30d",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "Tab [?] 500mg 1-[?]-[?] x 30d",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Tab Glycomet 500mg as directed",
+        "error": "http_500",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "aaji ki BP ki dawai Telma AM 40/5 subah khali pet 30 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Refresh Tears drops subah dopahar raat 15 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Betnovate cream raat ko lagana 7 din",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "Foracort inhaler subah ek raat ek 30 din",
+        "error": "http_503",
+        "http_fail": 1,
+        "parse_fail": 0
+      },
+      {
+        "line": "Thyronorm 50 subah khali pet continue, paani ke saath",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      },
+      {
+        "line": "aaji ko Atorva 10 raat ko khane ke baad dena",
+        "error": "schema",
+        "http_fail": 0,
+        "parse_fail": 1
+      }
+    ]
+  }
+}

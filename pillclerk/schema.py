@@ -24,6 +24,72 @@ SYSTEM_PROMPT = (
     "Output JSON only."
 )
 
+_DOSE_SCHEMA = {
+    "type": "OBJECT",
+    "properties": {
+        "morning": {"type": "NUMBER"},
+        "afternoon": {"type": "NUMBER"},
+        "night": {"type": "NUMBER"},
+        "unit": {
+            "type": "STRING",
+            "enum": ["tab", "cap", "ml", "drop", "puff", "unit", "sachet", "apply"],
+        },
+    },
+    "required": ["morning", "afternoon", "night", "unit"],
+}
+
+# Gemini generateContent responseSchema (OpenAPI subset, uppercase types).
+MEDLINE_GEMINI_SCHEMA: dict = {
+    "type": "OBJECT",
+    "properties": {
+        "drug": {"type": "STRING", "nullable": True},
+        "strength": {"type": "STRING", "nullable": True},
+        "form": {
+            "type": "STRING",
+            "enum": [
+                "tab",
+                "cap",
+                "syrup",
+                "drops",
+                "inhaler",
+                "injection",
+                "cream",
+                "sachet",
+                "other",
+            ],
+        },
+        "kind": {"type": "STRING", "enum": ["daily", "prn", "taper"]},
+        "dose": {**_DOSE_SCHEMA, "nullable": True},
+        "every_n_days": {"type": "INTEGER"},
+        "taper": {
+            "type": "ARRAY",
+            "items": {
+                "type": "OBJECT",
+                "properties": {
+                    "dose": _DOSE_SCHEMA,
+                    "days": {"type": "INTEGER"},
+                },
+                "required": ["dose", "days"],
+            },
+        },
+        "food": {
+            "type": "STRING",
+            "enum": ["before", "after", "with", "empty_stomach", "any"],
+        },
+        "duration_days": {"type": "INTEGER", "nullable": True},
+        "prn_max_per_day": {"type": "INTEGER", "nullable": True},
+        "note": {"type": "STRING", "nullable": True},
+        "needs_check": {
+            "type": "ARRAY",
+            "items": {
+                "type": "STRING",
+                "enum": ["drug", "strength", "dose", "food", "duration_days", "schedule"],
+            },
+        },
+    },
+    "required": ["drug", "form", "kind", "food", "taper", "needs_check"],
+}
+
 
 class Dose(BaseModel):
     morning: float = Field(0, ge=0, le=20)

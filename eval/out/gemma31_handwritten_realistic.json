@@ -3,7 +3,8 @@
   "set": "data/heldout/handwritten_realistic.jsonl",
   "n": 102,
   "json_valid": 0.6862745098039216,
-  "parse_fail": 0.3137254901960784,
+  "parse_fail": 0.27450980392156865,
+  "http_fail": 0.0392156862745098,
   "exact": 0.6274509803921569,
   "exact_ci95": [
     0.5196078431372549,
@@ -15,9 +16,13 @@
     0.7352941176470589
   ],
   "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
-  "danger": 0.3137254901960784,
-  "danger_v1": 0.3137254901960784,
-  "danger_v2": 0.0196078431372549,
+  "danger": 0.27450980392156865,
+  "danger_v1": 0.27450980392156865,
+  "danger_v2": 0.00980392156862745,
+  "danger_v2_strict": 0.0196078431372549,
+  "danger_v2_norm": 0.00980392156862745,
+  "n_valid": 70,
+  "exact_on_valid": 0.9142857142857143,
   "ask_recall": 0.6,
   "false_ask_rate": 0.29896907216494845,
   "n_gold_ask": 5,
@@ -33,8 +38,6 @@
     "duration_days": 0.6862745098039216,
     "prn_max_per_day": 0.6862745098039216
   },
-  "p50_s": 40.767244935035706,
-  "p95_s": 115.02472710609436,
   "error_fields": {
     "drug": 32,
     "strength": 34,
@@ -48,6 +51,9 @@
     "prn_max_per_day": 32
   },
   "dropped_train_duplicates": 0,
+  "p50_s": 40.767244935035706,
+  "p95_s": 115.02472710609436,
+  "rescored_from_preds": true,
   "payload_summary": {
     "count": 499,
     "sets": {

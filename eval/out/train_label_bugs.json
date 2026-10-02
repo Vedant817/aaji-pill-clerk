@@ -1,0 +1,21 @@
+{
+  "note": "align_gold on existing train/val. Weights not retrained. Generator already calls align_gold in pair_row.",
+  "files": [
+    {
+      "path": "data/synth/train.jsonl",
+      "n": 3096,
+      "n_changed": 104,
+      "food": 84,
+      "duration_days": 7,
+      "prn_max_per_day": 18
+    },
+    {
+      "path": "data/synth/val.jsonl",
+      "n": 250,
+      "n_changed": 15,
+      "food": 8,
+      "duration_days": 0,
+      "prn_max_per_day": 7
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 """Hand-written realistic held-out slips. Never used in training.
 
-Authored by Vedant: typed gold against each written line. These are
-de-identified typical clinic / caregiver slips (clinic print, doctor
-shorthand, WhatsApp). They are NOT photographed prescriptions. The set
-was created after FT2 was trained on the 2500-row mix at git 5619cee.
+Lines were generated in code (`SPECS` below), not handwritten by Vedant.
+Gold is the dict next to each line in this file. They are de-identified
+typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp).
+NOT photographed prescriptions. Created after FT2 at git 5619cee.
 
 67 of 102 lines use drug names that also appear in data/synth/train.jsonl
 (counted from those files). Treat as a dev set, not a drug-held-out test.
@@ -283,6 +283,7 @@ def rows() -> list[dict]:
                 "style": style,
                 "synthetic": False,
                 "held_out": True,
+                "authored": "code:eval/handwritten_realistic.py",
             }
         )
     return out

@@ -5,11 +5,13 @@ from __future__ import annotations
 import json
 import re
 from collections.abc import Callable
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from pillclerk import config
 from pillclerk.copy_explicit import copy_explicit
+from pillclerk.privacy import strip_pii
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 from pillclerk.validate import extra_rules
 
@@ -23,6 +25,20 @@ JSON_ONLY = (
     "dose is an object {morning, afternoon, night, unit}, never a string like \"1-0-1\". "
     "Missing fields are null and listed in needs_check."
 )
+JSON_SCHEMA_HINTS = (
+    " dose.unit is tab|cap|ml|drop|puff|unit|sachet|apply. "
+    "strength is a string (for example \"40 mg\"), never an object. "
+    "taper is a list of {dose:{morning,afternoon,night,unit}, days}."
+)
+
+
+@dataclass
+class ParseOutcome:
+    pred: MedLine | None
+    raw: str | None = None
+    error: str | None = None
+    accepted_config: dict = field(default_factory=dict)
+    finish_reason: str | None = None
 
 # Three gold pairs from train.jsonl, held out of synth_test and handwritten_realistic.
 FEW_SHOT: list[tuple[str, MedLine]] = [
@@ -64,6 +80,51 @@ FEW_SHOT: list[tuple[str, MedLine]] = [
     ),
 ]
 
+# Extra Gemma JSON-mode shots from train.jsonl. Lines are disjoint from every eval set
+# (eval.overlap.vs_eval). Drugs are not in eval_drug_names().
+GEMINI_EXTRA_FEW_SHOT: list[tuple[str, MedLine]] = [
+    (
+        "TAB. Metrogyl 400 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+        MedLine(
+            drug="Metrogyl",
+            strength="400 mg",
+            form="tab",
+            kind="taper",
+            dose=None,
+            taper=[
+                {"dose": {"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"}, "days": 5},
+                {"dose": {"morning": 0.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"}, "days": 5},
+            ],
+            food="before",
+            duration_days=10,
+        ),
+    ),
+    (
+        "DROPS Timolol 0.5 % 0-0-2 रात दो khane ke baad x5d",
+        MedLine(
+            drug="Timolol",
+            strength="0.5 %",
+            form="drops",
+            kind="daily",
+            dose={"morning": 0.0, "afternoon": 0.0, "night": 2.0, "unit": "drop"},
+            food="after",
+            duration_days=5,
+        ),
+    ),
+    (
+        "Inj Huminsulin 40 IU/ml 10-10-10 WF x5d",
+        MedLine(
+            drug="Huminsulin",
+            strength="40 IU/ml",
+            form="injection",
+            kind="daily",
+            dose={"morning": 10.0, "afternoon": 10.0, "night": 10.0, "unit": "unit"},
+            food="with",
+            duration_days=5,
+        ),
+    ),
+]
+
 
 def chat_messages(line: str, *, few_shot: bool = False) -> list[dict[str, str]]:
     """FT2 template is SYSTEM_PROMPT + user line. B0-fair adds JSON-only + 3 shots."""
@@ -77,18 +138,32 @@ def chat_messages(line: str, *, few_shot: bool = False) -> list[dict[str, str]]:
     return messages
 
 
-def gemini_teacher_messages(line: str) -> list[dict[str, str]]:
+def gemini_teacher_messages(line: str, *, json_mode: bool = False) -> list[dict[str, str]]:
     """Single user turn: Gemma 4 often ignores systemInstruction and few-shot chat."""
+    shots = FEW_SHOT + (GEMINI_EXTRA_FEW_SHOT if json_mode else [])
     examples = "\n\n".join(
-        f"Line: {user}\nJSON: {gold.model_dump_json()}" for user, gold in FEW_SHOT
+        f"Line: {user}\nJSON: {gold.model_dump_json()}" for user, gold in shots
     )
+    hints = JSON_ONLY + (JSON_SCHEMA_HINTS if json_mode else "")
     user = (
-        f"{SYSTEM_PROMPT}{JSON_ONLY}\n\n"
+        f"{SYSTEM_PROMPT}{hints}\n\n"
         f"Examples:\n{examples}\n\n"
         f"Line: {line}\n"
         "JSON:"
     )
     return [{"role": "user", "content": user}]
+
+
+def classify_gemini_failure(text: str, finish_reason: str | None, pred: MedLine | None) -> str | None:
+    if pred is not None:
+        return None
+    reason = (finish_reason or "").upper()
+    if reason in {"MAX_TOKENS", "LENGTH"}:
+        return "truncated"
+    blob = _extract_json(text or "")
+    if not text or "{" not in text or not blob.startswith("{"):
+        return "no_json"
+    return "schema"
 
 
 def _extract_json(text: str) -> str:
@@ -160,13 +235,14 @@ def make_tinker_parser(
     params = tinker.SamplingParams(max_tokens=400, temperature=0.0)
 
     def parse(line: str) -> MedLine | None:
-        prompt_tokens = _qwen_prompt(tokenizer, line, few_shot=few_shot)
+        clean, _stripped = strip_pii(line)
+        prompt_tokens = _qwen_prompt(tokenizer, clean, few_shot=few_shot)
         model_input = tinker.ModelInput.from_ints(prompt_tokens)
         res = sc.sample(prompt=model_input, num_samples=1, sampling_params=params).result()
         text = tokenizer.decode(res.sequences[0].tokens)
         try:
             med = extra_rules(MedLine.model_validate_json(_extract_json(text)))
-            return extra_rules(copy_explicit(med, line))
+            return extra_rules(copy_explicit(med, clean))
         except Exception:
             return None
 
@@ -208,28 +284,46 @@ def parse_gemini_text(text: str, line: str) -> MedLine | None:
     return extra_rules(copy_explicit(med, line))
 
 
-def make_gemini_parser(set_path: str) -> ParseFn:
+def make_gemini_parser(set_path: str, *, json_mode: bool = False) -> Callable[[str], ParseOutcome]:
     """Gemma 4 31B teacher. Text-only, allowlisted eval sets, payload log."""
-    from pillclerk.privacy import assert_gemini_eval_set, log_sent_payload, strip_pii
+    from pillclerk.privacy import assert_gemini_eval_set, log_sent_payload
     from pillclerk.render import GeminiBackend
 
     allowed = str(assert_gemini_eval_set(Path(set_path)))
     backend = GeminiBackend()
     model = backend.model
+    system = "gemma31_json" if json_mode else "gemma31"
 
-    def parse(line: str) -> MedLine | None:
+    def parse(line: str) -> ParseOutcome:
         clean, stripped = strip_pii(line)
-        messages = gemini_teacher_messages(clean)
+        messages = gemini_teacher_messages(clean, json_mode=json_mode)
         log_sent_payload(
-            system="gemma31",
+            system=system,
             set_path=allowed,
             model=model,
             line=clean,
             stripped=stripped,
             messages=messages,
         )
-        text = backend.complete(messages, temperature=0.0, max_tokens=1024)
-        return parse_gemini_text(text, clean)
+        result = backend.complete_detailed(
+            messages, temperature=0.0, max_tokens=1024, json_mode=json_mode
+        )
+        if result.error:
+            return ParseOutcome(
+                pred=None,
+                raw=result.text,
+                error=result.error,
+                accepted_config=result.accepted_config,
+                finish_reason=result.finish_reason,
+            )
+        pred = parse_gemini_text(result.text, clean)
+        return ParseOutcome(
+            pred=pred,
+            raw=result.text,
+            error=classify_gemini_failure(result.text, result.finish_reason, pred),
+            accepted_config=result.accepted_config,
+            finish_reason=result.finish_reason,
+        )
 
     return parse
 

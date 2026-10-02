@@ -4,20 +4,25 @@
   "n": 102,
   "json_valid": 0.9901960784313726,
   "parse_fail": 0.00980392156862745,
+  "http_fail": 0.0,
   "exact": 0.8627450980392157,
   "exact_ci95": [
     0.7941176470588235,
     0.9313725490196079
   ],
-  "exact_norm": 0.9019607843137255,
+  "exact_norm": 0.9215686274509803,
   "exact_norm_ci95": [
-    0.8431372549019608,
-    0.9509803921568627
+    0.8627450980392157,
+    0.9705882352941176
   ],
   "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
   "danger": 0.049019607843137254,
   "danger_v1": 0.049019607843137254,
-  "danger_v2": 0.12745098039215685,
+  "danger_v2": 0.058823529411764705,
+  "danger_v2_strict": 0.12745098039215685,
+  "danger_v2_norm": 0.058823529411764705,
+  "n_valid": 101,
+  "exact_on_valid": 0.8712871287128713,
   "ask_recall": 0.8,
   "false_ask_rate": 0.0,
   "n_gold_ask": 5,

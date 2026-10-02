@@ -62,6 +62,28 @@ def ci_width_points(n: int) -> float:
     return 1.96 * (0.5 * 0.5 / n) ** 0.5 * 100
 
 
+def exact_on_valid(t_preds: list[dict], other_preds: list[dict] | None = None) -> dict:
+    """Exact match on lines where T produced valid JSON. Numbers from preds files."""
+    if other_preds is not None and len(t_preds) != len(other_preds):
+        raise ValueError(f"pred length mismatch {len(t_preds)} vs {len(other_preds)}")
+    t_valid_idx = [i for i, r in enumerate(t_preds) if r.get("valid") or r.get("pred")]
+    n_valid = len(t_valid_idx)
+    t_exact = sum(int(t_preds[i].get("exact") or 0) for i in t_valid_idx)
+    out: dict = {
+        "n": len(t_preds),
+        "n_valid": n_valid,
+        "t_exact_on_valid": t_exact,
+        "t_exact_on_valid_rate": (t_exact / n_valid) if n_valid else None,
+    }
+    if other_preds is not None:
+        o_exact = sum(int(other_preds[i].get("exact") or 0) for i in t_valid_idx)
+        t_sub = [t_preds[i] for i in t_valid_idx]
+        o_sub = [other_preds[i] for i in t_valid_idx]
+        out["other_exact_on_valid"] = o_exact
+        out["mcnemar"] = mcnemar_exact(o_sub, t_sub, field="exact")
+    return out
+
+
 def public_set_name(n: int | None = None) -> str:
     if n is None:
         return "Public real-world set: HMR-100 (India)"
