@@ -6,8 +6,8 @@
 >
 > **Weekend overrides (source of truth over later sections):**
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
-> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Photo reading can use local Ollama `gemma4:e4b` **or** hosted Gemma if disk cannot fit it. Default `EXTRACT_BACKEND=hosted`.
-> 3. Big-model calls (synthetic data generation, the teacher baseline) go through DigitalOcean's OpenAI-compatible endpoint (`https://inference.do-ai.run/v1`, `gemma-4-31B-it`). An optional **Backboard** backend shares the same chat interface; do not depend on it.
+> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Optional local Ollama `gemma4:e4b` or hosted Gemma.
+> 3. DigitalOcean is **optional** (no card required). Default `LLM_BACKEND=template` (free Python messy-text). Optional Backboard or Tinker for an LLM renderer. Skip the DO partner category if DO is unused. The 31B teacher baseline stays TODO until an LLM backend is chosen.
 
 ---
 

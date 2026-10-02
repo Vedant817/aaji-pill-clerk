@@ -5,8 +5,8 @@ from __future__ import annotations
 import os
 from typing import Literal
 
-LlmBackend = Literal["digitalocean", "backboard"]
-ExtractBackend = Literal["ollama", "hosted"]
+LlmBackend = Literal["template", "digitalocean", "backboard", "tinker"]
+ExtractBackend = Literal["manual", "ollama", "hosted"]
 ParserBackend = Literal["tinker", "ollama"]
 
 
@@ -15,16 +15,19 @@ def _get(name: str, default: str = "") -> str:
 
 
 def llm_backend() -> LlmBackend:
-    value = _get("LLM_BACKEND", "digitalocean").lower()
-    if value not in ("digitalocean", "backboard"):
-        raise ValueError(f"LLM_BACKEND must be digitalocean or backboard, got {value!r}")
+    value = _get("LLM_BACKEND", "template").lower()
+    if value not in ("template", "digitalocean", "backboard", "tinker"):
+        raise ValueError(
+            "LLM_BACKEND must be template, digitalocean, backboard, or tinker, "
+            f"got {value!r}"
+        )
     return value  # type: ignore[return-value]
 
 
 def extract_backend() -> ExtractBackend:
-    value = _get("EXTRACT_BACKEND", "hosted").lower()
-    if value not in ("ollama", "hosted"):
-        raise ValueError(f"EXTRACT_BACKEND must be ollama or hosted, got {value!r}")
+    value = _get("EXTRACT_BACKEND", "manual").lower()
+    if value not in ("manual", "ollama", "hosted"):
+        raise ValueError(f"EXTRACT_BACKEND must be manual, ollama, or hosted, got {value!r}")
     return value  # type: ignore[return-value]
 
 

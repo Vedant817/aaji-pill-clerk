@@ -28,11 +28,11 @@ Every model call sits behind an env switch:
 
 | Variable | Default | What it controls |
 |---|---|---|
-| `LLM_BACKEND` | `digitalocean` | Synthetic data + teacher baseline (`digitalocean` or `backboard`) |
-| `EXTRACT_BACKEND` | `hosted` | Photo reading (`ollama` local `gemma4:e4b`, or `hosted` Gemma) |
-| `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune, or `ollama` local GGUF) |
+| `LLM_BACKEND` | `template` | Synthetic messy text (`template` is free). Optional: `backboard`, `tinker`, `digitalocean` |
+| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Optional: `ollama` local `gemma4:e4b`, or `hosted` Gemma (DO) |
+| `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
-Backboard is an optional drop-in with the same chat interface. The app does not depend on it.
+DigitalOcean is **optional**. The MVP does not need a DO card. Backboard is an optional drop-in with the same chat interface.
 
 ## Setup
 
@@ -47,9 +47,9 @@ uv run pytest
 
 Keys needed (ask before spending):
 
-- `TINKER_API_KEY` — Tinker Console; claim Hacktoberfest credits at https://hacktoberfest.com/my/promos
-- `DO_MODEL_ACCESS_KEY` — DigitalOcean Control Panel → Inference → model access keys (prepaid balance required)
-- `BACKBOARD_API_KEY` — optional, only if `LLM_BACKEND=backboard`
+- `TINKER_API_KEY` — required. Tinker Console; claim Hacktoberfest credits at https://hacktoberfest.com/my
+- `DO_MODEL_ACCESS_KEY` — optional. Skip if you do not want to add a card.
+- `BACKBOARD_API_KEY` — optional. Only if `LLM_BACKEND=backboard`
 
 ## Results
 

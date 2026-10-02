@@ -108,8 +108,19 @@ class BackboardBackend:
 
 def get_llm_backend() -> ChatBackend:
     name = config.llm_backend()
+    if name == "template":
+        raise RuntimeError(
+            "LLM_BACKEND=template uses the free Python renderer only. "
+            "It does not call DigitalOcean, Backboard, or Tinker for messy text. "
+            "Set LLM_BACKEND=backboard or tinker if you want an LLM renderer without DigitalOcean."
+        )
     if name == "backboard":
         return BackboardBackend()
+    if name == "tinker":
+        raise RuntimeError(
+            "LLM_BACKEND=tinker for synthetic render is not wired yet. "
+            "Use --renderer template (free) or LLM_BACKEND=backboard."
+        )
     return DigitalOceanBackend()
 
 
