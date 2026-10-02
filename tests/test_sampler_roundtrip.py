@@ -8,7 +8,7 @@ import pytest
 
 from pillclerk.filters import drug_present, rule_ok
 from pillclerk.render import to_chat_row
-from pillclerk.sampler import holdout_split, load_drugs, load_patterns, sample_line
+from pillclerk.sampler import holdout_split, is_weekly_typical, load_drugs, load_patterns, sample_line
 from pillclerk.schema import MedLine
 from pillclerk.templates import STYLES, dose_code, render_template
 from train.build_dataset import generate_pairs, main as build_main
@@ -26,11 +26,17 @@ def test_drug_list_is_large_enough() -> None:
 
 def test_patterns_weights_match_idea() -> None:
     p = load_patterns()
-    sched = {tuple(s["pattern"]): s["weight"] for s in p["schedules"]}
-    assert sched[(1.0, 0.0, 1.0)] == 25
-    assert sched[(1.0, 0.0, 0.0)] == 20
-    assert p["kind_weights"]["prn"] == 8
-    assert p["kind_weights"]["taper"] == 7
+    mix = p["line_mix"]
+    assert mix["1-0-1"] == 25
+    assert mix["1-0-0"] == 20
+    assert mix["0-0-1"] == 15
+    assert mix["1-1-1"] == 10
+    assert mix["half_tab"] == 7
+    assert mix["prn"] == 8
+    assert mix["taper"] == 7
+    assert mix["every_n_days"] == 5
+    assert mix["other"] == 3
+    assert sum(mix.values()) == 100
     assert p["hard_negative_rate"] == 0.05
     assert sum(p["styles"].values()) == 100
 
@@ -87,7 +93,48 @@ def test_every_n_days_only_on_single_slot() -> None:
             weekly += 1
             slots = sum(1 for s in (gold.dose.morning, gold.dose.afternoon, gold.dose.night) if s)
             assert slots == 1
+            assert gold.duration_days is None or gold.duration_days >= 30
     assert weekly >= 1
+
+
+def test_vitamin_d_is_weekly_od() -> None:
+    drugs = load_drugs()
+    d3 = next(d for d in drugs if d["name"] == "Calcirol")
+    assert is_weekly_typical(d3)
+    patterns = load_patterns()
+    rng = random.Random(4)
+    for _ in range(20):
+        gold = sample_line(rng, d3, patterns, hard_negative=False)
+        assert gold.kind == "daily"
+        assert gold.every_n_days == 7
+        assert gold.dose is not None
+        slots = sum(1 for s in (gold.dose.morning, gold.dose.afternoon, gold.dose.night) if s)
+        assert slots == 1
+
+
+def test_line_mix_roughly_matches_idea() -> None:
+    """Loose check on 2000 non-hard lines. Not an eval number for the post."""
+    drugs = [d for d in load_drugs() if not is_weekly_typical(d)]
+    patterns = load_patterns()
+    rng = random.Random(5)
+    counts = {"prn": 0, "taper": 0, "every_n": 0, "101": 0}
+    n = 0
+    for _ in range(2000):
+        gold = sample_line(rng, rng.choice(drugs), patterns, hard_negative=False)
+        n += 1
+        if gold.kind == "prn":
+            counts["prn"] += 1
+        elif gold.kind == "taper":
+            counts["taper"] += 1
+        elif gold.every_n_days > 1:
+            counts["every_n"] += 1
+        elif gold.dose and gold.dose.unit in ("tab", "cap"):
+            if (gold.dose.morning, gold.dose.afternoon, gold.dose.night) == (1, 0, 1):
+                counts["101"] += 1
+    assert 0.05 < counts["prn"] / n < 0.12
+    assert 0.04 < counts["taper"] / n < 0.11
+    assert 0.02 < counts["every_n"] / n < 0.09
+    assert 0.18 < counts["101"] / n < 0.32
 
 
 def test_holdout_splits_by_drug_name() -> None:
@@ -129,5 +176,37 @@ def test_llm_renderer_is_gated(capsys: pytest.CaptureFixture[str]) -> None:
 
 def test_drugs_csv_forms_are_known() -> None:
     allowed = {"tab", "cap", "syrup", "drops", "inhaler", "injection", "cream", "sachet", "other"}
-    for d in load_drugs():
+    drugs = load_drugs()
+    for d in drugs:
         assert d["form"] in allowed, d
+    tabcap = sum(1 for d in drugs if d["form"] in ("tab", "cap"))
+    assert tabcap / len(drugs) >= 0.75
+
+
+def test_rule_ok_rejects_dropped_facts() -> None:
+    gold = MedLine(
+        drug="Glycomet",
+        strength="500 mg",
+        dose={"morning": 1, "night": 1, "unit": "tab"},
+        duration_days=30,
+    )
+    assert rule_ok("TAB. Glycomet 500MG 1-0-1 AFTER FOOD x 30 DAYS", gold)
+    assert not rule_ok("TAB. SomethingElse 500MG 1-0-1 x 30 DAYS", gold)
+    assert not rule_ok("TAB. Glycomet 1-0-1 AFTER FOOD x 30 DAYS", gold)
+    assert not rule_ok("TAB. Glycomet 500MG 1-0-1 AFTER FOOD", gold)
+    assert rule_ok("Tab Glycomet 500mg BD PC 1/12", gold)
+
+
+def test_rule_ok_taper_uses_step_days() -> None:
+    gold = MedLine(
+        drug="Wysolone",
+        strength="10 mg",
+        kind="taper",
+        taper=[
+            {"dose": {"morning": 1, "night": 1, "unit": "tab"}, "days": 5},
+            {"dose": {"night": 1, "unit": "tab"}, "days": 5},
+        ],
+        duration_days=10,
+    )
+    line = "TAB. Wysolone 10 mg  1-0-1 x 5d then 0-0-1 x 5d  AFTER FOOD"
+    assert rule_ok(line, gold)

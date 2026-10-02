@@ -256,8 +256,9 @@ flowchart TD
 
 **Distribution choices** (write these in the post; they show care):
 - **Schedules:**
-  - `1-0-1` 25%, `1-0-0` 20%, `0-0-1` 15%, `1-1-1` 10%, half-tab patterns 7%, PRN/SOS 8%, tapers 7%, every-N-days 5% (e.g. Vitamin D3 60K weekly), other 3%.
-  - Durations: 3/5/7/10/15/30/60/90 days or "continue".
+  - `1-0-1` 25%, `1-0-0` 20%, `0-0-1` 15%, `1-1-1` 10%, half-tab patterns 7%, PRN/SOS 8%, tapers 7%, every-N-days 5% (e.g. Vitamin D3 60K weekly), other 3%. These are **top-level** shares of non-hard-negative lines (`data/patterns.yaml` `line_mix`), not nested under `kind=daily`.
+  - Durations: 3/5/7/10/15/30/60/90 days or "continue". Weekly lines use 30/60/90/continue only.
+  - Drugs whose name/strength is Vitamin D3 / 60K IU are always sampled as weekly OD (the IDEA example).
 - **Forms:** tablet/capsule 80%; syrup (ml), drops, inhalers (puffs), insulin (units), creams make up the rest.
 - **Styles:**
   - Clinic-printed English 25%, doctor shorthand 25%, Hinglish WhatsApp 20%, Hindi Devanagari 10%, Marathi Devanagari 10%, mixed 10%.

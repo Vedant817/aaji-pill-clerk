@@ -17,7 +17,7 @@ from pathlib import Path
 from pillclerk.filters import normalised_text, rule_ok
 from pillclerk.render import to_chat_row
 from pillclerk.sampler import load_drugs, load_patterns, sample_line
-from pillclerk.templates import STYLES, render_template
+from pillclerk.templates import render_template
 
 ROOT = Path(__file__).resolve().parents[1]
 

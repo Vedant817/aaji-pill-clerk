@@ -1,4 +1,9 @@
-"""Rule filter for synthetic pairs. Parse-back (teacher) is in render.py and costs money."""
+"""Rule filter for synthetic pairs (IDEA.md §7).
+
+Keep a pair only if the messy text still carries the gold facts we can check
+without an LLM: drug name (fuzzy), strength digits, duration digits.
+Parse-back agreement is a separate, paid teacher call in render.py.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +13,7 @@ from rapidfuzz import fuzz
 
 from pillclerk.schema import MedLine
 
-_DIGIT = re.compile(r"\d")
+_DIGITS = re.compile(r"\d+")
 
 
 def normalised_text(line: str) -> str:
@@ -17,35 +22,43 @@ def normalised_text(line: str) -> str:
 
 def drug_present(line: str, drug: str | None, *, min_ratio: int = 70) -> bool:
     if not drug:
-        return "[?]" in line or "ask" in line.lower()
+        return "[?]" in line
     return fuzz.partial_ratio(drug.lower(), line.lower()) >= min_ratio
 
 
+def _strength_digits_present(line: str, strength: str) -> bool:
+    blob = strength.upper().replace("60K", "60")
+    digits = _DIGITS.findall(blob)
+    if not digits:
+        return True
+    line_u = line.upper().replace("60K", "60")
+    return digits[0] in line_u
+
+
+def _duration_present(line: str, days: int) -> bool:
+    if str(days) in line:
+        return True
+    compact = line.replace(" ", "")
+    if days == 30 and "1/12" in compact:
+        return True
+    return False
+
+
 def rule_ok(line: str, gold: MedLine) -> bool:
-    """Keep a pair only if the messy text still carries the gold facts we can check without an LLM."""
-    if not line or len(line) > 240:
+    if not line or len(line) < 3 or len(line) > 240:
         return False
-    if gold.drug and not drug_present(line, gold.drug):
+    if gold.drug:
+        if not drug_present(line, gold.drug):
+            return False
+    elif "[?]" not in line:
         return False
-    if gold.strength and _DIGIT.search(gold.strength) and not _DIGIT.search(gold.strength.split()[0]):
-        pass
     if gold.strength and any(ch.isdigit() for ch in gold.strength):
-        digits = re.findall(r"\d+", gold.strength.replace("60K", "60000"))
-        if digits and not any(d in line.replace("60K", "60000").replace("60k", "60000") for d in digits[:1]):
-            # hard negatives and WhatsApp lines may drop strength on purpose
-            if "strength" in gold.needs_check or gold.note in {"as directed"}:
-                return True
-            if "zarurat" in line.lower() or "as directed" in line.lower():
-                return True
-            # Hinglish sometimes skips strength (IDEA.md); keep if drug is present
-            return True
-    if gold.duration_days is not None:
-        dur_ok = str(gold.duration_days) in line or (
-            gold.duration_days == 30 and ("1/12" in line or "1 / 12" in line)
-        )
-        if not dur_ok and "duration_days" not in gold.needs_check:
-            # weekly / continue phrasings
-            if gold.every_n_days == 7:
-                return True
-            return True
+        if not _strength_digits_present(line, gold.strength):
+            return False
+    if gold.kind == "taper" and gold.taper:
+        if not all(str(step.days) in line for step in gold.taper):
+            return False
+    elif gold.duration_days is not None and "duration_days" not in gold.needs_check:
+        if not _duration_present(line, gold.duration_days):
+            return False
     return True
