@@ -1,0 +1,1026 @@
+{
+  "train": [
+    {
+      "source_index": 14,
+      "line": "Cap Phexin 500 mg सुबह एक रात एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 15,
+      "line": "℞ Tab Tegrital 200 mg सुबह एक रात एक खाने के साथ",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 67,
+      "line": "Tab Stugeron 25 mg सुबह एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 123,
+      "line": "Tab Deplatt 75mg सुबह एक रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 156,
+      "line": "Tab Nexito 5 mg रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 203,
+      "line": "Tab Erythrocin 500 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 217,
+      "line": "Tab Voveran 50 mg रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 276,
+      "line": "1. Tab Tryptomer 25 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 323,
+      "line": "7. Tab Livogen सकाळी एक जेवणानंतर आठवड्यातून एकदा",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 370,
+      "line": "Tab Buscopan 10 mg सुबह एक रात एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 395,
+      "line": "Tab Voveran 50 mg सकाळी एक दुपारी एक रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 400,
+      "line": "4. Tab Allegra 180 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 421,
+      "line": "Tab Tenlimac 20 mg सुबह एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 495,
+      "line": "Tab Hifenac 100 mg सकाळी एक दुपारी एक रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 553,
+      "line": "Tab Combiflam 400 mg/325 mg सुबह एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 563,
+      "line": "Tab Calcium 500 mg सकाळी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 606,
+      "line": "Tab Valprol CR 200mg सुबह एक दोपहर एक रात एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 638,
+      "line": "Tab Eliquis 2.5 mg सुबह एक खाने के बाद हफ्ते में एक बार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 660,
+      "line": "Cap AB Phylline 100 mg सुबह एक दोपहर एक रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 663,
+      "line": "Cream Volini सकाळी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 706,
+      "line": "Cap Becosules जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 725,
+      "line": "8. Drops Ciplox D सकाळी एक रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 790,
+      "line": "Tab Ivermectol 12 mg सुबह एक खाने के साथ",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 803,
+      "line": "Tab Dytor Plus 10 mg/50 mg रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 807,
+      "line": "6. Tab Tegrital 200 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 832,
+      "line": "Tab Taxim O 200 mg सुबह एक दोपहर एक रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 836,
+      "line": "Tab Methycobal 500 mcg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 839,
+      "line": "Tab Mesacol 400 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 857,
+      "line": "Tab Oflox 200 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 898,
+      "line": "Tab Pan 40 mg सकाळी दोन रात्री दोन जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 917,
+      "line": "Tab Montair 10 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 965,
+      "line": "Tab Glycomet SR 500 mg रात्री एक उपाशीपोटी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 986,
+      "line": "Tab Cardace 5 mg सुबह एक रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1095,
+      "line": "Cap Uprise D3 60K IU सुबह एक खाने से पहले हफ्ते में एक बार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1102,
+      "line": "Tab Pan 40mg सकाळी एक जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1114,
+      "line": "Tab Wysolone 10 mg रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1127,
+      "line": "℞ Tab Nexito 5 mg रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1186,
+      "line": "2. Tab Glyciphage 850 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1191,
+      "line": "Tab Myospaz सकाळी एक रात्री एक उपाशीपोटी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1221,
+      "line": "Inj Lantus 100 IU/ml रात्री 10 जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1253,
+      "line": "Tab Dolo 650 mg सकाळी एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1300,
+      "line": "Tab Livogen सकाळी एक जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1325,
+      "line": "Tab Monocef O 200 mg रात्री एक जेवणाआधी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1391,
+      "line": "Tab Voveran 50 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1419,
+      "line": "Tab Storvas 10mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1534,
+      "line": "Syr Cremaffin सकाळी 5 रात्री 5",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1564,
+      "line": "Tab Combiflam 400mg/325mg सकाळी एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1591,
+      "line": "Tab Amlong 2.5 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1749,
+      "line": "Tab Dolo 650 mg सुबह एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1760,
+      "line": "℞ Tab Zolfresh 5 mg रात एक हफ्ते में एक बार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1802,
+      "line": "Tab Tenlimac 20 mg सुबह एक रात आधी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1857,
+      "line": "Sachet Calcirol 60K IU रात एक हफ्ते में एक बार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1874,
+      "line": "Tab Amlodac 5mg सकाळी एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1892,
+      "line": "Cap Gemcal रात एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1931,
+      "line": "Inj Huminsulin 40 IU/ml सुबह 10 खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 1979,
+      "line": "℞ Cap AB Phylline 100 mg सकाळी एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2055,
+      "line": "Drops Zincovit Drops रात्री दोन जेवणाआधी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2118,
+      "line": "Inj Mixtard 30/70 40 IU/ml सुबह 10 खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2172,
+      "line": "℞ Cream Candid सकाळी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2177,
+      "line": "Cap Ecosprin AV 75mg/20mg रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2272,
+      "line": "Cream Candid रात्री एक उपाशीपोटी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2345,
+      "line": "Tab Levipil 500 mg सकाळी अर्धी रात्री अर्धी जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2372,
+      "line": "Tab Ivermectol 12 mg सुबह एक रात एक खाली पेट",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2420,
+      "line": "Drops Zincovit Drops सुबह दो खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2424,
+      "line": "Drops Moxiflox 0.5 % सुबह दो रात दो खाली पेट",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2461,
+      "line": "Tab Deplatt 75 mg सुबह एक रात एक खाने के साथ",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2484,
+      "line": "Tab Crocin 650 mg सकाळी अर्धी उपाशीपोटी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2487,
+      "line": "Cream Betnovate सुबह एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2495,
+      "line": "℞ Inj Mixtard 30/70 40 IU/ml सुबह 10 रात 10",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2503,
+      "line": "Tab Zerodol P 100 mg/325 mg सुबह एक रात एक खाली पेट",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2526,
+      "line": "Tab Pioglar 30 mg सकाळी एक रात्री एक जेवणाआधी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2553,
+      "line": "Cap Autrin सकाळी एक रात्री एक जेवणाआधी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2586,
+      "line": "Cap Ecosprin AV 75 mg/10 mg रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2670,
+      "line": "Tab Dolo 650 mg सकाळी एक रात्री एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2715,
+      "line": "Tab Eliquis 5 mg रात्री अर्धी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2759,
+      "line": "Cap Ecosprin AV 75 mg/10 mg सकाळी एक जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2773,
+      "line": "Tab Metolar 25 mg सुबह एक रात एक खाली पेट",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2776,
+      "line": "Tab Pioglar 30 mg सकाळी अर्धी जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2777,
+      "line": "Tab Allegra 180 mg सुबह एक रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2785,
+      "line": "Cap Pregaba 75 mg रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2802,
+      "line": "Tab Montair LC 10 mg/5 mg सकाळी एक रात्री एक जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2810,
+      "line": "℞ Syr Ambrolite 30 mg/5 ml रात 5 खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2818,
+      "line": "Cap Uprise D3 60K IU सकाळी अर्धी रात्री अर्धी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2822,
+      "line": "Cap Myoril 4 mg सुबह एक रात एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2836,
+      "line": "℞ Tab Liv 52 सकाळी अर्धी रात्री अर्धी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2859,
+      "line": "Cap Myoril 8mg सुबह एक रात एक खाली पेट",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2893,
+      "line": "℞ Tab Sorbitrate 5 mg सकाळी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2939,
+      "line": "℞ Tab Monocef O 200 mg सुबह एक खाने से पहले",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2940,
+      "line": "Tab Thyroxine 100 mcg रात एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 2977,
+      "line": "Tab Levipil 500 mg सुबह एक रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 3021,
+      "line": "Tab Thyroxine 100 mcg सुबह एक रात एक खाने के बाद",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 3054,
+      "line": "Cream Volini सकाळी एक जेवणानंतर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    }
+  ],
+  "val": [
+    {
+      "source_index": 32,
+      "line": "Tab Nexpro 40 mg सकाळी एक दुपारी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 54,
+      "line": "Tab Istamet 50 mg/500 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 61,
+      "line": "Tab Zerodol SP 100 mg/325 mg सकाळी एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 76,
+      "line": "Tab Amlodipine 10mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 93,
+      "line": "Tab Glycomet SR 500 mg सकाळी एक दुपारी एक रात्री एक",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 98,
+      "line": "Tab Folvite 5 mg गरजेनुसार",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 112,
+      "line": "℞ Tab Amlodac 10 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 157,
+      "line": "Tab Dolo 650 mg सकाळी अर्धी रात्री अर्धी जेवणासोबत",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 173,
+      "line": "Cap Becosules सकाळी एक उपाशीपोटी",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    },
+    {
+      "source_index": 235,
+      "line": "Tab Lasix 40 mg जरूरत पर",
+      "field": "needs_check",
+      "before": [],
+      "after": [
+        "duration_days"
+      ],
+      "reason": "No written duration or explicit continuation; preserve null and require ASK"
+    }
+  ]
+}

@@ -22,6 +22,9 @@ data/real/
 data/acceptance/*/annotations.jsonl
 data/acceptance/*/completed_pages.jsonl
 data/acceptance/*/gold.jsonl
+# AI-created public-photo references are local, unverified evaluation material.
+data/reference/
+eval/out/*ai_reference*
 data/public/
 data/real/real_test.jsonl
 data/real/gt.jsonl

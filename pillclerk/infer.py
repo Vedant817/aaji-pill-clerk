@@ -145,6 +145,8 @@ def make_tinker_parser(
     base_model: str = config.BASE_MODEL,
     *,
     few_shot: bool = False,
+    detailed: bool = False,
+    sampling_budget_usd: float | None = None,
 ) -> ParseFn:
     """model_path=tinker://... for the fine-tune, None for the base model (B0 / B0-fair)."""
     import tinker
@@ -156,18 +158,37 @@ def make_tinker_parser(
         sc = svc.create_sampling_client(base_model=base_model)
     tokenizer = sc.get_tokenizer()
     params = tinker.SamplingParams(max_tokens=400, temperature=0.0)
+    budget_lock = __import__("threading").Lock()
+    reserved_usd = 0.0
 
     def parse(line: str) -> MedLine | None:
+        nonlocal reserved_usd
         clean, _stripped = strip_pii(line)
         prompt_tokens = _qwen_prompt(tokenizer, clean, few_shot=few_shot)
+        # Qwen3-8B prices verified 3 Oct 2026; reserve maximum output before each request.
+        upper_cost = (len(prompt_tokens) * 0.195 + 400 * 0.60) / 1_000_000
+        with budget_lock:
+            if sampling_budget_usd is not None and reserved_usd + upper_cost > sampling_budget_usd:
+                raise RuntimeError("Sampling compute budget exhausted before request")
+            reserved_usd += upper_cost
         model_input = tinker.ModelInput.from_ints(prompt_tokens)
         res = sc.sample(prompt=model_input, num_samples=1, sampling_params=params).result()
         text = tokenizer.decode(res.sequences[0].tokens)
+        error = None
+        recovered = False
         try:
             med = extra_rules(MedLine.model_validate_json(_extract_json(text)))
-            return extra_rules(copy_explicit(med, clean))
+            pred = extra_rules(copy_explicit(med, clean))
         except Exception:
-            return extra_rules(copy_explicit(stub_from_line(clean), clean))
+            error, recovered = "raw_schema", True
+            pred = extra_rules(copy_explicit(stub_from_line(clean), clean))
+        if detailed:
+            return ParseOutcome(pred=pred, raw=text, error=error,
+                finish_reason=str(getattr(res.sequences[0], "stop_reason", "unknown")),
+                accepted_config={"raw_schema_valid": not recovered, "recovery_used": recovered,
+                    "input_tokens": len(prompt_tokens), "output_tokens": len(res.sequences[0].tokens),
+                    "sampling_compute_upper_usd": reserved_usd, "sampling_budget_usd": sampling_budget_usd})
+        return pred
 
     return parse
 

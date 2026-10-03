@@ -6,8 +6,10 @@ Results stay TODO until this script is actually run. Do not invent numbers.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
+import re
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -159,8 +161,16 @@ def bootstrap_ci(xs, n=1000, seed=0):
     return means[int(0.025 * n)], means[int(0.975 * n)]
 
 
-def get_parser(system: str, set_path: str = ""):
+def get_parser(system: str, set_path: str = "", checkpoint: str = "", sampling_budget_usd: float | None = None):
     from pillclerk import infer
+
+    if checkpoint:
+        if system in {"gemma31", "gemma31_json", "b0", "b0_fair"}:
+            raise ValueError("An explicit checkpoint requires a separate fine-tuned system name")
+        meta = json.loads(Path(checkpoint).read_text(encoding="utf-8"))
+        if not str(meta.get("sampler", "")).startswith("tinker://"):
+            raise ValueError("Checkpoint must contain a hosted Tinker sampler path")
+        return infer.make_tinker_parser(meta["sampler"], detailed=True, sampling_budget_usd=sampling_budget_usd)
 
     ck = lambda v: json.loads((ROOT / "train" / f"checkpoint_{v}.json").read_text())["sampler"]
     return {
@@ -238,10 +248,16 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--system", required=True)
     ap.add_argument("--set", required=True)
+    ap.add_argument("--checkpoint", default="", help="evaluate a candidate sampler file without changing .env")
+    ap.add_argument("--max-sampling-usd", type=float, default=None, help="Qwen3-8B sampling compute cap; requires --checkpoint")
     ap.add_argument("--limit", type=int, default=0, help="cap rows (0 = all)")
     ap.add_argument("--preds", default="", help="rescore an existing preds jsonl; skip Tinker")
     ap.add_argument("--workers", type=int, default=0, help="parallel parsers (gemma31 default 3)")
     a = ap.parse_args()
+    if not re.fullmatch(r"[a-zA-Z0-9_-]+", a.system):
+        ap.error("system must be a filename-safe experiment name")
+    if a.max_sampling_usd is not None and (not a.checkpoint or a.max_sampling_usd <= 0):
+        ap.error("a positive sampling budget requires --checkpoint")
     gold_rows = [json.loads(l) for l in open(a.set, encoding="utf-8")]
     if a.limit:
         gold_rows = gold_rows[: a.limit]
@@ -288,7 +304,7 @@ def main() -> None:
             out["rescored_from_preds"] = True
     else:
         gold_rows, _, dropped_train = drop_train_duplicates(gold_rows, None)
-        parse = get_parser(a.system, a.set)
+        parse = get_parser(a.system, a.set, a.checkpoint, a.max_sampling_usd)
         workers = a.workers or (3 if a.system in {"gemma31", "gemma31_json"} else 1)
         parsed: list[tuple] = [(None, 0.0, None)] * len(gold_rows)
 
@@ -361,6 +377,19 @@ def main() -> None:
             from pillclerk.privacy import write_payload_summary
 
             out["payload_summary"] = write_payload_summary()
+    out["dataset_sha256"] = hashlib.sha256(Path(a.set).read_bytes()).hexdigest()
+    out["postprocessing"] = "copy_explicit + extra_rules"
+    origins = sorted({r.get("label_origin", "existing_dataset") for r in gold_rows})
+    out["label_origins"] = origins
+    out["exploratory_AI_reference"] = "ai_single_agent" in origins
+    if raw_rows and a.checkpoint:
+        configs = [r["accepted_config"] for r in raw_rows if r.get("accepted_config")]
+        out["raw_schema_failures"] = sum(c.get("recovery_used", False) for c in configs)
+        out["sampling_compute_upper_usd"] = max((c.get("sampling_compute_upper_usd", 0) for c in configs), default=0)
+        out["sampling_budget_usd"] = a.max_sampling_usd
+    if a.checkpoint:
+        out["checkpoint_sha256"] = hashlib.sha256(Path(a.checkpoint).read_bytes()).hexdigest()
+        out["sampler"] = json.loads(Path(a.checkpoint).read_text(encoding="utf-8"))["sampler"]
     print(json.dumps(out, indent=2))
     write_out(out, preds, a.set, a.system, raw_rows if raw_rows else None)
 

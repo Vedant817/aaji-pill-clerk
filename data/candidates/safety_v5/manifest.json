@@ -1,0 +1,60 @@
+{
+  "kind": "synthetic candidate only; not trained or deployed",
+  "algorithm": "normalized-text deduplication; conflicting labels quarantined",
+  "inputs": {
+    "data\\candidates\\safety_v5\\curation_inputs\\train.jsonl": {
+      "sha256": "059b66813fcbd268ff31865792e8893a45b3eb59cc24de9faa960e43f004b824",
+      "rows": 3079
+    },
+    "data\\candidates\\safety_v5\\curation_inputs\\val.jsonl": {
+      "sha256": "d37b77e3940ff1fb422fd0405b9076616254975a85e997b02e4330469c97924f",
+      "rows": 249
+    },
+    "data\\synth\\synth_test.jsonl": {
+      "sha256": "8325b4811cbd2d0137a68cc3f4664af65da442b3190d29652067780fd20ea2d5",
+      "rows": 400
+    },
+    "data\\heldout\\handwritten_realistic.jsonl": {
+      "sha256": "794fd6329067b168ee8ed18f37cf6c5c0305f2d4d0e8364db6146468e6e78cda",
+      "rows": 102
+    },
+    "data\\public_labels\\hmr100_gold.jsonl": {
+      "sha256": "7dca2bca2419edf2a4319521e5a2e419d5373eee845d7f9e99a2a9676bc3985b",
+      "rows": 104
+    },
+    "data\\public_labels\\bd200_gold.jsonl": {
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "rows": 0
+    }
+  },
+  "outputs": {
+    "train.jsonl": {
+      "sha256": "059b66813fcbd268ff31865792e8893a45b3eb59cc24de9faa960e43f004b824"
+    },
+    "val.jsonl": {
+      "sha256": "d37b77e3940ff1fb422fd0405b9076616254975a85e997b02e4330469c97924f"
+    },
+    "rejections.json": {
+      "sha256": "ff218c212c2e3ae4b46fe7f44f6ec9d89204e8f0edc04a382045c96122d41cf9"
+    }
+  },
+  "train_rows": 3079,
+  "validation_rows": 249,
+  "rejected_train": {},
+  "rejected_validation": {},
+  "overlap": {
+    "validation": 0,
+    "data\\synth\\synth_test.jsonl": 0,
+    "data\\heldout\\handwritten_realistic.jsonl": 0,
+    "data\\public_labels\\hmr100_gold.jsonl": 0,
+    "data\\public_labels\\bd200_gold.jsonl": 0
+  },
+  "human_sample_review": "pending",
+  "independent_test_labels": "pending",
+  "limitation": "Exact normalized overlap is checked; template similarity and prior model exposure are not eliminated",
+  "code_sha256": {
+    "train\\prepare_candidate.py": "44edd38e92b05a9cda6913524a76a70156156f2a5ab81768ffca9dcd63054a79",
+    "pillclerk\\filters.py": "fbc465358987298339c87c837d39ae96dce2f47c5f9d6c29e29931b2e91b6f4f",
+    "pillclerk\\schema.py": "fd3e6dd6f76385ebccb20280267a438bbb00df4a9bafe3888793ded8637a403a"
+  }
+}

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import math
 import random
 import time
 from pathlib import Path
@@ -60,26 +61,23 @@ def validate_split(train_rows: list[dict], validation_rows: list[dict], eval_pat
 
 
 def _conversation_ids(tokenizer, messages: list[dict]) -> tuple[list[int], list[int]]:
-    prompt = tokenizer.apply_chat_template(
-        messages[:-1],
-        tokenize=True,
-        add_generation_prompt=True,
-        enable_thinking=False,
-    )
-    full = tokenizer.apply_chat_template(
-        messages,
-        tokenize=True,
-        add_generation_prompt=False,
-        enable_thinking=False,
-    )
+    try:
+        prompt = tokenizer.apply_chat_template(
+            messages[:-1], tokenize=True, add_generation_prompt=True, enable_thinking=False,
+        )
+        full = tokenizer.apply_chat_template(
+            messages, tokenize=True, add_generation_prompt=False, enable_thinking=False,
+        )
+    except TypeError:
+        prompt = tokenizer.apply_chat_template(messages[:-1], tokenize=True, add_generation_prompt=True)
+        full = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=False)
     return as_token_ids(prompt), as_token_ids(full)
 
 
 def to_datum(tokenizer, row: dict) -> tinker.Datum:
     prompt, full = _conversation_ids(tokenizer, row["messages"])
     if len(full) > MAXLEN:
-        full = full[:MAXLEN]
-        prompt = prompt[: min(len(prompt), MAXLEN - 1)]
+        raise ValueError(f"Conversation has {len(full)} tokens, above {MAXLEN}; refusing a truncated JSON target")
     if len(full) < 2:
         raise ValueError("conversation too short")
     n_prefix = max(0, len(prompt) - 1)
@@ -109,6 +107,19 @@ def mean_nll(loss_fn_outputs, batch: list[tinker.Datum]) -> float:
     return total / mass if mass else float("nan")
 
 
+def training_plan(n_train: int, n_validation: int, epochs: int, batch: int, price: float) -> dict:
+    if min(n_train, epochs, batch) < 1 or not math.isfinite(price) or price <= 0:
+        raise ValueError("Training size, epochs, batch and token price must be positive")
+    steps = math.ceil(n_train / batch) * epochs
+    checks = math.ceil(steps / 10)
+    tokens = (n_train * epochs + min(n_validation, 64) * checks) * MAXLEN
+    return {"train_rows": n_train, "epochs": epochs, "batch": batch, "steps": steps,
+            "validation_rows_used": min(n_validation, 64), "validation_calls": checks,
+            "compute_token_upper_bound": tokens, "compute_usd_upper_bound": tokens * price / 1_000_000,
+            "train_usd_per_million": price,
+            "limits": "Compute estimate only; excludes checkpoint storage and sampling. Reject oversized conversations."}
+
+
 def main() -> None:
     import argparse
 
@@ -119,6 +130,9 @@ def main() -> None:
     ap.add_argument("--name", default="pillclerk-v1")
     ap.add_argument("--train", default="", help="override train jsonl path")
     ap.add_argument("--val", default="", help="override validation jsonl path for a frozen candidate")
+    ap.add_argument("--plan", action="store_true", help="print an offline maximum-token compute estimate")
+    ap.add_argument("--train-usd-per-million", type=float, default=0.44, help="verified provider train/forward token price")
+    ap.add_argument("--max-compute-usd", type=float, default=None, help="refuse before paid calls if estimated compute exceeds this cap")
     ap.add_argument(
         "--extra",
         action="append",
@@ -142,6 +156,10 @@ def main() -> None:
 
     train_rows = load_train_rows(train_path, extra_paths, limit=args.limit)
     val_rows = _load(val_path)
+    plan = training_plan(len(train_rows), len(val_rows), args.epochs, args.batch, args.train_usd_per_million)
+    if args.max_compute_usd is not None and (not math.isfinite(args.max_compute_usd) or
+            args.max_compute_usd <= 0 or plan["compute_usd_upper_bound"] > args.max_compute_usd):
+        raise SystemExit(f"Compute budget refused: {plan['compute_usd_upper_bound']:.4f} USD upper bound")
     validate_split(train_rows, val_rows, [ROOT / "data/synth/synth_test.jsonl",
                   ROOT / "data/heldout/handwritten_realistic.jsonl", ROOT / "data/public_labels/hmr100_gold.jsonl",
                   ROOT / "data/public_labels/bd200_gold.jsonl",
@@ -149,38 +167,18 @@ def main() -> None:
     if args.check_data:
         print("Training split passed offline checks; no provider calls made.")
         return
+    if args.plan:
+        print(json.dumps(plan, indent=2))
+        return
     require_env("TINKER_API_KEY")
     print(f"train_rows {len(train_rows)} extras {[str(p) for p in extra_paths]}", flush=True)
     service = tinker.ServiceClient()
     tc = service.create_lora_training_client(base_model=BASE_MODEL, rank=RANK)
     tokenizer = tc.get_tokenizer()
 
-    def safe_datum(row: dict) -> tinker.Datum | None:
-        try:
-            return to_datum(tokenizer, row)
-        except TypeError:
-            prompt = as_token_ids(
-                tokenizer.apply_chat_template(
-                    row["messages"][:-1], tokenize=True, add_generation_prompt=True
-                )
-            )
-            full = as_token_ids(
-                tokenizer.apply_chat_template(row["messages"], tokenize=True, add_generation_prompt=False)
-            )
-            n_prefix = max(0, len(prompt) - 1)
-            n_targets = len(full) - 1
-            weights = ([0.0] * n_prefix + [1.0] * max(0, n_targets - n_prefix))[:n_targets]
-            return tinker.Datum(
-                model_input=tinker.ModelInput.from_ints(full[:-1]),
-                loss_fn_inputs={
-                    "target_tokens": tinker.TensorData(data=full[1:], dtype="int64"),
-                    "weights": tinker.TensorData(data=weights, dtype="float32"),
-                },
-            )
-
-    train_data = [d for d in (safe_datum(r) for r in train_rows) if d]
-    val_batch = [d for d in (safe_datum(r) for r in val_rows[:64]) if d]
-    steps_per_epoch = max(1, len(train_data) // args.batch)
+    train_data = [to_datum(tokenizer, r) for r in train_rows]
+    val_batch = [to_datum(tokenizer, r) for r in val_rows[:64]]
+    steps_per_epoch = math.ceil(len(train_data) / args.batch)
     total = steps_per_epoch * args.epochs
     step = 0
     for epoch in range(args.epochs):
@@ -226,6 +224,7 @@ def main() -> None:
                 "model": BASE_MODEL,
                 "name": args.name,
                 "n_train": len(train_rows),
+                "training_plan": plan,
                 "extras": [str(p) for p in extra_paths],
                 "data_sha256": {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in [train_path, val_path, *extra_paths]},

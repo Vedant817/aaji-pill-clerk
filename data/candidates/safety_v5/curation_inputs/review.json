@@ -1,0 +1,1612 @@
+{
+  "source": "C:\\Users\\vedan\\Documents\\Resources\\Code\\aaji-pill-clerk\\data\\candidates\\clean_v4",
+  "source_sha256": {
+    "train": "2c82caad56b2d6476b854ac307f5b96f4308d050a62ac092460a7cfb8966647d",
+    "val": "41e8ced7f8f1bc81008138a14cd80ced1a19cf046fdb67e52f9a7311ca148493"
+  },
+  "splits": {
+    "train": {
+      "rows": 3079,
+      "coverage": {
+        "ASK": 130,
+        "clear": 2949,
+        "form:cap": 340,
+        "form:cream": 79,
+        "form:drops": 108,
+        "form:inhaler": 46,
+        "form:injection": 97,
+        "form:sachet": 46,
+        "form:syrup": 96,
+        "form:tab": 2267,
+        "kind:daily": 2649,
+        "kind:prn": 222,
+        "kind:taper": 208
+      },
+      "rule_filter_failures": [],
+      "copy_rule_disagreements": [],
+      "missing_duration_without_ASK_or_continue": [
+        14,
+        15,
+        67,
+        123,
+        156,
+        203,
+        217,
+        276,
+        323,
+        370,
+        395,
+        400,
+        421,
+        495,
+        553,
+        563,
+        606,
+        638,
+        660,
+        663,
+        706,
+        725,
+        790,
+        803,
+        807,
+        832,
+        836,
+        839,
+        857,
+        898,
+        917,
+        965,
+        986,
+        1095,
+        1102,
+        1114,
+        1127,
+        1186,
+        1191,
+        1221,
+        1253,
+        1300,
+        1325,
+        1391,
+        1419,
+        1534,
+        1564,
+        1591,
+        1749,
+        1760,
+        1802,
+        1857,
+        1874,
+        1892,
+        1931,
+        1979,
+        2055,
+        2118,
+        2172,
+        2177,
+        2272,
+        2345,
+        2372,
+        2420,
+        2424,
+        2461,
+        2484,
+        2487,
+        2495,
+        2503,
+        2526,
+        2553,
+        2586,
+        2670,
+        2715,
+        2759,
+        2773,
+        2776,
+        2777,
+        2785,
+        2802,
+        2810,
+        2818,
+        2822,
+        2836,
+        2859,
+        2893,
+        2939,
+        2940,
+        2977,
+        3021,
+        3054
+      ],
+      "sample_seed": 20261003,
+      "sample_indexes": [
+        20,
+        74,
+        115,
+        208,
+        232,
+        437,
+        508,
+        520,
+        587,
+        589,
+        922,
+        946,
+        1181,
+        1221,
+        1387,
+        1543,
+        1586,
+        1950,
+        2011,
+        2038,
+        2095,
+        2113,
+        2148,
+        2298,
+        2497,
+        2538,
+        2540,
+        2596,
+        2721,
+        2764
+      ],
+      "sample": [
+        {
+          "index": 20,
+          "line": "Inj Lantus 100 IU/ml subah 10 khane ke baad 10 din",
+          "gold": {
+            "drug": "Lantus",
+            "strength": "100 IU/ml",
+            "form": "injection",
+            "kind": "daily",
+            "dose": {
+              "morning": 10.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "unit"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 74,
+          "line": "TAB. Pan 40 mg 1-0-0 AFTER FOOD CONTINUE",
+          "gold": {
+            "drug": "Pan",
+            "strength": "40 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 115,
+          "line": "Tab [?] 500 mg 1-[?]-[?] cont",
+          "gold": {
+            "drug": null,
+            "strength": "500 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": "partially illegible",
+            "needs_check": [
+              "drug",
+              "dose",
+              "schedule"
+            ]
+          }
+        },
+        {
+          "index": 208,
+          "line": "Tab Azee 250 mg ½-0-0 ES x7d",
+          "gold": {
+            "drug": "Azee",
+            "strength": "250 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.5,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 232,
+          "line": "TAB Erythrocin 250 mg 1-0-0 AFTER FOOD x 15 DAYS",
+          "gold": {
+            "drug": "Erythrocin",
+            "strength": "250 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 437,
+          "line": "Tab Hifenac 100mg subah ek dopahar ek raat ko ek khali pet continue",
+          "gold": {
+            "drug": "Hifenac",
+            "strength": "100 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 508,
+          "line": "Tab Pioglar 15mg OD PC x3d",
+          "gold": {
+            "drug": "Pioglar",
+            "strength": "15 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 520,
+          "line": "Tab Calcium 500 mg सकाळी एक जेवणाआधी 30 दिवस",
+          "gold": {
+            "drug": "Calcium",
+            "strength": "500 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 587,
+          "line": "Tab Thyroxine 100 mcg TDS x15d",
+          "gold": {
+            "drug": "Thyroxine",
+            "strength": "100 mcg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 589,
+          "line": "SYR. Cremaffin 5-0-5 x 5d then 0-0-5 x 5d AFTER FOOD",
+          "gold": {
+            "drug": "Cremaffin",
+            "strength": null,
+            "form": "syrup",
+            "kind": "taper",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [
+              {
+                "dose": {
+                  "morning": 5.0,
+                  "afternoon": 0.0,
+                  "night": 5.0,
+                  "unit": "ml"
+                },
+                "days": 5
+              },
+              {
+                "dose": {
+                  "morning": 0.0,
+                  "afternoon": 0.0,
+                  "night": 5.0,
+                  "unit": "ml"
+                },
+                "days": 5
+              }
+            ],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 922,
+          "line": "TAB Wysolone 10mg 2-0-2 सुबह दो रात दो khane ke baad x90d",
+          "gold": {
+            "drug": "Wysolone",
+            "strength": "10 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 2.0,
+              "afternoon": 0.0,
+              "night": 2.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 90,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 946,
+          "line": "TAB Levoflox 500mg 1-1-1 सुबह एक दोपहर एक रात एक khane ke baad cont",
+          "gold": {
+            "drug": "Levoflox",
+            "strength": "500 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1181,
+          "line": "Tab Syndopa 110mg ½-0-½ PC x90d",
+          "gold": {
+            "drug": "Syndopa",
+            "strength": "110 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.5,
+              "afternoon": 0.0,
+              "night": 0.5,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 90,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1221,
+          "line": "Inj Lantus 100 IU/ml रात्री 10 जेवणानंतर",
+          "gold": {
+            "drug": "Lantus",
+            "strength": "100 IU/ml",
+            "form": "injection",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 10.0,
+              "unit": "unit"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1387,
+          "line": "Inj Novorapid 100 IU/ml सकाळी 10 रात्री 10 जेवणाआधी 3 दिवस",
+          "gold": {
+            "drug": "Novorapid",
+            "strength": "100 IU/ml",
+            "form": "injection",
+            "kind": "daily",
+            "dose": {
+              "morning": 10.0,
+              "afternoon": 0.0,
+              "night": 10.0,
+              "unit": "unit"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1543,
+          "line": "Cap Myoril 8mg HS PC x5d",
+          "gold": {
+            "drug": "Myoril",
+            "strength": "8 mg",
+            "form": "cap",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "cap"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 5,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1586,
+          "line": "℞ Tab Buscopan 10 mg zarurat pe max 2/d 3 din",
+          "gold": {
+            "drug": "Buscopan",
+            "strength": "10 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 3,
+            "prn_max_per_day": 2,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 1950,
+          "line": "Tab Ondem 8 mg रात्री एक जेवणानंतर 30 दिवस",
+          "gold": {
+            "drug": "Ondem",
+            "strength": "8 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2011,
+          "line": "Tab Eliquis 2.5 mg SOS max 3/d x7d",
+          "gold": {
+            "drug": "Eliquis",
+            "strength": "2.5 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 7,
+            "prn_max_per_day": 3,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2038,
+          "line": "6. Tab [?] 150 mg 1-[?]-[?] cont",
+          "gold": {
+            "drug": null,
+            "strength": "150 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": "partially illegible",
+            "needs_check": [
+              "drug",
+              "dose",
+              "schedule"
+            ]
+          }
+        },
+        {
+          "index": 2095,
+          "line": "TAB Tryptomer 10mg SOS / PRN max 3/d CONTINUE",
+          "gold": {
+            "drug": "Tryptomer",
+            "strength": "10 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": 3,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2113,
+          "line": "SYR. Cremaffin 5-0-0 x 30 DAYS",
+          "gold": {
+            "drug": "Cremaffin",
+            "strength": null,
+            "form": "syrup",
+            "kind": "daily",
+            "dose": {
+              "morning": 5.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "ml"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2148,
+          "line": "Cap Myoril 8 mg SOS x7d",
+          "gold": {
+            "drug": "Myoril",
+            "strength": "8 mg",
+            "form": "cap",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2298,
+          "line": "CAP. Vitamin D3 60K IU 1-0-1 EMPTY STOMACH x 3 DAYS",
+          "gold": {
+            "drug": "Vitamin D3",
+            "strength": "60K IU",
+            "form": "cap",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "cap"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2497,
+          "line": "Tab Fluconazole 150 mg सकाळी एक रात्री एक उपाशीपोटी 60 दिवस",
+          "gold": {
+            "drug": "Fluconazole",
+            "strength": "150 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": 60,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2538,
+          "line": "℞ Tab Zerodol SP 100mg/325mg TDS PC x3d",
+          "gold": {
+            "drug": "Zerodol SP",
+            "strength": "100 mg/325 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2540,
+          "line": "Inj Huminsulin 40 IU/ml सुबह 10 खाने के बाद 10 दिन",
+          "gold": {
+            "drug": "Huminsulin",
+            "strength": "40 IU/ml",
+            "form": "injection",
+            "kind": "daily",
+            "dose": {
+              "morning": 10.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "unit"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2596,
+          "line": "℞ Tab Istamet 50 mg/500 mg TDS x15d",
+          "gold": {
+            "drug": "Istamet",
+            "strength": "50 mg/500 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2721,
+          "line": "℞ CAP. Uprise D3 60K IU 1-0-0 BEFORE FOOD CONTINUE",
+          "gold": {
+            "drug": "Uprise D3",
+            "strength": "60K IU",
+            "form": "cap",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "cap"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 2764,
+          "line": "Tab Livogen BD ES x15d",
+          "gold": {
+            "drug": "Livogen",
+            "strength": null,
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        }
+      ],
+      "review_status": "automatic audit; AI inspection is not independent human or clinical review",
+      "limits": "Agreement with generator/copy rules is not an independent accuracy measurement"
+    },
+    "val": {
+      "rows": 249,
+      "coverage": {
+        "ASK": 12,
+        "clear": 237,
+        "form:cap": 17,
+        "form:cream": 4,
+        "form:drops": 6,
+        "form:inhaler": 3,
+        "form:injection": 6,
+        "form:sachet": 3,
+        "form:syrup": 4,
+        "form:tab": 206,
+        "kind:daily": 216,
+        "kind:prn": 19,
+        "kind:taper": 14
+      },
+      "rule_filter_failures": [],
+      "copy_rule_disagreements": [],
+      "missing_duration_without_ASK_or_continue": [
+        32,
+        54,
+        61,
+        76,
+        93,
+        98,
+        112,
+        157,
+        173,
+        235
+      ],
+      "sample_seed": 20261003,
+      "sample_indexes": [
+        1,
+        4,
+        7,
+        13,
+        27,
+        31,
+        32,
+        36,
+        73,
+        76,
+        86,
+        96,
+        99,
+        121,
+        127,
+        130,
+        132,
+        134,
+        156,
+        158,
+        162,
+        170,
+        193,
+        202,
+        211,
+        215,
+        224,
+        234,
+        235,
+        236
+      ],
+      "sample": [
+        {
+          "index": 1,
+          "line": "Tab Glucobay 50 mg रात्री एक जेवणानंतर 3 दिवस",
+          "gold": {
+            "drug": "Glucobay",
+            "strength": "50 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 4,
+          "line": "TAB. Stugeron 25 mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "gold": {
+            "drug": "Stugeron",
+            "strength": "25 mg",
+            "form": "tab",
+            "kind": "taper",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [
+              {
+                "dose": {
+                  "morning": 1.0,
+                  "afternoon": 0.0,
+                  "night": 1.0,
+                  "unit": "tab"
+                },
+                "days": 5
+              },
+              {
+                "dose": {
+                  "morning": 0.0,
+                  "afternoon": 0.0,
+                  "night": 1.0,
+                  "unit": "tab"
+                },
+                "days": 5
+              }
+            ],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 7,
+          "line": "TAB Storvas 40 mg 1-1-1 x 15 DAYS",
+          "gold": {
+            "drug": "Storvas",
+            "strength": "40 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 13,
+          "line": "Tab Cilacar 20 mg BD AC x60d",
+          "gold": {
+            "drug": "Cilacar",
+            "strength": "20 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 60,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 27,
+          "line": "TAB Liv 52 1-0-1 AFTER FOOD x 3 DAYS",
+          "gold": {
+            "drug": "Liv 52",
+            "strength": null,
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 31,
+          "line": "TAB Digoxin 0.25 mg 1-1-1 सुबह एक दोपहर एक रात एक khane se pehle x60d",
+          "gold": {
+            "drug": "Digoxin",
+            "strength": "0.25 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 60,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 32,
+          "line": "Tab Nexpro 40 mg सकाळी एक दुपारी एक रात्री एक",
+          "gold": {
+            "drug": "Nexpro",
+            "strength": "40 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 36,
+          "line": "℞ Tab Rablet 20 mg BD x3d",
+          "gold": {
+            "drug": "Rablet",
+            "strength": "20 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 73,
+          "line": "Tab Diamicron XR 60 mg सुबह आधी खाली पेट 7 दिन",
+          "gold": {
+            "drug": "Diamicron XR",
+            "strength": "60 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.5,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "empty_stomach",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 76,
+          "line": "Tab Amlodipine 10mg जरूरत पर",
+          "gold": {
+            "drug": "Amlodipine",
+            "strength": "10 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 86,
+          "line": "TAB. Crocin 500 mg SOS / PRN max 3/d x 5 DAYS",
+          "gold": {
+            "drug": "Crocin",
+            "strength": "500 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 5,
+            "prn_max_per_day": 3,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 96,
+          "line": "TAB Zerodol P 100 mg/325 mg 1-0-1 सुबह एक रात एक khane ke baad x15d",
+          "gold": {
+            "drug": "Zerodol P",
+            "strength": "100 mg/325 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 15,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 99,
+          "line": "Tab Pacitane 2 mg OD 1/12",
+          "gold": {
+            "drug": "Pacitane",
+            "strength": "2 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 121,
+          "line": "TAB Glimepiride 2 mg 0-0-1 AFTER FOOD x 7 DAYS",
+          "gold": {
+            "drug": "Glimepiride",
+            "strength": "2 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 127,
+          "line": "Tab Rozavel 10 mg सकाळी एक रात्री अर्धी जेवणाआधी 30 दिवस",
+          "gold": {
+            "drug": "Rozavel",
+            "strength": "10 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 0.5,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 130,
+          "line": "Tab Pantoprazole 40mg raat ko ek 7 din",
+          "gold": {
+            "drug": "Pantoprazole",
+            "strength": "40 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 132,
+          "line": "5. TAB Taxim O 200mg 0-0-1 रात एक x60d",
+          "gold": {
+            "drug": "Taxim O",
+            "strength": "200 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 60,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 134,
+          "line": "Tab Telma 20 mg subah ek dopahar ek raat ko ek khane se pehle 60 din",
+          "gold": {
+            "drug": "Telma",
+            "strength": "20 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 60,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 156,
+          "line": "℞ Tab Cardace 2.5 mg सुबह एक दोपहर एक रात एक खाने के बाद 10 दिन",
+          "gold": {
+            "drug": "Cardace",
+            "strength": "2.5 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 1.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 158,
+          "line": "TAB. Norflox 400mg 1-0-1 x 5d then 0-0-1 x 5d AFTER FOOD",
+          "gold": {
+            "drug": "Norflox",
+            "strength": "400 mg",
+            "form": "tab",
+            "kind": "taper",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [
+              {
+                "dose": {
+                  "morning": 1.0,
+                  "afternoon": 0.0,
+                  "night": 1.0,
+                  "unit": "tab"
+                },
+                "days": 5
+              },
+              {
+                "dose": {
+                  "morning": 0.0,
+                  "afternoon": 0.0,
+                  "night": 1.0,
+                  "unit": "tab"
+                },
+                "days": 5
+              }
+            ],
+            "food": "after",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 162,
+          "line": "TAB Glucobay 50 mg 1-0-1 सुबह एक रात एक x10d",
+          "gold": {
+            "drug": "Glucobay",
+            "strength": "50 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 170,
+          "line": "℞ Tab Azee 250 mg raat ko ek 30 din",
+          "gold": {
+            "drug": "Azee",
+            "strength": "250 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 30,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 193,
+          "line": "Cap Pregaba 75mg BD x10d",
+          "gold": {
+            "drug": "Pregaba",
+            "strength": "75 mg",
+            "form": "cap",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "cap"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 202,
+          "line": "Cream Betnovate सुबह एक रात एक 10 दिन",
+          "gold": {
+            "drug": "Betnovate",
+            "strength": null,
+            "form": "cream",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "apply"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 211,
+          "line": "℞ Tab Glycomet SR 500 mg subah ek raat ko ek khane ke saath 10 din",
+          "gold": {
+            "drug": "Glycomet SR",
+            "strength": "500 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "with",
+            "duration_days": 10,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 215,
+          "line": "Tab Ecosprin 150 mg रात एक 90 दिन हफ्ते में एक बार",
+          "gold": {
+            "drug": "Ecosprin",
+            "strength": "150 mg",
+            "form": "tab",
+            "kind": "daily",
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "every_n_days": 7,
+            "taper": [],
+            "food": "any",
+            "duration_days": 90,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 224,
+          "line": "TAB Ecosprin 150 mg SOS / PRN x 7 DAYS",
+          "gold": {
+            "drug": "Ecosprin",
+            "strength": "150 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 234,
+          "line": "Drops Ciplox D subah do raat ko do 7 din",
+          "gold": {
+            "drug": "Ciplox D",
+            "strength": null,
+            "form": "drops",
+            "kind": "daily",
+            "dose": {
+              "morning": 2.0,
+              "afternoon": 0.0,
+              "night": 2.0,
+              "unit": "drop"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": 7,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 235,
+          "line": "Tab Lasix 40 mg जरूरत पर",
+          "gold": {
+            "drug": "Lasix",
+            "strength": "40 mg",
+            "form": "tab",
+            "kind": "prn",
+            "dose": null,
+            "every_n_days": 1,
+            "taper": [],
+            "food": "any",
+            "duration_days": null,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        },
+        {
+          "index": 236,
+          "line": "SACHET Econorm 250 mg 1-0-1 सुबह एक रात एक khane se pehle x3d",
+          "gold": {
+            "drug": "Econorm",
+            "strength": "250 mg",
+            "form": "sachet",
+            "kind": "daily",
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "sachet"
+            },
+            "every_n_days": 1,
+            "taper": [],
+            "food": "before",
+            "duration_days": 3,
+            "prn_max_per_day": null,
+            "note": null,
+            "needs_check": []
+          }
+        }
+      ],
+      "review_status": "automatic audit; AI inspection is not independent human or clinical review",
+      "limits": "Agreement with generator/copy rules is not an independent accuracy measurement"
+    }
+  },
+  "human_review": "pending",
+  "independent_acceptance_gold": "pending",
+  "model_accuracy": "not measured"
+}

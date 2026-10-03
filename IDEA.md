@@ -15,6 +15,15 @@
 > implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
 >
 > **Weekend overrides (source of truth over later sections):**
+> **3 October candidate follow-through:** clean_v4 is frozen (3,079 train / 249 val,
+> zero checked normalized-text overlap). AI review found 92 train / 10 validation
+> examples missing duration ASK flags; safety_v5 adds those flags without changing
+> clinical values. User authorized up to $10 for one hosted candidate run and fresh
+> comparison. FT2 remains active. At the user's request, the assistant inspected all
+> 20 reserved HMR pages and created 85 local AI reference lines. These are explicitly
+> unverified, single-agent exploratory labels, not two-person human gold, OCR CER
+> ground truth, or family acceptance. No reserved images/text enter training.
+>
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
 > 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.
 > 3. DigitalOcean is **dropped** (historical: early drafts used DO Serverless for Gemma). No card. Default `LLM_BACKEND=template` (free Python messy-text). Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Optional Backboard. Public demo: **`render.yaml` provided; not deployed** (`$PORT`, synthetic data only). Do not enter the Render category unless we deploy.
