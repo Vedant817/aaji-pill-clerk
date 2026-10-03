@@ -159,6 +159,22 @@ def test_drop_train_duplicates() -> None:
     assert g[0]["line"] == "unique-eval-line-xyz"
 
 
+def test_rescore_pairs_by_line_even_when_equal_length_reordered(tmp_path, monkeypatch):
+    import sys
+    from eval import eval as ev
+
+    data = [{"line": name, "gold": MedLine(drug=name, kind="prn").model_dump()} for name in ["A", "B"]]
+    gold, preds = tmp_path / "gold.jsonl", tmp_path / "preds.jsonl"
+    gold.write_text("\n".join(json.dumps(r) for r in data), encoding="utf-8")
+    preds.write_text("\n".join(json.dumps({"line": r["line"], "pred": r["gold"]}) for r in reversed(data)), encoding="utf-8")
+    monkeypatch.setattr(ev, "ROOT", tmp_path)
+    monkeypatch.setattr(ev, "TRAIN_JSONL", tmp_path / "absent.jsonl")
+    monkeypatch.setattr(sys, "argv", ["eval", "--system", "ft2", "--set", str(gold), "--preds", str(preds)])
+    ev.main()
+    result = json.loads((tmp_path / "eval/out/ft2_gold.json").read_text())
+    assert result["exact"] == 1
+
+
 def test_align_gold_food_duration_prn() -> None:
     from pillclerk.copy_explicit import align_gold
 

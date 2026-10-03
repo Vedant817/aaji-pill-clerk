@@ -40,90 +40,13 @@ class ParseOutcome:
     accepted_config: dict = field(default_factory=dict)
     finish_reason: str | None = None
 
-# Three gold pairs from train.jsonl, held out of synth_test and handwritten_realistic.
-FEW_SHOT: list[tuple[str, MedLine]] = [
-    (
-        "5. Tab Pantoprazole 40mg subah ek raat ko ek khane ke baad 3 din",
-        MedLine(
-            drug="Pantoprazole",
-            strength="40 mg",
-            form="tab",
-            kind="daily",
-            dose={"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"},
-            food="after",
-            duration_days=3,
-        ),
-    ),
-    (
-        "TAB. Sucral 1 g SOS / PRN max 2/d x 7 DAYS",
-        MedLine(
-            drug="Sucral",
-            strength="1 g",
-            form="tab",
-            kind="prn",
-            food="any",
-            duration_days=7,
-            prn_max_per_day=2,
-        ),
-    ),
-    (
-        "Tab Lasix 40 mg subah ek raat ko ek khali pet 7 din",
-        MedLine(
-            drug="Lasix",
-            strength="40 mg",
-            form="tab",
-            kind="daily",
-            dose={"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"},
-            food="empty_stomach",
-            duration_days=7,
-        ),
-    ),
-]
+# Prompt examples are explicit reference data, never loaded as patient drafts.
+def _load_examples() -> dict:
+    return json.loads((Path(__file__).parent / "resources" / "parser_examples.json").read_text(encoding="utf-8"))
 
-# Extra Gemma JSON-mode shots from train.jsonl. Lines are disjoint from every eval set
-# (eval.overlap.vs_eval). Drugs are not in eval_drug_names().
-GEMINI_EXTRA_FEW_SHOT: list[tuple[str, MedLine]] = [
-    (
-        "TAB. Metrogyl 400 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
-        MedLine(
-            drug="Metrogyl",
-            strength="400 mg",
-            form="tab",
-            kind="taper",
-            dose=None,
-            taper=[
-                {"dose": {"morning": 1.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"}, "days": 5},
-                {"dose": {"morning": 0.0, "afternoon": 0.0, "night": 1.0, "unit": "tab"}, "days": 5},
-            ],
-            food="before",
-            duration_days=10,
-        ),
-    ),
-    (
-        "DROPS Timolol 0.5 % 0-0-2 रात दो khane ke baad x5d",
-        MedLine(
-            drug="Timolol",
-            strength="0.5 %",
-            form="drops",
-            kind="daily",
-            dose={"morning": 0.0, "afternoon": 0.0, "night": 2.0, "unit": "drop"},
-            food="after",
-            duration_days=5,
-        ),
-    ),
-    (
-        "Inj Huminsulin 40 IU/ml 10-10-10 WF x5d",
-        MedLine(
-            drug="Huminsulin",
-            strength="40 IU/ml",
-            form="injection",
-            kind="daily",
-            dose={"morning": 10.0, "afternoon": 10.0, "night": 10.0, "unit": "unit"},
-            food="with",
-            duration_days=5,
-        ),
-    ),
-]
+_EXAMPLES = _load_examples()
+FEW_SHOT = [(r["line"], MedLine.model_validate(r["gold"])) for r in _EXAMPLES["base"]]
+GEMINI_EXTRA_FEW_SHOT = [(r["line"], MedLine.model_validate(r["gold"])) for r in _EXAMPLES["gemini_extra"]]
 
 
 def chat_messages(line: str, *, few_shot: bool = False) -> list[dict[str, str]]:
@@ -333,6 +256,8 @@ def get_parser() -> ParseFn:
     if backend == "ollama":
         return lambda line: parse_ollama(line)
     path = config._get("PILLCLERK_TINKER_PATH") or None
+    if not path:
+        raise RuntimeError("Fine-tuned sampler is not configured. Set PILLCLERK_TINKER_PATH or review manually.")
     return make_tinker_parser(path)
 
 

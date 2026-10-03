@@ -1,6 +1,12 @@
 # Aaji's Pill Clerk — post draft
 
-**Status:** draft. Every number below is copied from `eval/out/` (see `eval/results.md`). Local demo: http://localhost:8501. Public demo: **render.yaml provided; not deployed**. Demo video uses the **synthetic slip** (`data/demo/prescriptions/aaji_sample.txt`). HMR-100 is CC BY-ND 4.0: do not crop, blur, or publish those images.
+**Status:** draft. Every number below is copied from `eval/out/` (see `eval/results.md`). Local app: http://localhost:8501. Public demo: **render.yaml provided; not deployed**. Recording is still planned, using user-pasted synthetic text; no prescription is bundled into the app. HMR-100 is CC BY-ND 4.0: do not crop, blur, or publish those images.
+
+3 October audit: `docs/accuracy-plan.md` documents review/output fixes and offline
+HMR replay (75/104 → 83/104 exact; unflagged dangerous errors 23 → 14). This is
+development replay of saved predictions, not new inference or an independent
+test. The official model tables below retain the saved-run numbers. Do not claim
+family handover, automated OCR or offline hosted parsing until independently verified.
 
 ## Problem and persona
 

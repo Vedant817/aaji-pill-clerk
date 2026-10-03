@@ -13,6 +13,9 @@ st.caption(
     "Paste one medicine line per row from the slip in front of you. "
     "Photos stay on this laptop. Local OCR is not claimed."
 )
+photo = st.file_uploader("Prescription photo (local reference while typing)", type=["jpg", "jpeg", "png", "webp"])
+if photo is not None:
+    st.image(photo, caption="Type what you can read. Use [?] for anything unclear.")
 
 text = st.text_area(
     "Prescription lines",

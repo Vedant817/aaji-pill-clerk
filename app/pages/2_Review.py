@@ -1,7 +1,7 @@
 """One line at a time. A human confirms each copy before Chart unlocks."""
 
 from pillclerk.ui import apply_theme, stepper
-from pillclerk.config import tinker_parser_ready
+from pillclerk.config import parser_backend, tinker_parser_ready
 from pillclerk.review import (
     WIDGET_PREFIX,
     clear_widget_keys,
@@ -9,8 +9,9 @@ from pillclerk.review import (
     med_from_fields,
     n_confirmed,
     next_unconfirmed,
+    updated_draft,
 )
-from pillclerk.schema import Dose, Food, Form, Kind, MedLine, Unit
+from pillclerk.schema import Dose, Food, Form, Kind, MedLine, Unit, TaperStep
 from pillclerk.validate import schedule_conflicts
 
 apply_theme()
@@ -47,12 +48,21 @@ def _push_gold(i: int, gold: MedLine) -> None:
 def _parse_all() -> None:
     from pillclerk.infer import get_parser
 
-    parse = get_parser()
+    try:
+        parse = get_parser()
+    except Exception as exc:
+        st.session_state["parsed_once"] = True
+        st.session_state["parse_note"] = f"Parser unavailable ({type(exc).__name__}). Review manually or retry."
+        return
     filled = 0
     failed = 0
     next_drafts: list[dict] = []
     for i, draft in enumerate(drafts):
-        pred = parse(draft["line"])
+        try:
+            pred = parse(draft["line"])
+        except Exception:
+            # Keep the original ASK draft; never invent a successful parse.
+            pred = None
         if pred is None:
             failed += 1
             next_drafts.append(draft)
@@ -67,13 +77,15 @@ def _parse_all() -> None:
     st.session_state["review_i"] = 0 if first is None else first
 
 
-if tinker_parser_ready() and drafts_need_parse(drafts) and not st.session_state.get("parsed_once"):
+backend = parser_backend()
+parser_ready = backend == "ollama" or tinker_parser_ready()
+if parser_ready and drafts_need_parse(drafts) and not st.session_state.get("parsed_once"):
     with st.spinner("Reading the lines…"):
         _parse_all()
     st.rerun()
 
-if tinker_parser_ready():
-    if st.button("Fill fields from Tinker parser"):
+if parser_ready:
+    if st.button(f"Fill fields from {backend} parser"):
         with st.spinner("Reading the lines…"):
             _parse_all()
         st.rerun()
@@ -132,31 +144,56 @@ afternoon = m2.number_input("Afternoon", min_value=0.0, max_value=20.0, step=0.5
 night = m3.number_input("Night", min_value=0.0, max_value=20.0, step=0.5, key=p + "pm")
 unit = m4.selectbox("Unit", UNITS, key=p + "unit")
 prn_max = st.number_input("PRN max per day (0 = unset)", min_value=0, key=p + "prn")
+taper = list(gold.taper)
+if kind == "taper":
+    import pandas as pd
+    rows = st.data_editor(pd.DataFrame([
+        {"days": step.days, **step.dose.model_dump()} for step in taper
+    ], columns=["days", "morning", "afternoon", "night", "unit"]),
+        num_rows="dynamic", key=p + "taper", hide_index=True).to_dict("records")
+    try:
+        taper = [TaperStep(days=row["days"], dose=Dose(**{k: row[k] for k in ("morning", "afternoon", "night", "unit")})) for row in rows]
+    except (ValueError, TypeError, KeyError):
+        st.error("Each taper step needs positive days, valid doses, and a unit. Check the prescription.")
+        st.stop()
 
-med = med_from_fields(
-    line=draft["line"],
-    drug=drug,
-    strength=strength,
-    form=form,
-    kind=kind,
-    food=food,
-    duration=int(duration),
-    every=int(every),
-    morning=float(morning),
-    afternoon=float(afternoon),
-    night=float(night),
-    unit=unit,
-    prn_max=int(prn_max),
-    taper=list(gold.taper) if gold.taper else [],
-)
+try:
+    med = med_from_fields(
+        line=draft["line"],
+        drug=drug,
+        strength=strength,
+        form=form,
+        kind=kind,
+        food=food,
+        duration=int(duration),
+        every=int(every),
+        morning=float(morning),
+        afternoon=float(afternoon),
+        night=float(night),
+        unit=unit,
+        prn_max=int(prn_max),
+        taper=taper,
+    )
+except ValueError:
+    st.error("These fields do not form a valid prescription copy. Check the dose, unit, and schedule.")
+    st.stop()
+
 if med.needs_check:
     st.markdown(
         f'<div class="pc-ask">ASK: {", ".join(med.needs_check)}</div>',
         unsafe_allow_html=True,
     )
 
-drafts[i] = {"line": draft["line"], "gold": med.model_dump(), "confirmed": bool(draft.get("confirmed")) and not med.needs_check}
+# Parser uncertainty must be explicitly resolved by the caregiver.
+parser_checks = draft.get("parser_checks", gold.needs_check)
+unresolved = []
+for check in parser_checks:
+    if not st.checkbox(f"I checked {check} against the prescription and resolved the ASK", key=p + "resolve_" + check):
+        unresolved.append(check)
+med = med.model_copy(update={"needs_check": sorted(set(med.needs_check + unresolved))})
+drafts[i] = updated_draft({**draft, "parser_checks": parser_checks}, med)
 st.session_state["drafts"] = drafts
+done = n_confirmed(drafts)
 
 nav1, nav2, nav3 = st.columns([1, 2, 1])
 with nav1:
@@ -165,7 +202,7 @@ with nav1:
         st.rerun()
 with nav2:
     if st.button("Confirm this line", type="primary", disabled=bool(med.needs_check)):
-        drafts[i] = {"line": draft["line"], "gold": med.model_dump(), "confirmed": True}
+        drafts[i] = {**drafts[i], "confirmed": True}
         st.session_state["drafts"] = drafts
         nxt = next_unconfirmed(drafts, after=i)
         if nxt is None:

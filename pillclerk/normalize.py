@@ -10,48 +10,14 @@ Rules (applied to every system when reporting exact_norm):
 from __future__ import annotations
 
 import re
+import json
+from pathlib import Path
 import unicodedata
 
-# Devanagari (or mixed) brand -> Latin alias. Keys are lowercased NFKC.
-# Halant spellings (टेल्मा, पैन, …) were added after seeing eval errors. Disclose that.
-BRAND_ALIASES: dict[str, str] = {
-    "ग्लाइकोमेट": "glycomet",
-    "ग्लायकोमेट": "glycomet",
-    "ग्लुकोमेट": "glycomet",
-    "टेलमा": "telma",
-    "टेल्मा": "telma",
-    "टेलमा एएम": "telma am",
-    "टेल्मा एएम": "telma am",
-    "पैन": "pan",
-    "पैन": "pan",
-    "इकोस्प्रिन": "ecosprin",
-    "इकोस्प्रिन एव्ही": "ecosprin av",
-    "थायरोनॉर्म": "thyronorm",
-    "थायरॉनॉर्म": "thyronorm",
-    "एटोरवा": "atorva",
-    "डोलो": "dolo",
-    "पैंटोप्रैजोल": "pantoprazole",
-    "पैंटोप्राज़ोल": "pantoprazole",
-    "पॅन्टोप": "pantop",
-    "पैंटोप": "pantop",
-    "मेटोलार": "metolar",
-    "क्लोपीटैब": "clopitab",
-    "क्लोपिटॅब": "clopitab",
-    "रोजावेल": "rozavel",
-    "फोराकोर्ट": "foracort",
-    "अस्थालिन": "asthalin",
-    "लेंटस": "lantus",
-    "नोवोरेपिड": "novorapid",
-    "नोव्होरेपिड": "novorapid",
-    "शेल्कल": "shelcal",
-    "कॅल्सिरोल": "calcirol",
-    "विटामिन डी3": "vitamin d3",
-    "एस्कोरिल": "ascoril",
-    "वइसोलोन": "wysolone",
-    "वायसोलोन": "wysolone",
-    "कॉम्बिफ्लेम": "combiflam",
-    "ड्यूलिन": "duolin",
-}
+# Declared transliteration reference data; never supplies a dose or patient record.
+BRAND_ALIASES: dict[str, str] = json.loads(
+    (Path(__file__).parent / "resources" / "brand_aliases.json").read_text(encoding="utf-8")
+)
 
 _STRENGTH = re.compile(
     r"(\d+(?:\.\d+)?)\s*(mcg|mg|iu|ml|g|k|μg|ug)?",

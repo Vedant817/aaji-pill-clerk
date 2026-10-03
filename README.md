@@ -92,6 +92,18 @@ SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500
 
 ## Results
 
+3 October audit: see [accuracy issues and improvement plan](docs/accuracy-plan.md).
+Offline replay of saved FT2 HMR predictions improves exact from **75/104 (72.1%)**
+to **83/104 (79.8%)**, with unflagged dangerous errors **23 → 14**. This is development
+replay of existing predictions, not new model inference or photo accuracy. Official
+saved scores below remain unchanged. The `exact` metric excludes ASK flags; SYNTH
+FT2 ASK recall is only **70.6%** despite its 100% exact score.
+
+```powershell
+uv run python -m eval.audit
+uv run python -m train.sft --check-data  # offline; refuses current split leakage
+```
+
 Headline numbers: SYNTH held-out drugs (n=397) and **Hand-written realistic (n=102)** (never trained, not photographed). **Public real-world set: HMR-100 (India), n=104**: FT2 exact **0.7212** [0.6346, 0.8077], danger_v2_norm **0.2212**; T JSON **0.6442** [0.5577, 0.7308], danger_v2_norm **0.2596**, http_fail **0.0385** (`eval/out/ft2_hmr100_gold.json`, `eval/out/gemma31_json_hmr100_gold.json`). Full table in `eval/results.md`. Public images stay gitignored in `data/public/`.
 
 | System | Exact SYNTH n=397 [95% CI] | Danger_v2_norm SYNTH | parse_fail / http_fail SYNTH | Exact HW n=102 [95% CI] | Danger_v2_norm HW | Files |

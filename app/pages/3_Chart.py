@@ -5,8 +5,9 @@ from datetime import date
 from pillclerk.ui import apply_theme, stepper
 from pillclerk.chart import chart_html
 from pillclerk.ics import to_ics
-from pillclerk.schedule import expand, prn_meds, refill_date
+from pillclerk.schedule import SLOTS, expand, prn_meds, refill_date
 from pillclerk.schema import MedLine
+from pillclerk.review import export_blockers
 from pillclerk.store import save_meds
 from pillclerk.validate import all_confirmed, schedule_conflicts
 
@@ -38,11 +39,19 @@ if conflicts:
         "The clerk copied both. Ask the doctor or pharmacist which one to follow.</div>",
         unsafe_allow_html=True,
     )
+    st.stop()
+
+for blocker in export_blockers(drafts):
+    st.error(blocker)
+    st.stop()
 
 c1, c2, c3 = st.columns(3)
 start = c1.date_input("Start date", value=date.today())
 lang = c2.selectbox("Chart language", ["mr", "hi", "en"], index=0)
-stock = c3.number_input("Tablets in stock (first daily med)", min_value=0, value=30)
+st.caption("Set caregiver reminder times. Check these against the prescription before exporting.")
+time_cols = st.columns(3)
+slot_times = {slot: col.time_input(slot.capitalize(), value=default)
+              for col, (slot, default) in zip(time_cols, SLOTS.items())}
 
 plan = expand(meds, start)
 html = chart_html(
@@ -50,19 +59,28 @@ html = chart_html(
     lang=lang,
     footer="Clerk copy of the prescription. Not medical advice. If anything looks different, ask the doctor or pharmacist.",
     prn=prn_meds(meds),
+    slot_times=slot_times,
 )
 components.html(html, height=460, scrolling=True)
 d1, d2, d3 = st.columns(3)
 with d1:
     st.download_button("Download fridge chart.html", html.encode("utf-8"), "fridge-chart.html", "text/html")
 with d2:
-    st.download_button("Download reminders.ics", to_ics(plan), "pillclerk.ics", "text/calendar")
+    st.download_button("Download reminders.ics", to_ics(plan, slot_times=slot_times), "pillclerk.ics", "text/calendar")
 with d3:
     if st.button("Save to local history"):
         save_meds(meds, note="confirmed")
         st.success("Saved on this laptop (SQLite).")
 
-for m in meds:
-    rd = refill_date(m, start, float(stock))
-    if rd:
-        st.write(f"Refill **{m.drug}**: {rd.isoformat()}")
+st.subheader("Stock and refill dates")
+for i, m in enumerate(meds):
+    if m.kind != "daily" or not m.dose:
+        continue
+    stock = st.number_input(f"{m.drug}: stock remaining ({m.dose.unit})", min_value=0.0,
+                            value=None, key=f"stock_{i}_{m.model_dump_json()}")
+    if stock is not None:
+        rd = refill_date(m, start, float(stock))
+        if rd:
+            st.write(f"Stock runs out for **{m.drug}** on {rd.isoformat()}.")
+        else:
+            st.caption(f"{m.drug}: entered stock covers the prescribed course.")

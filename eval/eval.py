@@ -256,7 +256,9 @@ def main() -> None:
         pred_rows = [json.loads(l) for l in open(a.preds, encoding="utf-8")]
         if a.limit:
             pred_rows = pred_rows[: a.limit]
-        if len(pred_rows) == len(gold_rows):
+        if len({pr["line"] for pr in pred_rows}) != len(pred_rows):
+            raise SystemExit("Duplicate prediction lines make rescore pairing ambiguous")
+        if len(pred_rows) == len(gold_rows) and all(r["line"] == pr["line"] for r, pr in zip(gold_rows, pred_rows, strict=True)):
             gold_rows, pred_rows, dropped_train = drop_train_duplicates(gold_rows, pred_rows)
         else:
             gold_rows, _, dropped_train = drop_train_duplicates(gold_rows, None)

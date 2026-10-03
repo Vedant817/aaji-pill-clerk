@@ -31,6 +31,8 @@ def mcnemar_exact(a: list[dict], b: list[dict], field: str = "exact") -> dict:
         raise ValueError(f"pred length mismatch {len(a)} vs {len(b)}")
     n01 = n10 = n11 = n00 = 0
     for x, y in zip(a, b, strict=True):
+        if "line" in x and "line" in y and x["line"] != y["line"]:
+            raise ValueError("Paired predictions are not aligned by prescription line")
         ax, by = int(x.get(field) or 0), int(y.get(field) or 0)
         if ax == 0 and by == 1:
             n01 += 1
@@ -115,4 +117,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

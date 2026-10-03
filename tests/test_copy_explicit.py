@@ -178,6 +178,7 @@ def test_ml_triple_and_insulin_strength_cleared() -> None:
     out_i = extra_rules(copy_explicit(lantus, "Inj Lantus Solostar 10 units SC at 10PM"))
     assert out_i.strength is None
     assert out_i.dose is not None and out_i.dose.night == 10
+    assert "schedule" in out_i.needs_check  # 10PM cannot be silently replaced by the night default
 
 
 def test_stub_from_line_copies_suspension() -> None:

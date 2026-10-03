@@ -1,0 +1,147 @@
+{
+  "base": [
+    {
+      "line": "5. Tab Pantoprazole 40mg subah ek raat ko ek khane ke baad 3 din",
+      "gold": {
+        "drug": "Pantoprazole",
+        "strength": "40 mg",
+        "form": "tab",
+        "kind": "daily",
+        "dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "after",
+        "duration_days": 3,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    },
+    {
+      "line": "TAB. Sucral 1 g SOS / PRN max 2/d x 7 DAYS",
+      "gold": {
+        "drug": "Sucral",
+        "strength": "1 g",
+        "form": "tab",
+        "kind": "prn",
+        "dose": null,
+        "every_n_days": 1,
+        "taper": [],
+        "food": "any",
+        "duration_days": 7,
+        "prn_max_per_day": 2,
+        "note": null,
+        "needs_check": []
+      }
+    },
+    {
+      "line": "Tab Lasix 40 mg subah ek raat ko ek khali pet 7 din",
+      "gold": {
+        "drug": "Lasix",
+        "strength": "40 mg",
+        "form": "tab",
+        "kind": "daily",
+        "dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 1.0,
+          "unit": "tab"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "empty_stomach",
+        "duration_days": 7,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    }
+  ],
+  "gemini_extra": [
+    {
+      "line": "TAB. Metrogyl 400 mg 1-0-1 x 5d then 0-0-1 x 5d BEFORE FOOD",
+      "gold": {
+        "drug": "Metrogyl",
+        "strength": "400 mg",
+        "form": "tab",
+        "kind": "taper",
+        "dose": null,
+        "every_n_days": 1,
+        "taper": [
+          {
+            "dose": {
+              "morning": 1.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          },
+          {
+            "dose": {
+              "morning": 0.0,
+              "afternoon": 0.0,
+              "night": 1.0,
+              "unit": "tab"
+            },
+            "days": 5
+          }
+        ],
+        "food": "before",
+        "duration_days": 10,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    },
+    {
+      "line": "DROPS Timolol 0.5 % 0-0-2 रात दो khane ke baad x5d",
+      "gold": {
+        "drug": "Timolol",
+        "strength": "0.5 %",
+        "form": "drops",
+        "kind": "daily",
+        "dose": {
+          "morning": 0.0,
+          "afternoon": 0.0,
+          "night": 2.0,
+          "unit": "drop"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "after",
+        "duration_days": 5,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    },
+    {
+      "line": "Inj Huminsulin 40 IU/ml 10-10-10 WF x5d",
+      "gold": {
+        "drug": "Huminsulin",
+        "strength": "40 IU/ml",
+        "form": "injection",
+        "kind": "daily",
+        "dose": {
+          "morning": 10.0,
+          "afternoon": 10.0,
+          "night": 10.0,
+          "unit": "unit"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "with",
+        "duration_days": 5,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    }
+  ]
+}

@@ -72,7 +72,7 @@ def test_scan_switches_to_review_and_review_confirms_one_line() -> None:
     assert "switch_page" in scan
     assert "Load demo slip" not in scan
     assert "Confirm this line" in review
-    assert "st.checkbox" not in review
+    assert "resolved the ASK" in review
     assert "WIDGET_PREFIX" in review
 
 

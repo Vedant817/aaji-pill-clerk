@@ -1,0 +1,712 @@
+{
+  "kind": "offline replay of already postprocessed saved predictions; no new model calls",
+  "limitations": [
+    "Not raw model accuracy",
+    "Public set has informed parser changes and is now development evidence",
+    "No photo/OCR or family acceptance measurement",
+    "No new latency measurement"
+  ],
+  "code_sha256": {
+    "pillclerk\\copy_explicit.py": "707fd7c9a97c5305f1559060923eee9aba06029b145f10cd77eabd822324ea5e",
+    "pillclerk\\validate.py": "fcf091f0ab6ec39c8ec401f6519a289d3d3fcb2a39200b7b68a9181c99b4eeac",
+    "eval\\eval.py": "53ed83cb6efa388a02654189810b25088ee3e6d037185297fe2f37202d0d0f46",
+    "eval\\audit.py": "a88b229633709dafc7f076b7766913a3e7051f505601a6b90f9a000ac822df8c"
+  },
+  "sets": {
+    "synth_test": {
+      "gold_sha256": "8325b4811cbd2d0137a68cc3f4664af65da442b3190d29652067780fd20ea2d5",
+      "predictions_sha256": "c5a475aa15042029ca6a7f793d33b59abf4ec8eb7c66759b7c49a063f5bac65e",
+      "excluded_gold_rows": 3,
+      "saved": {
+        "system": "ft2_saved",
+        "set": "data\\synth\\synth_test.jsonl",
+        "n": 397,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 1.0,
+        "exact_ci95": [
+          1.0,
+          1.0
+        ],
+        "exact_norm": 1.0,
+        "exact_norm_ci95": [
+          1.0,
+          1.0
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.0,
+        "danger_v1": 0.0,
+        "danger_v2": 0.0,
+        "danger_v2_strict": 0.0,
+        "danger_v2_norm": 0.0,
+        "n_valid": 397,
+        "exact_on_valid": 1.0,
+        "ask_recall": 0.7058823529411765,
+        "false_ask_rate": 0.0,
+        "n_gold_ask": 17,
+        "per_field": {
+          "drug": 1.0,
+          "strength": 1.0,
+          "form": 1.0,
+          "kind": 1.0,
+          "dose": 1.0,
+          "every_n_days": 1.0,
+          "taper": 1.0,
+          "food": 1.0,
+          "duration_days": 1.0,
+          "prn_max_per_day": 1.0
+        },
+        "error_fields": {},
+        "exact_and_ask": 0.9874055415617129,
+        "danger_count": 0
+      },
+      "replay": {
+        "system": "ft2_offline_replay",
+        "set": "data\\synth\\synth_test.jsonl",
+        "n": 397,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 1.0,
+        "exact_ci95": [
+          1.0,
+          1.0
+        ],
+        "exact_norm": 1.0,
+        "exact_norm_ci95": [
+          1.0,
+          1.0
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.0,
+        "danger_v1": 0.0,
+        "danger_v2": 0.0,
+        "danger_v2_strict": 0.0,
+        "danger_v2_norm": 0.0,
+        "n_valid": 397,
+        "exact_on_valid": 1.0,
+        "ask_recall": 0.7058823529411765,
+        "false_ask_rate": 0.0,
+        "n_gold_ask": 17,
+        "per_field": {
+          "drug": 1.0,
+          "strength": 1.0,
+          "form": 1.0,
+          "kind": 1.0,
+          "dose": 1.0,
+          "every_n_days": 1.0,
+          "taper": 1.0,
+          "food": 1.0,
+          "duration_days": 1.0,
+          "prn_max_per_day": 1.0
+        },
+        "error_fields": {},
+        "exact_and_ask": 0.9874055415617129,
+        "danger_count": 0
+      },
+      "paired": {
+        "n": 397,
+        "n01_b_fixes": 0,
+        "n10_b_regresses": 0,
+        "both_right": 397,
+        "both_wrong": 0,
+        "p_two_sided": 1.0,
+        "field": "exact"
+      },
+      "changes": [
+        {
+          "line": "Tab [?] 50 mg/1000 mg 1-[?]-[?] cont",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Supradyn as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Clopitab 75 mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "8. Inh Asthalin 100mcg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Meftal Spas 250mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab [?] 500mg/1mg 1-[?]-[?] cont",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Telmisartan 80 mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Amaryl 1 mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        }
+      ]
+    },
+    "handwritten_realistic": {
+      "gold_sha256": "794fd6329067b168ee8ed18f37cf6c5c0305f2d4d0e8364db6146468e6e78cda",
+      "predictions_sha256": "2442ae768681368e242eee6106aef4a397299b231b1f4897d804767237f9512a",
+      "excluded_gold_rows": 0,
+      "saved": {
+        "system": "ft2_saved",
+        "set": "data\\heldout\\handwritten_realistic.jsonl",
+        "n": 102,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 0.9803921568627451,
+        "exact_ci95": [
+          0.9509803921568627,
+          1.0
+        ],
+        "exact_norm": 0.9803921568627451,
+        "exact_norm_ci95": [
+          0.9509803921568627,
+          1.0
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.0,
+        "danger_v1": 0.0,
+        "danger_v2": 0.0,
+        "danger_v2_strict": 0.0,
+        "danger_v2_norm": 0.0,
+        "n_valid": 102,
+        "exact_on_valid": 0.9803921568627451,
+        "ask_recall": 1.0,
+        "false_ask_rate": 0.010309278350515464,
+        "n_gold_ask": 5,
+        "per_field": {
+          "drug": 1.0,
+          "strength": 1.0,
+          "form": 0.9803921568627451,
+          "kind": 1.0,
+          "dose": 1.0,
+          "every_n_days": 1.0,
+          "taper": 1.0,
+          "food": 1.0,
+          "duration_days": 1.0,
+          "prn_max_per_day": 1.0
+        },
+        "error_fields": {
+          "form": 2
+        },
+        "exact_and_ask": 0.9803921568627451,
+        "danger_count": 0
+      },
+      "replay": {
+        "system": "ft2_offline_replay",
+        "set": "data\\heldout\\handwritten_realistic.jsonl",
+        "n": 102,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 0.9803921568627451,
+        "exact_ci95": [
+          0.9509803921568627,
+          1.0
+        ],
+        "exact_norm": 0.9803921568627451,
+        "exact_norm_ci95": [
+          0.9509803921568627,
+          1.0
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.0,
+        "danger_v1": 0.0,
+        "danger_v2": 0.0,
+        "danger_v2_strict": 0.0,
+        "danger_v2_norm": 0.0,
+        "n_valid": 102,
+        "exact_on_valid": 0.9803921568627451,
+        "ask_recall": 1.0,
+        "false_ask_rate": 0.010309278350515464,
+        "n_gold_ask": 5,
+        "per_field": {
+          "drug": 1.0,
+          "strength": 1.0,
+          "form": 0.9803921568627451,
+          "kind": 1.0,
+          "dose": 1.0,
+          "every_n_days": 1.0,
+          "taper": 1.0,
+          "food": 1.0,
+          "duration_days": 1.0,
+          "prn_max_per_day": 1.0
+        },
+        "error_fields": {
+          "form": 2
+        },
+        "exact_and_ask": 0.9803921568627451,
+        "danger_count": 0
+      },
+      "paired": {
+        "n": 102,
+        "n01_b_fixes": 0,
+        "n10_b_regresses": 0,
+        "both_right": 100,
+        "both_wrong": 2,
+        "p_two_sided": 1.0,
+        "field": "exact"
+      },
+      "changes": [
+        {
+          "line": "Tab [?] 500mg 1-[?]-[?] x 30d",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Glycomet 500mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Cap Pan 40mg as directed",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        }
+      ]
+    },
+    "hmr100_gold": {
+      "gold_sha256": "7dca2bca2419edf2a4319521e5a2e419d5373eee845d7f9e99a2a9676bc3985b",
+      "predictions_sha256": "5cb214b6bd92e21488ff356d1995d00d0c333ea5eacbb8888ff3f14639ac609f",
+      "excluded_gold_rows": 0,
+      "saved": {
+        "system": "ft2_saved",
+        "set": "data\\public_labels\\hmr100_gold.jsonl",
+        "n": 104,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 0.7211538461538461,
+        "exact_ci95": [
+          0.6346153846153846,
+          0.8076923076923077
+        ],
+        "exact_norm": 0.7211538461538461,
+        "exact_norm_ci95": [
+          0.6346153846153846,
+          0.8076923076923077
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.07692307692307693,
+        "danger_v1": 0.07692307692307693,
+        "danger_v2": 0.22115384615384615,
+        "danger_v2_strict": 0.22115384615384615,
+        "danger_v2_norm": 0.22115384615384615,
+        "n_valid": 104,
+        "exact_on_valid": 0.7211538461538461,
+        "ask_recall": 0.6,
+        "false_ask_rate": 0.1717171717171717,
+        "n_gold_ask": 5,
+        "per_field": {
+          "drug": 0.8846153846153846,
+          "strength": 0.9134615384615384,
+          "form": 0.9903846153846154,
+          "kind": 0.9903846153846154,
+          "dose": 0.9038461538461539,
+          "every_n_days": 0.9711538461538461,
+          "taper": 1.0,
+          "food": 0.9807692307692307,
+          "duration_days": 0.9711538461538461,
+          "prn_max_per_day": 0.9711538461538461
+        },
+        "error_fields": {
+          "strength": 9,
+          "duration_days": 3,
+          "dose": 10,
+          "every_n_days": 3,
+          "food": 2,
+          "drug": 12,
+          "form": 1,
+          "prn_max_per_day": 3,
+          "kind": 1
+        },
+        "exact_and_ask": 0.6442307692307693,
+        "danger_count": 23
+      },
+      "replay": {
+        "system": "ft2_offline_replay",
+        "set": "data\\public_labels\\hmr100_gold.jsonl",
+        "n": 104,
+        "json_valid": 1.0,
+        "parse_fail": 0.0,
+        "http_fail": 0.0,
+        "exact": 0.7980769230769231,
+        "exact_ci95": [
+          0.7211538461538461,
+          0.8653846153846154
+        ],
+        "exact_norm": 0.7980769230769231,
+        "exact_norm_ci95": [
+          0.7211538461538461,
+          0.8653846153846154
+        ],
+        "norm_rule": "strength: number+unit; drug: Devanagari→Latin BRAND_ALIASES",
+        "danger": 0.038461538461538464,
+        "danger_v1": 0.038461538461538464,
+        "danger_v2": 0.1346153846153846,
+        "danger_v2_strict": 0.1346153846153846,
+        "danger_v2_norm": 0.1346153846153846,
+        "n_valid": 104,
+        "exact_on_valid": 0.7980769230769231,
+        "ask_recall": 0.8,
+        "false_ask_rate": 0.25252525252525254,
+        "n_gold_ask": 5,
+        "per_field": {
+          "drug": 0.9326923076923077,
+          "strength": 0.9230769230769231,
+          "form": 0.9903846153846154,
+          "kind": 0.9903846153846154,
+          "dose": 0.9326923076923077,
+          "every_n_days": 0.9711538461538461,
+          "taper": 1.0,
+          "food": 0.9903846153846154,
+          "duration_days": 0.9711538461538461,
+          "prn_max_per_day": 0.9711538461538461
+        },
+        "error_fields": {
+          "strength": 8,
+          "dose": 7,
+          "duration_days": 3,
+          "every_n_days": 3,
+          "food": 1,
+          "form": 1,
+          "drug": 7,
+          "prn_max_per_day": 3,
+          "kind": 1
+        },
+        "exact_and_ask": 0.6442307692307693,
+        "danger_count": 14
+      },
+      "paired": {
+        "n": 104,
+        "n01_b_fixes": 8,
+        "n10_b_regresses": 0,
+        "both_right": 75,
+        "both_wrong": 21,
+        "p_two_sided": 0.0078125,
+        "field": "exact"
+      },
+      "changes": [
+        {
+          "line": "Betadine Gargle 2-3 times x 5d",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Nebulise with Levosalbutamol (0.63) plus Budesonide (0.5mg) twice a day for 5 days",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 1,
+          "changed_fields": [
+            "dose",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Inj Lantus Solostar 10 units SC at 10PM",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Tab Folitrax 15 mg once per week (Friday night) x 2 months",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 1,
+          "changed_fields": [
+            "dose"
+          ]
+        },
+        {
+          "line": "Tab Folvite 5 mg twice per week (Saturday, Sundays) x 2 months",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "dose",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Sinarest 1 OD (after food) x 3d",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "drug"
+          ]
+        },
+        {
+          "line": "Suspension Paracetamol 240 mg (Crocin DS) 5 ml SoS can be given 6 hrly",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 1,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Syrup Fexofenadine 30 mg (Allegra) 5 ml 2 times a day X 5 days (O--O)",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 1,
+          "changed_fields": [
+            "dose",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Syrup Ambrolite S 5 ml 2 times a day X 5 days (O--O)",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "strength",
+            "dose",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Suspension Meftal P 4 ml X SoS Can be given 6 hrly",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Hexidol plus 1-1-1 / SOS x 3 days",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "drug"
+          ]
+        },
+        {
+          "line": "T Montair LC 1 OD x 5 days",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "drug"
+          ]
+        },
+        {
+          "line": "T Ecosprin 75 mg 1 daily 9 pm x 3 months",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Clopitab 75 1 daily 9 am x 3 months",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Tonact TG 10 1 daily 9 pm x 3 months",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "drug",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Starpress XL 25 1 daily 9 am x 3 months",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "drug",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Ivabrad 5mg 1 daily 9 pm x 3 months",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Imdur 30 1/2 8am 1/2 5pm x 3 months",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 1,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Gemer 1 mg 1 daily 8 am x 3 months",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "T Rivotril 0.5mg 1 daily 8 pm x 3 months",
+          "before_exact": 1,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Cap Nervmax one after dinner 1 OD",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "food"
+          ]
+        },
+        {
+          "line": "Tab Folitrax 15 mg once per week (Wednesday night) x 1 month",
+          "before_exact": 0,
+          "after_exact": 1,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "dose"
+          ]
+        },
+        {
+          "line": "Tab Folvite 5 mg once daily except Wednesday x 1 month",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 0,
+          "after_danger": 0,
+          "changed_fields": [
+            "dose",
+            "needs_check"
+          ]
+        },
+        {
+          "line": "Syp Calpol (250mg/5ml) 6 ml every 6 hrly for fever >100F",
+          "before_exact": 0,
+          "after_exact": 0,
+          "before_danger": 1,
+          "after_danger": 0,
+          "changed_fields": [
+            "dose",
+            "needs_check"
+          ]
+        }
+      ]
+    }
+  }
+}

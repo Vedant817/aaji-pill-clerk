@@ -7,6 +7,7 @@ Do not start until data/synth/train.jsonl exists.
 from __future__ import annotations
 
 import json
+import hashlib
 import random
 import time
 from pathlib import Path
@@ -39,6 +40,23 @@ def load_train_rows(train_path: Path, extra_paths: list[Path] | None = None, lim
     if limit:
         rows = rows[:limit]
     return rows
+
+
+def validate_split(train_rows: list[dict], validation_rows: list[dict], eval_paths: list[Path]) -> dict:
+    """Fail before creating a paid client when evaluation text leaks into training."""
+    from pillclerk.filters import normalised_text
+
+    def lines(rows):
+        return {normalised_text(r["line"]) for r in rows}
+
+    train = lines(train_rows)
+    overlaps = {"validation": len(train & lines(validation_rows))}
+    for path in eval_paths:
+        if path.is_file():
+            overlaps[str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else path.name] = len(train & lines(_load(path)))
+    if any(overlaps.values()):
+        raise ValueError(f"Training/evaluation leakage: {overlaps}. Create a clean candidate split; do not rewrite published gold.")
+    return overlaps
 
 
 def _conversation_ids(tokenizer, messages: list[dict]) -> tuple[list[int], list[int]]:
@@ -112,9 +130,9 @@ def main() -> None:
         help="write sampler path to .env (v1/v2 always do; v3 only with this flag)",
     )
     ap.add_argument("--log", default="", help="append train_nll lines to this path")
+    ap.add_argument("--check-data", action="store_true", help="check split leakage offline and exit without provider calls")
     args = ap.parse_args()
 
-    require_env("TINKER_API_KEY")
     train_path = Path(args.train) if args.train else ROOT / "data" / "synth" / "train.jsonl"
     val_path = ROOT / "data" / "synth" / "val.jsonl"
     extra_paths = [Path(p) for p in args.extra]
@@ -123,6 +141,12 @@ def main() -> None:
 
     train_rows = load_train_rows(train_path, extra_paths, limit=args.limit)
     val_rows = _load(val_path)
+    validate_split(train_rows, val_rows, [ROOT / "data/synth/synth_test.jsonl",
+                  ROOT / "data/heldout/handwritten_realistic.jsonl", ROOT / "data/public_labels/hmr100_gold.jsonl"])
+    if args.check_data:
+        print("Training split passed offline checks; no provider calls made.")
+        return
+    require_env("TINKER_API_KEY")
     print(f"train_rows {len(train_rows)} extras {[str(p) for p in extra_paths]}", flush=True)
     service = tinker.ServiceClient()
     tc = service.create_lora_training_client(base_model=BASE_MODEL, rank=RANK)
@@ -200,6 +224,8 @@ def main() -> None:
                 "name": args.name,
                 "n_train": len(train_rows),
                 "extras": [str(p) for p in extra_paths],
+                "data_sha256": {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
+                                for p in [train_path, val_path, *extra_paths]},
             },
             indent=2,
         ),

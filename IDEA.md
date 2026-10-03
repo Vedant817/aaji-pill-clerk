@@ -4,6 +4,16 @@
 > **Hard deadline: Mon 5 Oct 2026, 12:29 PM IST** (06:59 UTC). **Target: published by Mon 10:00 AM IST.**
 > This file stands alone; you don't need any other document. Every number marked `TODO` or `[fill]` must come from your own runs. Never fake a number.
 >
+> **3 October audit correction:** older sections below contain historical sketches,
+> offline/local claims and expired provider plans. The live MVP is local photo
+> reference + manual transcription → hosted Tinker parse → human review → exports.
+> Automated OCR and a family handover are unverified. FT2's saved HMR parser result
+> is 75/104 exact; offline replay of general copy fixes is 83/104, with unflagged
+> danger 23 → 14. This is development replay, not fresh inference. Exact excludes
+> ASK fields. Training/validation has six exact overlaps; future training refuses
+> leakage before spending. See `docs/accuracy-plan.md` for the current evidence,
+> implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
+>
 > **Weekend overrides (source of truth over later sections):**
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
 > 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.

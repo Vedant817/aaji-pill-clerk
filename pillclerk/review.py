@@ -30,7 +30,7 @@ def med_from_fields(
     checks: list[CheckField] = []
     if not (drug or "").strip():
         checks.append("drug")
-    dose = None if kind == "prn" else Dose(
+    dose = None if kind in ("prn", "taper") else Dose(
         morning=morning, afternoon=afternoon, night=night, unit=unit
     )
     if kind == "daily" and dose and (dose.morning + dose.afternoon + dose.night) == 0:
@@ -60,6 +60,31 @@ def med_from_fields(
 
 def n_confirmed(drafts: list[dict[str, Any]]) -> int:
     return sum(1 for d in drafts if d.get("confirmed"))
+
+
+def updated_draft(draft: dict[str, Any], med: MedLine) -> dict[str, Any]:
+    """Any edit revokes the previous human sign-off."""
+    unchanged = MedLine.model_validate(draft["gold"]).model_dump() == med.model_dump()
+    return {**draft, "gold": med.model_dump(),
+            "confirmed": bool(draft.get("confirmed")) and unchanged and not med.needs_check}
+
+
+def export_blockers(drafts: list[dict[str, Any]]) -> list[str]:
+    from pillclerk.copy_explicit import guard_schedule
+    from pillclerk.validate import schedule_conflicts
+
+    if not drafts:
+        return ["No prescription lines loaded."]
+    meds = [extra_rules(MedLine.model_validate(d["gold"])) for d in drafts]
+    blockers = []
+    if any(not d.get("confirmed") for d in drafts) or any(m.needs_check for m in meds):
+        blockers.append("Confirm every line and resolve every ASK field on Review.")
+    if schedule_conflicts(meds):
+        blockers.append("Conflicting copies of the same medicine must be resolved before export.")
+    if any(guard_schedule(m.model_copy(update={"needs_check": []}), d["line"]).needs_check
+           for m, d in zip(meds, drafts, strict=True)):
+        blockers.append("This prescription contains timing or uncertainty the three-slot chart cannot represent. Correct the source on Scan or ask for clarification before export.")
+    return blockers
 
 
 def next_unconfirmed(drafts: list[dict[str, Any]], after: int = -1) -> int | None:

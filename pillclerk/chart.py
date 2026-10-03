@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from html import escape
+from datetime import time, timedelta
 
-from pillclerk.schedule import Dosing
+from pillclerk.schedule import Dosing, SLOTS
 from pillclerk.schema import MedLine
 
 LABELS = {
@@ -59,21 +60,26 @@ def chart_html(
     lang: str = "mr",
     footer: str = "",
     prn: list[MedLine] | None = None,
+    slot_times: dict[str, time] | None = None,
 ) -> str:
     L = LABELS.get(lang, LABELS["en"])
+    times = slot_times or SLOTS
     rows: list[str] = []
     for slot in ("morning", "afternoon", "night"):
         cells = "".join(
             f"<div class='pill'><b>{escape(d.med.drug or L['ask'])}</b> {escape(d.med.strength or '')}"
-            f"<br/>{_amt(d.amount)} {L['tab']} · {L[d.med.food]}</div>"
+            f"<br/>{_amt(d.amount)} {L['tab'] if d.unit == 'tab' else escape(d.unit)} · {L[d.med.food]}"
+            f"<br/>{d.start.isoformat()} → {(d.start + timedelta(days=d.days - 1)).isoformat() if d.days else 'until changed'}"
+            f"{' · every ' + str(d.every_n_days) + ' days' if d.every_n_days > 1 else ''}</div>"
             for d in plan
             if d.slot == slot
         ) or "—"
-        rows.append(f"<tr><th>{L[slot]}</th><td>{cells}</td></tr>")
+        rows.append(f"<tr><th>{L[slot]}<br/>{times[slot].strftime('%H:%M')}</th><td>{cells}</td></tr>")
     if prn:
         cells = "".join(
             f"<div class='pill'><b>{escape(m.drug or L['ask'])}</b> {escape(m.strength or '')}"
-            f"<br/>{L['prn']}</div>"
+            f"<br/>{L['prn']}"
+            f"{' · max ' + str(m.prn_max_per_day) + '/day' if m.prn_max_per_day else ''}</div>"
             for m in prn
         )
         rows.append(f"<tr><th>{L['prn']}</th><td>{cells}</td></tr>")

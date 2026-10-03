@@ -9,7 +9,7 @@ from pillclerk.schema import Dose, Form, MedLine
 
 _FORM_CUES: list[tuple[re.Pattern[str], Form, str]] = [
     (re.compile(r"\b(capsules?|cap\.?)\b", re.I), "cap", "cap"),
-    (re.compile(r"\b(tablets?|tab\.?)\b", re.I), "tab", "tab"),
+    (re.compile(r"\b(tablets?|tab\.?)\b|^\s*T\.?\s+", re.I), "tab", "tab"),
     (re.compile(r"\b(syrup|syp\.?|syr\.?|suspension)\b", re.I), "syrup", "ml"),
     (re.compile(r"\b(drops?)\b", re.I), "drops", "drop"),
     (re.compile(r"\b(inhaler|inh\.?|puff|nebuli[sz]e)\b", re.I), "inhaler", "puff"),
@@ -21,7 +21,7 @@ _FORM_CUES: list[tuple[re.Pattern[str], Form, str]] = [
 
 _FOOD_CUES: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"before food|\bac\b|खाने से पहले|जेवणाआधी|khane se pehle", re.I), "before"),
-    (re.compile(r"after food|\bpc\b|after\s+bf\b|after breakfast|खाने के बाद|जेवणानंतर|khane ke baad", re.I), "after"),
+    (re.compile(r"after food|\bpc\b|after\s+bf\b|after (?:breakfast|lunch|dinner)|खाने के बाद|जेवणानंतर|khane ke baad", re.I), "after"),
     (re.compile(r"with food|\bwf\b|खाने के साथ|जेवणासोबत|khane ke saath", re.I), "with"),
     (
         re.compile(r"empty stomach|\bes\b|\bbbf\b|before breakfast|खाली पेट|उपाशीपोटी|khali pet", re.I),
@@ -49,8 +49,8 @@ _DOSE_TRIPLE = re.compile(
 )
 _OD_BD = re.compile(r"\b(OD|BD|TDS|QID|HS)\b", re.I)
 _ONCE = re.compile(r"\b(?:once\s+(?:a|per)\s+day|once\s+daily|1\s+daily)\b", re.I)
-_TWICE = re.compile(r"\b(?:twice(?:\s+a\s+day|\s+daily)?|two\s+times(?:\s+a\s+day)?)\b", re.I)
-_THRICE = re.compile(r"\b(?:thrice(?:\s+a\s+day|\s+daily)?|three\s+times(?:\s+a\s+day)?)\b", re.I)
+_TWICE = re.compile(r"\b(?:twice(?:\s+a\s+day|\s+daily)?|(?:two|2)\s+times(?:\s+a\s+day)?)\b", re.I)
+_THRICE = re.compile(r"\b(?:thrice(?:\s+a\s+day|\s+daily)?|(?:three|3)\s+times(?:\s+a\s+day)?)\b", re.I)
 _AT_NIGHT = re.compile(r"\b(?:at\s+night|at\s+bedtime|bedtime)\b", re.I)
 _DAILY_WORD = re.compile(r"\b(?:daily|every\s+day)\b", re.I)
 _BBF = re.compile(r"\bbbf\b|before\s+breakfast", re.I)
@@ -67,7 +67,7 @@ _AMT_UNIT = re.compile(
 )
 _AMT_X = re.compile(r"\b(\d+(?:\.\d+)?|½|¼|¾)\s*(?:tab|tablet|puff|sachet|cap)?s?\s*x\b", re.I)
 _FORM_LEAD = re.compile(
-    r"^(?:\d+\.\s*)?(?:tab(?:let)?s?|cap(?:sule)?s?|syp|syr(?:up)?|inh|inj|"
+    r"^(?:\d+\.\s*)?(?:T|tab(?:let)?s?|cap(?:sule)?s?|syp|syr(?:up)?|inh|inj|"
     r"drops?|sachet|suspension|injection|cream|ointment|nebuli[sz]e(?:\s+with)?)\.?\s+",
     re.I,
 )
@@ -170,8 +170,11 @@ def _strip_device(name: str) -> str:
 
 
 def _surface_drug(line: str, pred_drug: str) -> str | None:
+    pred_drug = _FORM_LEAD.sub("", pred_drug.strip())
     pred_drug = _strip_device(pred_drug)
     parts = pred_drug.split()
+    if not parts:
+        return None
     first = parts[0]
     if len(parts) == 1:
         combo = re.search(rf"{re.escape(first)}{_COMBO.pattern}", line, re.I)
@@ -254,6 +257,8 @@ def _amount_and_unit(line: str, default_unit: str) -> tuple[float, str]:
 def _freq_slots(line: str) -> tuple[float, float, float] | None:
     """Return 1/0 multipliers for morning, afternoon, night from written frequency."""
     if re.search(r"\bQID\b", line, re.I):
+        return None
+    if re.search(r"\b\d+\s*[-–]\s*\d+\s*times\b", line, re.I):
         return None
     hs = bool(re.search(r"\bHS\b", line, re.I))
     night = bool(_NIGHT.search(line) or _AT_NIGHT.search(line) or _PM.search(line) or hs)
@@ -497,6 +502,11 @@ def copy_explicit(med: MedLine, line: str) -> MedLine:
     if _WEEKLY.search(line) and med.every_n_days == 1:
         updates["every_n_days"] = 7
 
+    if _WEEKLY.search(line) and (_NIGHT.search(line) or re.search(r"\bnight\b", line, re.I)):
+        dose = updates.get("dose", med.dose)
+        if dose and dose.morning > 0 and dose.afternoon == 0 and dose.night == 0:
+            updates["dose"] = dose.model_copy(update={"morning": 0.0, "night": dose.morning})
+
     strength_now = updates.get("strength", med.strength)
     if _ml_is_dose_not_strength(line, strength_now):
         updates["strength"] = None
@@ -509,6 +519,26 @@ def copy_explicit(med: MedLine, line: str) -> MedLine:
         checks = [c for c in (updates.get("needs_check", med.needs_check) or []) if c not in drop]
         updates["needs_check"] = checks
 
-    if not updates:
-        return med
-    return med.model_copy(update=updates)
+    copied = med.model_copy(update=updates)
+    return guard_schedule(copied, line)
+
+
+def guard_schedule(med: MedLine, line: str) -> MedLine:
+    """Refuse schedules the three-slot schema cannot faithfully represent."""
+    unsupported = re.search(
+        r"\b(?:except|QID|q\s*\d+\s*h|every\s+\d+\s*(?:hours?|hrly)|\d+\s*hrly|"
+        r"twice\s+(?:a|per)\s+week|every\s+month)\b|\b\d+\s*[-–]\s*\d+\s*times\b",
+        line, re.I,
+    )
+    clock = re.search(r"\b\d+\s*(?:am|pm)\b|\b\d{1,2}:\d{2}\b", line, re.I)
+    # Drug mixtures cannot be represented as one independent medicine line.
+    mixture = re.search(r"\bplus\b|\s\+\s", line, re.I) if re.search(r"nebul", line, re.I) else None
+    if unsupported or mixture or clock:
+        checks = sorted(set(med.needs_check + ["schedule"]))
+        updates = {"needs_check": checks}
+        if med.kind == "daily" and (unsupported or mixture):
+            updates.update(dose=None, needs_check=sorted(set(checks + ["dose"])))
+        return med.model_copy(update=updates)
+    if "[?]" in line or re.search(r"\bas directed\b", line, re.I):
+        return med.model_copy(update={"needs_check": sorted(set(med.needs_check + ["dose", "schedule"]))})
+    return med

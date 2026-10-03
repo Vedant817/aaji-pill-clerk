@@ -32,7 +32,8 @@ def schedule_conflicts(meds: list[MedLine]) -> list[tuple[str, MedLine, MedLine]
     for med in meds:
         if not med.drug:
             continue
-        by_name.setdefault(med.drug.lower(), []).append(med)
+        name = " ".join(med.drug.casefold().split())
+        by_name.setdefault(name, []).append(med)
     for name, group in by_name.items():
         for i, a in enumerate(group):
             for b in group[i + 1 :]:
@@ -40,6 +41,12 @@ def schedule_conflicts(meds: list[MedLine]) -> list[tuple[str, MedLine, MedLine]
                     a.kind == b.kind
                     and a.every_n_days == b.every_n_days
                     and (a.dose.model_dump() if a.dose else None) == (b.dose.model_dump() if b.dose else None)
+                    and a.strength == b.strength
+                    and a.form == b.form
+                    and a.food == b.food
+                    and a.duration_days == b.duration_days
+                    and a.taper == b.taper
+                    and a.prn_max_per_day == b.prn_max_per_day
                 )
                 if not same:
                     found.append((name, a, b))
