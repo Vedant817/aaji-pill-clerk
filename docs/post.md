@@ -33,7 +33,7 @@ McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.7683
 
 T-valid after stub recovery: **350/393** vs FT2 **393/393**. HW T-valid **73/98** vs **96/98**. JSON mode SYNTH exact 0.9824 [0.9673, 0.9924], danger_v2_norm 0.0126; HW exact 0.9608 [0.9216, 0.9902], danger_v2_norm 0.0294. McNemar FT2 vs `gemma31_json`: SYNTH 0/7 p = 0.015625; HW 2/4 p = 0.6875 (tie). A fine-tuned 8B plus a copy-from-the-line parser beats JSON-mode 31B on corrected SYNTH and ties on hand-written realistic, at a quarter of the size, cheaper on Tinker. T p50 includes HTTP retries.
 
-**Public real-world set: HMR-100 (India), n=104** is parser-only, gold from photographed slips (`eval/out/ft2_hmr100_gold.json`). FT2 exact **0.7212** [0.6346, 0.8077], danger_v2_norm **0.2212**; B0-fair 0.5577 / 0.3558; FT3 0.6923 / 0.2596. McNemar FT2 vs B0 22/5, p = 0.0015. Do not publish cropped or blurred HMR photos (CC BY-ND).
+**Public real-world set: HMR-100 (India), n=104** is parser-only, gold from photographed slips. FT2 exact **0.7212** [0.6346, 0.8077], danger_v2_norm **0.2212**; B0-fair 0.5577 / 0.3558; FT3 0.6923 / 0.2596; T JSON **0.6442** [0.5577, 0.7308], danger_v2_norm **0.2596**, http_fail **0.0385**. McNemar FT2 vs B0 22/5, p = 0.0015; FT2 vs T JSON 10/18, p = 0.185 (tie). Do not publish cropped or blurred HMR photos (CC BY-ND).
 
 Gemma 4 31B is the measured 31B teacher on de-identified text (`synth_test`, `handwritten_realistic`). Official T is **no JSON mode**; `gemma31_json` is the fairness rerun with responseMimeType + MedLine schema. It did **not** write `train.jsonl` (all 3096 rows `renderer=template`). Local OCR (`gemma4:e4b`) is not claimed.
 

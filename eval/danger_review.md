@@ -4,7 +4,7 @@ A **dangerous error** (`danger_v2`, default = **normalised**) is drug, strength,
 
 `BRAND_ALIASES` includes Devanagari spellings with a halant (`टेल्मा`, `पैन`, …). **That table was written after seeing eval errors.**
 
-Sources: `eval/out/ft2_*`, `eval/out/ft3_*`, `eval/out/gemma31_*`, `eval/out/danger_v2_review.json`. Official rows are `rescored_from_preds` through `extra_rules(copy_explicit)`. This is the hand-written realistic set plus corrected SYNTH. **Public real-world set: HMR-100 (India)** n=104 (`eval/out/ft2_hmr100_gold.json`): FT2 danger_v2_norm 0.2212, exact 0.7212.
+Sources: `eval/out/ft2_*`, `eval/out/ft3_*`, `eval/out/gemma31_*`, `eval/out/danger_v2_review.json`. Official rows are `rescored_from_preds` through `extra_rules(copy_explicit)`. This is the hand-written realistic set plus corrected SYNTH. **Public real-world set: HMR-100 (India)** n=104 (`eval/out/ft2_hmr100_gold.json`): FT2 danger_v2_norm 0.2212, exact 0.7212. T JSON (`eval/out/gemma31_json_hmr100_gold.json`): exact 0.6442, danger_v2_norm 0.2596, http_fail 0.0385.
 
 ## FT2
 

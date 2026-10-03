@@ -17,7 +17,7 @@ Fixes in the product and in v2 data:
 
 **Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, generated in code (`eval/handwritten_realistic.py` `SPECS`, `authored=code:eval/handwritten_realistic.py`), never handwritten by Vedant, never used in training. Gold is the dict next to each line in that file. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions. The set was created **after** FT2 was trained (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl` (counted from those files).
 
-**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`, n=104). Official parser-only scores: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`. `gemma31_json` on HMR is not in `eval/out/` yet. Gemma 4 31B may see de-identified gold *text* only — never the images. Local OCR (`gemma4:e4b`) is **not claimed**: ollama is not on this laptop (`eval/ocr_cer.py`).
+**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`, n=104). Official scores: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`, `eval/out/gemma31_json_hmr100_gold.json`. Gemma 4 31B may see de-identified gold *text* only — never the images. Local OCR (`gemma4:e4b`) is **not claimed**: ollama is not on this laptop (`eval/ocr_cer.py`).
 
 JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
 
@@ -158,20 +158,22 @@ FT2 remaining misses: 2 inexact lines, both `form`. `डोलो 650 जरू�
 
 ## Public real-world set: HMR-100 (India), n=104
 
-Parser-only scoring of typed gold lines (`data/public_labels/hmr100_gold.jsonl`, 21 photographed pages, 0 train overlap). Images stay gitignored. Sources: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`. `gemma31_json` HMR is not in `eval/out/` yet.
+Parser-only scoring of typed gold lines (`data/public_labels/hmr100_gold.jsonl`, 21 photographed pages, 0 train overlap). Images stay gitignored. Sources: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`, `eval/out/gemma31_json_hmr100_gold.json`. T JSON mode p50/p95 **34.49 / 151.83** includes retries.
 
-| Field | B0-fair | FT2 | FT3 candidate |
-|---|---|---|---|
-| json_valid | 1.0 | 1.0 | 1.0 |
-| parse_fail | 0.0 | 0.0 | 0.0 |
-| http_fail | 0.0 | 0.0 | 0.0 |
-| exact | 0.5577 | 0.7212 | 0.6923 |
-| exact_ci95 | [0.4615, 0.6538] | [0.6346, 0.8077] | [0.6058, 0.7788] |
-| danger_v2 (norm) | 0.3558 | 0.2212 | 0.2596 |
-| dose | 0.8846 | 0.9038 | 0.8846 |
-| drug | 0.9135 | 0.8846 | 0.8462 |
+| Field | B0-fair | FT2 | FT3 candidate | T JSON mode |
+|---|---|---|---|---|
+| json_valid | 1.0 | 1.0 | 1.0 | 0.9615 |
+| parse_fail | 0.0 | 0.0 | 0.0 | 0.0 |
+| http_fail | 0.0 | 0.0 | 0.0 | 0.0385 |
+| exact | 0.5577 | 0.7212 | 0.6923 | 0.6442 |
+| exact_ci95 | [0.4615, 0.6538] | [0.6346, 0.8077] | [0.6058, 0.7788] | [0.5577, 0.7308] |
+| danger_v2 (norm) | 0.3558 | 0.2212 | 0.2596 | 0.2596 |
+| dose | 0.8846 | 0.9038 | 0.8846 | 0.7596 |
+| drug | 0.9135 | 0.8846 | 0.8462 | 0.8750 |
+| n_valid | 104 | 104 | 104 | 100 |
+| exact_on_valid | 0.5577 | 0.7212 | 0.6923 | 0.6700 |
 
-Paired FT2 vs B0-fair: **22** FT2 fixes / **5** regressions, p = 0.0015137195587158203. Paired FT2 vs FT3: **1** FT3 fix / **4** FT3 regressions, p = 0.375 (FT2 ahead). CIs overlap FT2 vs FT3; the FT2 vs B0 gap (16 points) is larger than the ±8–9 interval.
+Paired FT2 vs B0-fair: **22** FT2 fixes / **5** regressions, p = 0.0015137195587158203. Paired FT2 vs FT3: **1** FT3 fix / **4** FT3 regressions, p = 0.375 (FT2 ahead). Paired FT2 vs `gemma31_json`: **10** T-fixes / **18** T-regresses, p = 0.1849333420395851 (tie). On T-valid lines: T **67/100** vs FT2 **73/100**, p = 0.32693958282470703. CIs overlap FT2 vs T JSON and FT2 vs FT3; the FT2 vs B0 gap (16 points) is larger than the ±8–9 interval. T `http_fail` 0.0385 (4 Gemini HTTP failures).
 
 FT2 remaining misses (29/104): mostly extra brand tokens (`T` shorthand, generic in parentheses), weekly/except-day schedules, SOS q6h, and two-drug nebules. English once/twice/`N puff`/`N ml` copy closed the bulk of the old dose-ASK misses.
 

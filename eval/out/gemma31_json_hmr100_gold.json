@@ -1,0 +1,84 @@
+{
+  "system": "gemma31_json",
+  "set": "data/public_labels/hmr100_gold.jsonl",
+  "n": 104,
+  "json_valid": 0.9615384615384616,
+  "parse_fail": 0.0,
+  "http_fail": 0.038461538461538464,
+  "exact": 0.6442307692307693,
+  "exact_ci95": [
+    0.5576923076923077,
+    0.7307692307692307
+  ],
+  "exact_norm": 0.6442307692307693,
+  "exact_norm_ci95": [
+    0.5576923076923077,
+    0.7307692307692307
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.125,
+  "danger_v1": 0.125,
+  "danger_v2": 0.25961538461538464,
+  "danger_v2_strict": 0.25961538461538464,
+  "danger_v2_norm": 0.25961538461538464,
+  "n_valid": 100,
+  "exact_on_valid": 0.67,
+  "ask_recall": 0.6,
+  "false_ask_rate": 0.3434343434343434,
+  "n_gold_ask": 5,
+  "per_field": {
+    "drug": 0.875,
+    "strength": 0.9134615384615384,
+    "form": 0.9519230769230769,
+    "kind": 0.9615384615384616,
+    "dose": 0.7596153846153846,
+    "every_n_days": 0.9615384615384616,
+    "taper": 0.9615384615384616,
+    "food": 0.9519230769230769,
+    "duration_days": 0.9519230769230769,
+    "prn_max_per_day": 0.9326923076923077
+  },
+  "p50_s": 34.48505187034607,
+  "p95_s": 151.82571029663086,
+  "error_fields": {
+    "dose": 25,
+    "form": 5,
+    "drug": 13,
+    "strength": 9,
+    "kind": 4,
+    "every_n_days": 4,
+    "taper": 4,
+    "food": 5,
+    "duration_days": 5,
+    "prn_max_per_day": 7
+  },
+  "dropped_train_duplicates": 0,
+  "gemini_accepted_config": {
+    "maxOutputTokens": 1024,
+    "responseMimeType": "application/json",
+    "responseSchema": true,
+    "temperature": 0.0,
+    "thinkingConfig": true
+  },
+  "gemini_accepted_config_counts": {
+    "{\"maxOutputTokens\": 1024, \"responseMimeType\": \"application/json\", \"responseSchema\": true, \"temperature\": 0.0, \"thinkingConfig\": true}": 104
+  },
+  "json_mode": true,
+  "payload_summary": {
+    "count": 1118,
+    "sets": {
+      "synth_test.jsonl": 794,
+      "handwritten_realistic.jsonl": 204,
+      "hmr100_gold.jsonl": 120
+    },
+    "models": {
+      "gemma-4-31b-it": 1118
+    },
+    "systems": {
+      "gemma31": 499,
+      "gemma31_json": 619
+    },
+    "sha256": "213d222f83b2186ae5ce5a8486f675803a8985390ec674a1a730d5935dd73631",
+    "log": "eval\\out\\sent_payload_log.jsonl"
+  }
+}
