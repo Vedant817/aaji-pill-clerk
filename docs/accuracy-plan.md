@@ -142,6 +142,13 @@ labels, explicitly exploratory; independent human rounds remain empty. Next work
 is missing-form/unit coverage, consistent label policy and conservative recovery,
 followed by caregiver acceptance. Further paid training requires new authorization.
 
+Further offline work completed: [recovery and uncertainty candidate](offline-followthrough.md).
+Field salvage and preservation of model ASK/null doses are implemented; a separate
+3,279/280-row synthetic candidate versions missing-form/unit labels. Saved raw FT2
+HMR replay has 71 exact and 17 unflagged danger cases out of 104, trading matches
+for abstention. There are no new hosted scores. FT2 stays active; next is policy/
+sample review and caregiver acceptance before a separately authorized experiment.
+
 Use `uv run pytest` for schema, notation, scheduling, calendar, review and offline
 evidence regressions. Streamlit AppTest exercises actual page widgets for edit
 revocation, unresolved ASK flags, blank stock and conflict-blocked downloads.

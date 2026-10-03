@@ -148,3 +148,8 @@ files have no diff. New AI reference labels/raw outputs remain gitignored, and
 fresh artifacts contain none of the configured API key values.
 Fresh HMR line-level predictions/raw text also stay local; only their aggregate
 results are committed. Rebuilding the full comparison requires these local files.
+
+Subsequent offline work is recorded in [recovery and uncertainty follow-through](offline-followthrough.md):
+conservative field recovery, preservation of model ASK/null doses and a separate
+untrained unit/form candidate are now implemented. FT5's hosted-run evidence above
+is preserved; later replay results do not replace those fresh scores.

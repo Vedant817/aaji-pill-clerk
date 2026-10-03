@@ -92,6 +92,13 @@ SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500
 
 ## Results
 
+4 October offline follow-through: [recovery changes and prepared candidate](docs/offline-followthrough.md).
+Invalid fields now require ASK while valid fields can survive schema recovery;
+model ASK flags and unresolved null doses survive source copying. Saved FT2 HMR
+raw-output replay is 71/104 exact with 17 unflagged danger cases (previously 75/104
+and 21), partly through abstention. This is offline replay, not fresh accuracy.
+The new 3,279/280-row synthetic candidate is prepared but untrained; FT2 stays active.
+
 The authorized FT5 candidate run is complete: **3,079 synthetic training / 249
 validation rows**, with corrected duration ASK labels and zero checked text
 overlaps. **FT5 was rejected; FT2 remains active.** Fresh matched exact scores are

@@ -24,6 +24,9 @@ data/acceptance/*/completed_pages.jsonl
 data/acceptance/*/gold.jsonl
 # AI-created public-photo references are local, unverified evaluation material.
 data/reference/
+# Local preparation attempts; corrected frozen candidate is uncertainty_v6_final.
+data/candidates/uncertainty_v6/
+data/candidates/uncertainty_v6b/
 eval/out/*ai_reference*
 # Fresh public-photo parser text stays local; commit aggregate metrics only.
 eval/out/ft2_current_hmr100_gold_preds.jsonl

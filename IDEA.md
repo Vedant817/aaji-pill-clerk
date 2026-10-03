@@ -30,6 +30,12 @@
 > Compute bounds total $6.219847, excluding storage; billed spend is unverified.
 > See `docs/candidate-v5.md` and `eval/out/ft5_comparison.json`. No accuracy gain
 > or automated image-reading result is claimed from this training experiment.
+> **4 October offline follow-through:** Tinker/Ollama share field-level recovery;
+> invalid dose units stay null, and source copying preserves model ASK flags.
+> Raw FT2 replay is SYNTH 397/397, generated 100/102, HMR 71/104 with danger 17/104.
+> This trades some exact matches for abstention; it is not fresh model accuracy.
+> `uncertainty_v6_final` is prepared (3,279/280), including unit-label corrections
+> and missing-form examples. It is not trained. See `docs/offline-followthrough.md`.
 >
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
 > 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.

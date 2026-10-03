@@ -1,0 +1,448 @@
+{
+  "kind": "synthetic omission candidate; not trained or deployed",
+  "policy": {
+    "missing_form": "form=other, dose=null, ASK dose+schedule; no brand inference",
+    "missing_dose_unit": "retain written form, dose=null, ASK dose; never assume a liquid/device quantity unit"
+  },
+  "source_sha256": {
+    "train": "059b66813fcbd268ff31865792e8893a45b3eb59cc24de9faa960e43f004b824",
+    "val": "d37b77e3940ff1fb422fd0405b9076616254975a85e997b02e4330469c97924f"
+  },
+  "requested_per_kind": {
+    "train": 100,
+    "val": 20
+  },
+  "additions": {
+    "train": {
+      "missing_form": 100
+    },
+    "val": {
+      "missing_form": 20
+    }
+  },
+  "unit_label_corrections": {
+    "train": 351,
+    "val": 21
+  },
+  "explicit_unit_positives": {
+    "train": 100,
+    "val": 11
+  },
+  "sample": {
+    "train": [
+      {
+        "line": "Glyciphage 850 mg 1-0-1 AFTER FOOD x 7 DAYS",
+        "gold": {
+          "drug": "Glyciphage",
+          "strength": "850 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "after",
+          "duration_days": 7,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Glyciphage 850 mg 1-0-1 AFTER FOOD x 7 DAYS"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Glyciphage\",\"strength\":\"850 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"after\",\"duration_days\":7,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 2,
+        "paired_source_line": "TAB Glyciphage 850 mg 1-0-1 AFTER FOOD x 7 DAYS",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Montair LC 10 mg/5 mg सकाळी अर्धी रात्री अर्धी 5 दिवस",
+        "gold": {
+          "drug": "Montair LC",
+          "strength": "10 mg/5 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "any",
+          "duration_days": 5,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Montair LC 10 mg/5 mg सकाळी अर्धी रात्री अर्धी 5 दिवस"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Montair LC\",\"strength\":\"10 mg/5 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"any\",\"duration_days\":5,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 4,
+        "paired_source_line": "Tab Montair LC 10 mg/5 mg सकाळी अर्धी रात्री अर्धी 5 दिवस",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Acitrom 4 mg 1-0-1 AFTER FOOD CONTINUE",
+        "gold": {
+          "drug": "Acitrom",
+          "strength": "4 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "after",
+          "duration_days": null,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Acitrom 4 mg 1-0-1 AFTER FOOD CONTINUE"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Acitrom\",\"strength\":\"4 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"after\",\"duration_days\":null,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 6,
+        "paired_source_line": "TAB Acitrom 4 mg 1-0-1 AFTER FOOD CONTINUE",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Lasix 40 mg subah ek raat ko ek khali pet 7 din",
+        "gold": {
+          "drug": "Lasix",
+          "strength": "40 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "empty_stomach",
+          "duration_days": 7,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Lasix 40 mg subah ek raat ko ek khali pet 7 din"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Lasix\",\"strength\":\"40 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"empty_stomach\",\"duration_days\":7,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 9,
+        "paired_source_line": "Tab Lasix 40 mg subah ek raat ko ek khali pet 7 din",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Septran 800 mg/160 mg subah ek raat ko ek khane ke saath 7 din",
+        "gold": {
+          "drug": "Septran",
+          "strength": "800 mg/160 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "with",
+          "duration_days": 7,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Septran 800 mg/160 mg subah ek raat ko ek khane ke saath 7 din"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Septran\",\"strength\":\"800 mg/160 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"with\",\"duration_days\":7,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 11,
+        "paired_source_line": "Tab Septran 800 mg/160 mg subah ek raat ko ek khane ke saath 7 din",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      }
+    ],
+    "val": [
+      {
+        "line": "Galvus 50mg ½-0-0 x5d",
+        "gold": {
+          "drug": "Galvus",
+          "strength": "50 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "any",
+          "duration_days": 5,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Galvus 50mg ½-0-0 x5d"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Galvus\",\"strength\":\"50 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"any\",\"duration_days\":5,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 0,
+        "paired_source_line": "Tab Galvus 50mg ½-0-0 x5d",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Glucobay 50 mg रात्री एक जेवणानंतर 3 दिवस",
+        "gold": {
+          "drug": "Glucobay",
+          "strength": "50 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "after",
+          "duration_days": 3,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Glucobay 50 mg रात्री एक जेवणानंतर 3 दिवस"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Glucobay\",\"strength\":\"50 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"after\",\"duration_days\":3,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 1,
+        "paired_source_line": "Tab Glucobay 50 mg रात्री एक जेवणानंतर 3 दिवस",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Novamox 500mg OD x3d",
+        "gold": {
+          "drug": "Novamox",
+          "strength": "500 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "any",
+          "duration_days": 3,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Novamox 500mg OD x3d"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Novamox\",\"strength\":\"500 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"any\",\"duration_days\":3,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 6,
+        "paired_source_line": "Cap Novamox 500mg OD x3d",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Storvas 40 mg 1-1-1 x 15 DAYS",
+        "gold": {
+          "drug": "Storvas",
+          "strength": "40 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "any",
+          "duration_days": 15,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Storvas 40 mg 1-1-1 x 15 DAYS"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Storvas\",\"strength\":\"40 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"any\",\"duration_days\":15,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 7,
+        "paired_source_line": "TAB Storvas 40 mg 1-1-1 x 15 DAYS",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      },
+      {
+        "line": "Trajenta 5 mg subah ek raat ko ek 3 din",
+        "gold": {
+          "drug": "Trajenta",
+          "strength": "5 mg",
+          "form": "other",
+          "kind": "daily",
+          "dose": null,
+          "every_n_days": 1,
+          "taper": [],
+          "food": "any",
+          "duration_days": 3,
+          "prn_max_per_day": null,
+          "note": null,
+          "needs_check": [
+            "dose",
+            "schedule"
+          ]
+        },
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are Pill Clerk. Convert ONE prescription line into JSON matching the MedLine schema. Copy only what is written. Form (Tab/Cap/Syr/Inh/Inj/Drops/Cream/Sachet) and food (before/after/with/empty stomach; AC/PC/WF/ES; Hindi/Marathi food phrases) come from tokens on the line. If no food token is written, food is any. 1/12 means duration_days=30. SOS/PRN/zarurat/जरूरत/गरजेनुसार is kind=prn with dose null (no morning/afternoon/night slots). Never guess a missing dose, drug, or duration: leave it null and add it to needs_check. Output JSON only."
+          },
+          {
+            "role": "user",
+            "content": "Trajenta 5 mg subah ek raat ko ek 3 din"
+          },
+          {
+            "role": "assistant",
+            "content": "{\"drug\":\"Trajenta\",\"strength\":\"5 mg\",\"form\":\"other\",\"kind\":\"daily\",\"dose\":null,\"every_n_days\":1,\"taper\":[],\"food\":\"any\",\"duration_days\":3,\"prn_max_per_day\":null,\"note\":null,\"needs_check\":[\"dose\",\"schedule\"]}"
+          }
+        ],
+        "synthetic": true,
+        "renderer": "synthetic_omission",
+        "omission": "missing_form",
+        "source_index": 10,
+        "paired_source_line": "Tab Trajenta 5 mg subah ek raat ko ek 3 din",
+        "label_origin": "deterministic_source_omission",
+        "human_verified": false
+      }
+    ]
+  },
+  "limitations": "Derived templates, not independent human gold; historical evaluation labels unchanged; source positives retained"
+}
