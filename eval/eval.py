@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import random
 import re
 import time
@@ -168,6 +169,8 @@ def get_parser(system: str, set_path: str = "", checkpoint: str = "", sampling_b
         if system in {"gemma31", "gemma31_json", "b0", "b0_fair"}:
             raise ValueError("An explicit checkpoint requires a separate fine-tuned system name")
         meta = json.loads(Path(checkpoint).read_text(encoding="utf-8"))
+        if sampling_budget_usd is not None and meta.get("model", "Qwen/Qwen3-8B") != "Qwen/Qwen3-8B":
+            raise ValueError("Budget pricing is verified for Qwen/Qwen3-8B only")
         if not str(meta.get("sampler", "")).startswith("tinker://"):
             raise ValueError("Checkpoint must contain a hosted Tinker sampler path")
         return infer.make_tinker_parser(meta["sampler"], detailed=True, sampling_budget_usd=sampling_budget_usd)
@@ -256,7 +259,7 @@ def main() -> None:
     a = ap.parse_args()
     if not re.fullmatch(r"[a-zA-Z0-9_-]+", a.system):
         ap.error("system must be a filename-safe experiment name")
-    if a.max_sampling_usd is not None and (not a.checkpoint or a.max_sampling_usd <= 0):
+    if a.max_sampling_usd is not None and (not a.checkpoint or not math.isfinite(a.max_sampling_usd) or a.max_sampling_usd <= 0):
         ap.error("a positive sampling budget requires --checkpoint")
     gold_rows = [json.loads(l) for l in open(a.set, encoding="utf-8")]
     if a.limit:

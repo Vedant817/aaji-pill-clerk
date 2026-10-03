@@ -20,6 +20,9 @@ and no duration ASK. They contradicted the system prompt's missing-duration rule
 assistant target, and prepares `data/candidates/safety_v5/`. Source v4, published
 gold and clinical fields stay fixed. Review samples, coverage and per-row deltas
 are in `safety_v5/curation_inputs/{review,changes}.json`.
+The candidate also includes later synthetic form/dose/food and drug/strength
+examples absent from FT2's original 2,500-row training set. This run does not
+isolate ASK-label corrections from the effect of that additional coverage.
 
 ```powershell
 uv run python -m train.review_candidate
@@ -75,3 +78,12 @@ reading, independent clinical accuracy or caregiver acceptance.
 
 Results: **pending completion of the actual hosted runs**. FT2 stays active until
 results are available and a candidate's behavior justifies a separate promotion.
+
+Fresh FT2-current baseline completed: SYNTH 397/397 exact, generated realistic
+100/102, existing HMR 75/104, and AI reference 22/85 (exploratory). Raw schema
+failures: 0, 1, 14 and 9 respectively. The HMR fresh result does not reproduce the
+83/104 offline replay; original predictions had already been postprocessed.
+Do not present replay as fresh inference. The new reference is deliberately
+conservative about missing forms, quantities and durations, while historical
+HMR gold has sparse ASK flags. Scores against those two label policies are not
+directly comparable clinical accuracy measurements.

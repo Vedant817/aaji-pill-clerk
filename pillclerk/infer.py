@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -150,6 +151,9 @@ def make_tinker_parser(
 ) -> ParseFn:
     """model_path=tinker://... for the fine-tune, None for the base model (B0 / B0-fair)."""
     import tinker
+
+    if sampling_budget_usd is not None and (not math.isfinite(sampling_budget_usd) or sampling_budget_usd <= 0):
+        raise ValueError("Sampling compute budget must be positive and finite")
 
     svc = tinker.ServiceClient()
     if model_path:

@@ -60,6 +60,8 @@ def test_sampling_budget_refuses_before_provider_call(monkeypatch):
     with pytest.raises(RuntimeError, match="budget exhausted"):
         parse("Tab TestOnly 1-0-0")
     assert not calls
+    with pytest.raises(ValueError, match="finite"):
+        infer.make_tinker_parser("tinker://test", sampling_budget_usd=float("nan"))
 
 
 def test_explicit_checkpoint_does_not_change_active_environment(tmp_path, monkeypatch):
