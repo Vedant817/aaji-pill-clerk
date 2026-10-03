@@ -1,53 +1,53 @@
 {
-  "note": "Exact on lines where T (gemma31, no JSON mode) produced valid JSON. From preds after copy_explicit rescore (rescored_from_preds).",
+  "note": "Exact on lines where T (gemma31, no JSON mode) produced a scored pred after copy_explicit + stub recovery (rescored_from_preds). http_fail lines stay invalid.",
   "synth": {
     "n": 397,
-    "n_valid": 350,
-    "t_exact_on_valid": 346,
-    "t_exact_on_valid_rate": 0.9885714285714285,
-    "other_exact_on_valid": 350,
+    "n_valid": 393,
+    "t_exact_on_valid": 350,
+    "t_exact_on_valid_rate": 0.8905852417302799,
+    "other_exact_on_valid": 393,
     "mcnemar": {
-      "n": 350,
+      "n": 393,
       "n01_b_fixes": 0,
-      "n10_b_regresses": 4,
-      "both_right": 346,
+      "n10_b_regresses": 43,
+      "both_right": 350,
       "both_wrong": 0,
-      "p_two_sided": 0.125,
+      "p_two_sided": 2.2737367544323206e-13,
       "field": "exact"
     }
   },
   "hw": {
     "n": 102,
-    "n_valid": 70,
-    "t_exact_on_valid": 66,
-    "t_exact_on_valid_rate": 0.9428571428571428,
-    "other_exact_on_valid": 69,
+    "n_valid": 98,
+    "t_exact_on_valid": 73,
+    "t_exact_on_valid_rate": 0.7448979591836735,
+    "other_exact_on_valid": 96,
     "mcnemar": {
-      "n": 70,
+      "n": 98,
       "n01_b_fixes": 1,
-      "n10_b_regresses": 4,
-      "both_right": 65,
-      "both_wrong": 0,
-      "p_two_sided": 0.375,
+      "n10_b_regresses": 24,
+      "both_right": 72,
+      "both_wrong": 1,
+      "p_two_sided": 1.5497207641601562e-06,
       "field": "exact"
     }
   },
   "synth_whole_set_mcnemar_ft2_vs_t": {
     "n": 397,
     "n01_b_fixes": 0,
-    "n10_b_regresses": 51,
-    "both_right": 346,
+    "n10_b_regresses": 47,
+    "both_right": 350,
     "both_wrong": 0,
-    "p_two_sided": 8.881784197001252e-16,
+    "p_two_sided": 1.4210854715202004e-14,
     "field": "exact"
   },
   "hw_whole_set_mcnemar_ft2_vs_t": {
     "n": 102,
     "n01_b_fixes": 1,
-    "n10_b_regresses": 35,
-    "both_right": 65,
+    "n10_b_regresses": 28,
+    "both_right": 72,
     "both_wrong": 1,
-    "p_two_sided": 1.076841726899147e-09,
+    "p_two_sided": 1.1175870895385742e-07,
     "field": "exact"
   }
 }

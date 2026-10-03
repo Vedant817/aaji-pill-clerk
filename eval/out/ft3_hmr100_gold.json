@@ -1,0 +1,56 @@
+{
+  "system": "ft3",
+  "set": "data/public_labels/hmr100_gold.jsonl",
+  "n": 104,
+  "json_valid": 1.0,
+  "parse_fail": 0.0,
+  "http_fail": 0.0,
+  "exact": 0.6923076923076923,
+  "exact_ci95": [
+    0.6057692307692307,
+    0.7788461538461539
+  ],
+  "exact_norm": 0.6923076923076923,
+  "exact_norm_ci95": [
+    0.6057692307692307,
+    0.7788461538461539
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.08653846153846154,
+  "danger_v1": 0.08653846153846154,
+  "danger_v2": 0.25961538461538464,
+  "danger_v2_strict": 0.25961538461538464,
+  "danger_v2_norm": 0.25961538461538464,
+  "n_valid": 104,
+  "exact_on_valid": 0.6923076923076923,
+  "ask_recall": 0.8,
+  "false_ask_rate": 0.30303030303030304,
+  "n_gold_ask": 5,
+  "per_field": {
+    "drug": 0.8461538461538461,
+    "strength": 0.8942307692307693,
+    "form": 0.9615384615384616,
+    "kind": 0.9903846153846154,
+    "dose": 0.8846153846153846,
+    "every_n_days": 0.9903846153846154,
+    "taper": 1.0,
+    "food": 0.9807692307692307,
+    "duration_days": 0.9711538461538461,
+    "prn_max_per_day": 0.9711538461538461
+  },
+  "error_fields": {
+    "strength": 11,
+    "duration_days": 3,
+    "dose": 12,
+    "every_n_days": 1,
+    "food": 2,
+    "drug": 16,
+    "form": 4,
+    "prn_max_per_day": 3,
+    "kind": 1
+  },
+  "dropped_train_duplicates": 0,
+  "p50_s": 3.1090240478515625,
+  "p95_s": 4.120800733566284,
+  "rescored_from_preds": true
+}

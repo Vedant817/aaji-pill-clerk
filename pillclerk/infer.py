@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from pillclerk import config
-from pillclerk.copy_explicit import copy_explicit
+from pillclerk.copy_explicit import copy_explicit, stub_from_line
 from pillclerk.privacy import strip_pii
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 from pillclerk.validate import extra_rules
@@ -194,7 +194,7 @@ def parse_ollama(line: str, model: str | None = None) -> MedLine | None:
         med = extra_rules(MedLine.model_validate_json(r.message.content))
         return extra_rules(copy_explicit(med, line))
     except Exception:
-        return None
+        return extra_rules(copy_explicit(stub_from_line(line), line))
 
 
 def as_token_ids(ids: Any) -> list[int]:
@@ -244,7 +244,7 @@ def make_tinker_parser(
             med = extra_rules(MedLine.model_validate_json(_extract_json(text)))
             return extra_rules(copy_explicit(med, clean))
         except Exception:
-            return None
+            return extra_rules(copy_explicit(stub_from_line(clean), clean))
 
     return parse
 

@@ -14,8 +14,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from statistics import median
 
+from pillclerk.copy_explicit import copy_explicit, stub_from_line
 from pillclerk.normalize import drug_eq, strength_eq
 from pillclerk.schema import MedLine
+from pillclerk.validate import extra_rules
 
 ROOT = Path(__file__).resolve().parents[1]
 FIELDS = [
@@ -265,10 +267,16 @@ def main() -> None:
             pred_rows = [by_line[r["line"]] for r in gold_rows]
         for r, pr in zip(gold_rows, pred_rows, strict=True):
             gold = MedLine.model_validate(r["gold"])
-            p = MedLine.model_validate(pr["pred"]) if pr.get("pred") else None
-            s = score(p, gold, error=pr.get("error"))
+            http_err = pr.get("error") if pr.get("error") in {"http_500", "http_503"} else None
+            if http_err:
+                p = None
+            elif pr.get("pred"):
+                p = extra_rules(copy_explicit(MedLine.model_validate(pr["pred"]), r["line"]))
+            else:
+                p = extra_rules(copy_explicit(stub_from_line(r["line"]), r["line"]))
+            s = score(p, gold, error=http_err)
             scores.append(s)
-            preds.append({"line": r["line"], "pred": pr.get("pred"), **s})
+            preds.append({"line": r["line"], "pred": p.model_dump() if p else None, **s})
         prev = json.loads((ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").read_text(encoding="utf-8")) if (ROOT / "eval" / "out" / f"{a.system}_{Path(a.set).name.removesuffix('.jsonl')}.json").is_file() else {}
         out = summarize(a.system, a.set, scores, None)
         out["dropped_train_duplicates"] = dropped_train

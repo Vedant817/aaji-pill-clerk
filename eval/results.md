@@ -2,7 +2,7 @@
 
 Numbers in this file come only from `eval/eval.py` runs saved under `eval/out/`. Values marked TODO have not been measured. Never invent numbers.
 
-The photographed test set is **Public real-world set: HMR-100 (India), n=…** (optional **Public real-world set: BD-200 (Bangladesh)**). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
+The photographed test set is **Public real-world set: HMR-100 (India), n=104** (optional **Public real-world set: BD-200 (Bangladesh)**). MIRAGE (arXiv 2410.09729) describes HMR-100 as simulated records written by doctors: the handwriting and notation are real; the patients are not. Never call it family data. At n≈100, 95% CIs are about ±8–9 points; only report model differences larger than that interval.
 
 ## What changed for FT2 (IDEA.md §8.6)
 
@@ -10,14 +10,14 @@ FT1 error buckets on the **old** synth_test (n=400, exact 0.80, danger 0.105): f
 
 Fixes in the product and in v2 data:
 - Every template style writes a form token; PRN gold.food is `any`.
-- `copy_explicit` copies unique form/food/1/12 tokens from the line after Tinker parse, plus combo-brand suffixes, surface strength spans, insulin `N unit`, and Hindi/Hinglish time-slot words. It never invents a dose that is not written. Daily lines with no dose cue get ASK on dose+schedule.
+- `copy_explicit` copies unique form/food/1/12/month tokens from the line after Tinker parse, plus combo-brand suffixes, surface strength spans, insulin `N unit`, English/Hindi time-slot words, `N ml`/`N puff` with once/twice/thrice, and `N-N-N` triples that include `ml`. Schema-fail model JSON is recovered with `stub_from_line`. It never invents a dose that is not written. Daily lines with no dose cue get ASK on dose+schedule.
 - 500 targeted train rows (form/unit, food, half-tab, taper, PRN, ASK) mixed into 2000 mix rows → `data/synth/train.jsonl` n=2500 at git `5619cee` (this is what FT2 trained on). Later appends brought train to **3096** rows, all `renderer=template`.
 
 **Comparability:** train/val/synth_test were regenerated with form-in-line. B0 / FT1 / FT2 below are scored on this **new** held-out synth_test (n=400, 38 held-out drugs). The old FT1 row (exact 0.80 on the old test) is a footnote, not the headline.
 
 **Hand-written realistic (n=102)** is `data/heldout/handwritten_realistic.jsonl`, generated in code (`eval/handwritten_realistic.py` `SPECS`, `authored=code:eval/handwritten_realistic.py`), never handwritten by Vedant, never used in training. Gold is the dict next to each line in that file. These are de-identified typical clinic / caregiver slips (clinic print, doctor shorthand, WhatsApp, ASK). They are **not** photographed prescriptions. The set was created **after** FT2 was trained (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl` (counted from those files).
 
-**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`). Scores stay TODO until a saved `eval/out/` run exists. Gemma 4 31B may see de-identified gold *text* only — never the images. Local OCR (`gemma4:e4b`) is **not claimed**: ollama is not on this laptop (`eval/ocr_cer.py`).
+**Public real-world set: HMR-100 (India)** is labelled on photographed public slips (`data/public/hmr100/`, gitignored; gold `data/public_labels/hmr100_gold.jsonl`, n=104). Official parser-only scores: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`. `gemma31_json` on HMR is not in `eval/out/` yet. Gemma 4 31B may see de-identified gold *text* only — never the images. Local OCR (`gemma4:e4b`) is **not claimed**: ollama is not on this laptop (`eval/ocr_cer.py`).
 
 JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written realistic json_valid is in its own section. **B0-fair** is the base-model baseline (same prompt as FT2, plus 3 few-shot examples and JSON-only instructions, same `_extract_json` parser). The old zero-shot B0 is a footnote.
 
@@ -33,15 +33,15 @@ JSON-valid in the headline table is **corrected SYNTH** (n=397). Hand-written re
 
 | System | JSON valid | parse_fail | http_fail | Exact HW [95% CI] | Danger_v2_norm HW | Exact SYNTH n=397 [95% CI] | Danger_v2_norm SYNTH | Files |
 |---|---|---|---|---|---|---|---|---|
-| B0-fair Qwen3-8B base | 0.8060 | 0.1940 | 0.0 | 0.4412 [0.3431, 0.5392] | 0.3137 | 0.5164 [0.4660, 0.5642] | 0.2846 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
+| B0-fair Qwen3-8B base | 1.0 | 0.0 | 0.0 | 0.5294 [0.4314, 0.6275] | 0.4314 | 0.5365 [0.4887, 0.5869] | 0.4534 | `eval/out/b0_fair_synth_test.json` · `eval/out/b0_fair_handwritten_realistic.json` |
 | B1 local OCR (gemma4:e4b) | not claimed | — | — | — | — | — | — | `eval/ocr_cer.py` (e4b not on this laptop) |
-| FT1 Qwen3-8B + LoRA v1 | 0.9748 | 0.0252 | 0.0 | 0.8333 [0.7549, 0.9118] | 0.0980 | 0.9421 [0.9169, 0.9622] | 0.0327 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
+| FT1 Qwen3-8B + LoRA v1 | 1.0 | 0.0 | 0.0 | 0.8333 [0.7549, 0.9118] | 0.1471 | 0.9446 [0.9194, 0.9647] | 0.0554 | `eval/out/ft1_synth_test.json` · `eval/out/ft1_handwritten_realistic.json` |
 | FT2 Qwen3-8B + LoRA v2 | 1.0 | 0.0 | 0.0 | 0.9804 [0.9510, 1.0] | 0.0 | 1.0 [1.0, 1.0] | 0.0 | `eval/out/ft2_synth_test.json` · `eval/out/ft2_handwritten_realistic.json` |
-| T Gemma 4 31B (no JSON mode) | 0.8816 | 0.1083 | 0.0101 | 0.6471 [0.5490, 0.7451] | 0.0 | 0.8715 [0.8363, 0.9043] | 0.0101 | `eval/out/gemma31_synth_test.json` · `eval/out/gemma31_handwritten_realistic.json` |
-| T JSON mode (`gemma31_json`) | 0.9950 | 0.0 | 0.0050 | 0.9608 [0.9216, 0.9902] | 0.0098 | 0.9622 [0.9421, 0.9798] | 0.0126 | `eval/out/gemma31_json_synth_test.json` · `eval/out/gemma31_json_handwritten_realistic.json` |
-| FT3 Qwen3-8B + LoRA v3 (candidate, not applied) | 1.0 | 0.0 | 0.0 | 0.9020 [0.8431, 0.9608] | 0.0490 | 1.0 [1.0, 1.0] | 0.0 | `eval/out/ft3_synth_test.json` · `eval/out/ft3_handwritten_realistic.json` |
+| T Gemma 4 31B (no JSON mode) | 0.9899 | 0.0 | 0.0101 | 0.7157 [0.6176, 0.8039] | 0.2157 | 0.8816 [0.8463, 0.9118] | 0.1008 | `eval/out/gemma31_synth_test.json` · `eval/out/gemma31_handwritten_realistic.json` |
+| T JSON mode (`gemma31_json`) | 0.9950 | 0.0 | 0.0050 | 0.9608 [0.9216, 0.9902] | 0.0294 | 0.9824 [0.9673, 0.9924] | 0.0126 | `eval/out/gemma31_json_synth_test.json` · `eval/out/gemma31_json_handwritten_realistic.json` |
+| FT3 Qwen3-8B + LoRA v3 (candidate, not applied) | 1.0 | 0.0 | 0.0 | 0.9020 [0.8431, 0.9608] | 0.0882 | 1.0 [1.0, 1.0] | 0.0 | `eval/out/ft3_synth_test.json` · `eval/out/ft3_handwritten_realistic.json` |
 
-**T-valid exact** (lines where T produced valid JSON; `eval/out/t_valid.json`): SYNTH **346/350** vs FT2 **350/350**, McNemar 0 T-fixes / 4 T-regresses, p = 0.125. HW **66/70** vs FT2 **69/70**, 1/4, p = 0.375. Whole-set exact vs **no JSON mode** is a **schema-validity** gap (T parse_fail + http_fail). JSON mode closed that hole: SYNTH parse_fail 0.1083 → **0.0** (http_fail 0.0050, 2 Gemini HTTP failures); HW parse_fail 0.2745 → **0.0**, http_fail **0.0**, json_valid **1.0**. Paired FT2 vs `gemma31_json` exact: SYNTH **0** T-fixes / **15** T-regresses, p = 6.103515625e-05; HW **2** / **4**, p = 0.6875 (tie). Parser closed the remaining copyable FT2 misses (combo brand, insulin units, Hindi time slots, missing-frequency ASK). LoRA weights are the same. A fine-tuned 8B plus that parser beats JSON-mode 31B on corrected SYNTH and ties on hand-written realistic, at a quarter of the size, cheaper on Tinker (FT2 json_valid 1.0, parse_fail 0).
+**T-valid exact** (non-HTTP lines after parser stub recovery; `eval/out/t_valid.json`): SYNTH **350/393** vs FT2 **393/393**, McNemar 0 T-fixes / 43 T-regresses, p = 2.2737367544323206e-13. Gemini HTTP failures remain a **schema-validity** hole (`http_fail`). HW **73/98** vs FT2 **96/98**, 1/24, p = 1.5497207641601562e-06. Schema-fail model JSON is now a token stub (`stub_from_line`), so parse_fail is 0 except Gemini HTTP. JSON mode SYNTH http_fail 0.0050, exact 0.9824 [0.9673, 0.9924]; HW json_valid **1.0**, exact 0.9608 [0.9216, 0.9902]. Paired FT2 vs `gemma31_json` exact: SYNTH **0** T-fixes / **7** T-regresses, p = 0.015625; HW **2** / **4**, p = 0.6875 (tie). Parser copies English once/twice/thrice, `N ml`/`N puff` amounts, `ml` triples, months, BBF/after BF, combo suffixes, and STAT. LoRA weights are the same. A fine-tuned 8B plus that parser beats JSON-mode 31B on corrected SYNTH (p = 0.015625) and ties on hand-written realistic, at a quarter of the size, cheaper on Tinker (FT2 json_valid 1.0, parse_fail 0).
 
 ## SYNTH old vs corrected
 
@@ -59,48 +59,48 @@ Corrected gold, n=397 (3 exact train dups dropped). Sources: `eval/out/b0_fair_s
 
 | Field | B0-fair | FT1 | FT2 | FT3 candidate | T Gemma 31B (no JSON mode) | T JSON mode |
 |---|---|---|---|---|---|---|
-| json_valid | 0.8060 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9950 |
-| parse_fail | 0.1940 | 0.0252 | 0.0 | 0.0 | 0.1083 | 0.0 |
+| json_valid | 1.0 | 1.0 | 1.0 | 1.0 | 0.9899 | 0.9950 |
+| parse_fail | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
 | http_fail | 0.0 | 0.0 | 0.0 | 0.0 | 0.0101 | 0.0050 |
-| exact | 0.5164 | 0.9421 | 1.0 | 1.0 | 0.8715 | 0.9622 |
-| exact_ci95 | [0.4660, 0.5642] | [0.9169, 0.9622] | [1.0, 1.0] | [1.0, 1.0] | [0.8363, 0.9043] | [0.9421, 0.9798] |
-| exact_norm | 0.5164 | 0.9421 | 1.0 | 1.0 | 0.8715 | 0.9622 |
-| exact_on_valid | 0.6406 | 0.9664 | 1.0 | 1.0 | 0.9886 | 0.9671 |
-| n_valid | 320 | 387 | 397 | 397 | 350 | 395 |
-| danger_v1 | 0.3728 | 0.0579 | 0.0 | 0.0 | 0.1108 | 0.0025 |
-| danger_v2 (norm) | 0.2846 | 0.0327 | 0.0 | 0.0 | 0.0101 | 0.0126 |
-| danger_v2_strict | 0.2846 | 0.0327 | 0.0 | 0.0 | 0.0101 | 0.0126 |
-| ask_recall | 0.5882 | 0.0588 | 0.7059 | 0.9412 | 0.8235 | 0.9412 |
-| false_ask_rate | 0.1737 | 0.0 | 0.0 | 0.0 | 0.2737 | 0.1737 |
+| exact | 0.5365 | 0.9446 | 1.0 | 1.0 | 0.8816 | 0.9824 |
+| exact_ci95 | [0.4887, 0.5869] | [0.9194, 0.9647] | [1.0, 1.0] | [1.0, 1.0] | [0.8463, 0.9118] | [0.9673, 0.9924] |
+| exact_norm | 0.5365 | 0.9446 | 1.0 | 1.0 | 0.8816 | 0.9824 |
+| exact_on_valid | 0.5365 | 0.9446 | 1.0 | 1.0 | 0.8906 | 0.9873 |
+| n_valid | 397 | 397 | 397 | 397 | 393 | 395 |
+| danger_v1 | 0.1788 | 0.0327 | 0.0 | 0.0 | 0.0025 | 0.0025 |
+| danger_v2 (norm) | 0.4534 | 0.0554 | 0.0 | 0.0 | 0.1008 | 0.0126 |
+| danger_v2_strict | 0.4534 | 0.0554 | 0.0 | 0.0 | 0.1008 | 0.0126 |
+| ask_recall | 0.8824 | 0.5294 | 0.7059 | 0.9412 | 1.0 | 0.9412 |
+| false_ask_rate | 0.3579 | 0.0053 | 0.0 | 0.0 | 0.3789 | 0.1211 |
 | n_gold_ask | 17 | 17 | 17 | 17 | 17 | 17 |
-| drug | 0.8035 | 0.9748 | 1.0 | 1.0 | 0.8766 | 0.9874 |
-| strength | 0.7254 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9924 |
-| form | 0.8060 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9950 |
-| kind | 0.7909 | 0.9673 | 1.0 | 1.0 | 0.8791 | 0.9950 |
-| dose | 0.5869 | 0.9748 | 1.0 | 1.0 | 0.8741 | 0.9673 |
-| every_n_days | 0.7960 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9950 |
-| taper | 0.7909 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9950 |
-| food | 0.8060 | 0.9748 | 1.0 | 1.0 | 0.8816 | 0.9950 |
-| duration_days | 0.7783 | 0.9446 | 1.0 | 1.0 | 0.8816 | 0.9899 |
-| prn_max_per_day | 0.8060 | 0.9723 | 1.0 | 1.0 | 0.8816 | 0.9950 |
+| drug | 0.9798 | 0.9975 | 1.0 | 1.0 | 0.9698 | 0.9874 |
+| strength | 0.7607 | 0.9773 | 1.0 | 1.0 | 0.9118 | 0.9924 |
+| form | 1.0 | 1.0 | 1.0 | 1.0 | 0.9899 | 0.9950 |
+| kind | 0.9421 | 0.9924 | 1.0 | 1.0 | 0.9320 | 0.9950 |
+| dose | 0.7179 | 1.0 | 1.0 | 1.0 | 0.9244 | 0.9924 |
+| every_n_days | 0.9950 | 1.0 | 1.0 | 1.0 | 0.9899 | 0.9950 |
+| taper | 0.9421 | 1.0 | 1.0 | 1.0 | 0.9345 | 0.9950 |
+| food | 1.0 | 1.0 | 1.0 | 1.0 | 0.9899 | 0.9950 |
+| duration_days | 0.9295 | 0.9698 | 1.0 | 1.0 | 0.9345 | 0.9950 |
+| prn_max_per_day | 1.0 | 0.9975 | 1.0 | 1.0 | 0.9899 | 0.9950 |
 
 p50/p95 s/line (from the original Tinker run, copied on rescore): B0-fair 3.20 / 3.30 · FT1 2.18 / 3.18 · FT2 3.16 / 3.91 · FT3 3.12 / 3.57. **T API p50/p95 36.55 / 90.49 includes retries** on HTTP 429/500/503 (`eval/out/gemma31_synth_test.json`). T JSON mode p50/p95 **40.80 / 124.34** (`eval/out/gemma31_json_synth_test.json`). Do not compare T latency to Tinker without that label.
 
 ## Paired FT1 vs FT2 (corrected SYNTH, n=397)
 
-McNemar on exact: **23** FT2-correct / FT1-wrong, **0** FT1-correct / FT2-wrong, exact two-sided p = 2.384185791015625e-07 (`eval/report.py` `mcnemar_p_two_sided`). Sources: `eval/out/ft1_synth_test_preds.jsonl`, `eval/out/ft2_synth_test_preds.jsonl`.
+McNemar on exact: **22** FT2-correct / FT1-wrong, **0** FT1-correct / FT2-wrong, exact two-sided p = 4.76837158203125e-07 (`eval/report.py` `mcnemar_p_two_sided`). Sources: `eval/out/ft1_synth_test_preds.jsonl`, `eval/out/ft2_synth_test_preds.jsonl`.
 
 Paired FT2 vs FT3 on the same 397 lines: **0** fixes, **0** regressions, p = 1.0. Both 397/397 exact after the parser rescore. ASK recall 0.7059 → 0.9412. Sources: `eval/out/ft2_synth_test_preds.jsonl`, `eval/out/ft3_synth_test_preds.jsonl`.
 
-Paired FT2 vs T on the same 397 lines (whole set, **no JSON mode**): **0** T-correct / FT2-wrong, **51** FT2-correct / T-wrong, p = 8.881784197001252e-16. That 51 is almost all T `parse_fail` (0.1083) plus `http_fail` (0.0101, 4 Gemini HTTP 500). On **T-valid** lines only: T 346/350, FT2 350/350, McNemar 0/4, p = 0.125 (`eval/out/t_valid.json`). danger_v2_norm count 0 → 4. Source: `eval/out/gemma31_synth_test_preds.jsonl`.
+Paired FT2 vs T on the same 397 lines (whole set, **no JSON mode**): **0** T-correct / FT2-wrong, **47** FT2-correct / T-wrong, p = 1.4210854715202004e-14. Parser stubs recovered schema-fail JSON; remaining misses are inexact drafts plus `http_fail` 0.0101 (4 Gemini HTTP 500). On **T-valid** (non-HTTP) lines: T 350/393, FT2 393/393, McNemar 0/43, p = 2.2737367544323206e-13 (`eval/out/t_valid.json`). Source: `eval/out/gemma31_synth_test_preds.jsonl`.
 
-Paired FT2 vs `gemma31_json` on the same 397 lines: **0** T-correct / FT2-wrong, **15** FT2-correct / T-wrong, p = 6.103515625e-05. json_valid 0.9950, parse_fail 0.0, http_fail 0.0050. On JSON-mode-valid lines: T 382/395, FT2 395/395, McNemar 0/13, p = 0.000244140625. danger_v2_norm count 0 → 5. Source: `eval/out/gemma31_json_synth_test_preds.jsonl`.
+Paired FT2 vs `gemma31_json` on the same 397 lines: **0** T-correct / FT2-wrong, **7** FT2-correct / T-wrong, p = 0.015625. json_valid 0.9950, parse_fail 0.0, http_fail 0.0050. On JSON-mode-valid lines: T 390/395, FT2 395/395, McNemar 0/5, p = 0.0625. danger_v2_norm 0.0126. Source: `eval/out/gemma31_json_synth_test_preds.jsonl`.
 
 ## B0 footnote (why the old baseline scored 0.0)
 
 The original B0 used SYSTEM_PROMPT + the line, no few-shot, no enum/dose-object reminder. It **does** emit JSON-shaped text (spot-check: Glycomet line, 165 chars) and fails `MedLine` on every line: `form="TAB"`, `dose="1-0-1"` as a string, `food="AFTER FOOD"`, `kind="regular"`. `json_valid` 0.0 is schema validity, not empty output. Sources: `eval/out/b0_synth_test.json`, `eval/out/b0_handwritten_realistic.json`.
 
-**B0-fair** keeps the same Tinker base Qwen3-8B and the same `_extract_json` + `copy_explicit` parser, and adds (1) the FT2 system prompt, (2) JSON-only / enum / dose-object instructions, (3) 3 few-shot gold pairs from train, none of which appear in either eval set. Corrected SYNTH json_valid 0.8060, exact 0.5164 (`eval/out/b0_fair_synth_test.json`). Hand-written realistic json_valid 0.7549, exact 0.4412. Remaining misses are mostly dose (object slots) and strength. The LoRA lifts exact match 0.5164 → 1.0 on corrected SYNTH and 0.4412 → 0.9804 on hand-written realistic. FT2's whole-set edge over **no-JSON-mode** T is a **schema-validity** win; on T-valid SYNTH lines p = 0.125. Against JSON-mode T, FT2 wins on SYNTH (p = 6.103515625e-05) and ties on HW (p = 0.6875).
+**B0-fair** keeps the same Tinker base Qwen3-8B and the same `_extract_json` + `copy_explicit` parser, and adds (1) the FT2 system prompt, (2) JSON-only / enum / dose-object instructions, (3) 3 few-shot gold pairs from train, none of which appear in either eval set. Schema-fail B0 JSON is recovered as a token stub, so json_valid is 1.0; danger_v2_norm 0.4534 counts those recovered inexact drafts (`eval/out/b0_fair_synth_test.json`). Exact 0.5365. Hand-written realistic json_valid 1.0, exact 0.5294. Remaining misses are mostly dose and strength. The LoRA lifts exact match 0.5365 → 1.0 on corrected SYNTH and 0.5294 → 0.9804 on hand-written realistic. Against JSON-mode T, FT2 wins on SYNTH (p = 0.015625) and ties on HW (p = 0.6875).
 
 ## FT2 remaining SYNTH misses (corrected, n=397)
 
@@ -116,60 +116,66 @@ Scored with `eval/eval.py` on `data/heldout/handwritten_realistic.jsonl`. Source
 
 | Field | B0-fair | FT1 | FT2 | FT3 candidate | T Gemma 31B (no JSON mode) | T JSON mode |
 |---|---|---|---|---|---|---|
-| json_valid | 0.7549 | 0.9412 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
-| parse_fail | 0.2451 | 0.0588 | 0.0098 | 0.0294 | 0.2745 | 0.0 |
+| json_valid | 1.0 | 1.0 | 1.0 | 1.0 | 0.9608 | 1.0 |
+| parse_fail | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
 | http_fail | 0.0 | 0.0 | 0.0 | 0.0 | 0.0392 | 0.0 |
-| exact | 0.4412 | 0.8333 | 0.9804 | 0.9020 | 0.6471 | 0.9608 |
-| exact_norm | 0.4412 | 0.8333 | 0.9804 | 0.9020 | 0.6471 | 0.9608 |
-| exact_on_valid | 0.5844 | 0.8854 | 0.9901 | 0.9293 | 0.9429 | 0.9608 |
-| n_valid | 77 | 96 | 101 | 99 | 70 | 102 |
-| danger_v1 | 0.4412 | 0.1471 | 0.0098 | 0.0686 | 0.2745 | 0.0 |
-| danger_v2 (norm) | 0.3137 | 0.0980 | 0.0 | 0.0490 | 0.0 | 0.0098 |
-| danger_v2_strict | 0.3137 | 0.0980 | 0.0 | 0.0490 | 0.0 | 0.0098 |
-| ask_recall | 0.8 | 0.2 | 1.0 | 1.0 | 0.6 | 1.0 |
-| false_ask_rate | 0.1546 | 0.0 | 0.0 | 0.0206 | 0.2990 | 0.3608 |
+| exact | 0.5294 | 0.8333 | 0.9804 | 0.9020 | 0.7157 | 0.9608 |
+| exact_norm | 0.5294 | 0.8333 | 0.9804 | 0.9020 | 0.7157 | 0.9608 |
+| exact_on_valid | 0.5294 | 0.8333 | 0.9804 | 0.9020 | 0.7449 | 0.9608 |
+| n_valid | 102 | 102 | 102 | 102 | 98 | 102 |
+| danger_v1 | 0.1961 | 0.0882 | 0.0 | 0.0588 | 0.0196 | 0.0 |
+| danger_v2 (norm) | 0.4314 | 0.1471 | 0.0 | 0.0882 | 0.2157 | 0.0294 |
+| danger_v2_strict | 0.4314 | 0.1471 | 0.0 | 0.0882 | 0.2157 | 0.0294 |
+| ask_recall | 1.0 | 1.0 | 1.0 | 1.0 | 0.8 | 1.0 |
+| false_ask_rate | 0.4021 | 0.0206 | 0.0103 | 0.0309 | 0.5567 | 0.3402 |
 | n_gold_ask | 5 | 5 | 5 | 5 | 5 | 5 |
-| drug | 0.7451 | 0.9216 | 0.9902 | 0.9706 | 0.6863 | 0.9902 |
-| strength | 0.6765 | 0.9412 | 0.9902 | 0.9510 | 0.6863 | 0.9804 |
-| form | 0.7255 | 0.9216 | 0.9804 | 0.9216 | 0.6471 | 0.9804 |
-| kind | 0.7549 | 0.9412 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
-| dose | 0.5490 | 0.9216 | 0.9902 | 0.9216 | 0.6667 | 0.9804 |
-| every_n_days | 0.7451 | 0.9216 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
-| taper | 0.7549 | 0.9412 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
-| food | 0.7549 | 0.9412 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
-| duration_days | 0.7255 | 0.8725 | 0.9902 | 0.9608 | 0.6863 | 1.0 |
-| prn_max_per_day | 0.7549 | 0.9314 | 0.9902 | 0.9706 | 0.6863 | 1.0 |
+| drug | 0.9412 | 0.9510 | 1.0 | 0.9804 | 0.9216 | 0.9902 |
+| strength | 0.8137 | 0.9608 | 1.0 | 0.9608 | 0.7647 | 0.9804 |
+| form | 0.9314 | 0.9706 | 0.9804 | 0.9216 | 0.7843 | 0.9804 |
+| kind | 0.9804 | 1.0 | 1.0 | 1.0 | 0.9412 | 1.0 |
+| dose | 0.7451 | 0.9608 | 1.0 | 0.9314 | 0.8137 | 0.9804 |
+| every_n_days | 1.0 | 1.0 | 1.0 | 1.0 | 0.9608 | 1.0 |
+| taper | 0.9804 | 1.0 | 1.0 | 1.0 | 0.9412 | 1.0 |
+| food | 1.0 | 1.0 | 1.0 | 1.0 | 0.9608 | 1.0 |
+| duration_days | 0.9510 | 0.9314 | 1.0 | 0.9902 | 0.9412 | 1.0 |
+| prn_max_per_day | 1.0 | 0.9902 | 1.0 | 1.0 | 0.9608 | 1.0 |
 
 T API p50/p95 40.77 / 115.02 **includes retries**. T JSON mode p50/p95 **43.05 / 108.27**. Tinker p50 (original run): B0-fair 3.13 · FT1 2.22 · FT2 3.20 · FT3 2.76.
 
 Paired FT2 vs FT1 on the same 102 lines: **17** exact-match fixes, **2** regressions, exact two-sided McNemar p = 0.000728607177734375. Sources: `eval/out/ft1_handwritten_realistic_preds.jsonl`, `eval/out/ft2_handwritten_realistic_preds.jsonl`.
 
-Paired FT2 vs FT3 (dev): **1** FT3-correct / FT2-wrong, **9** FT2-correct / FT3-wrong, p = 0.021484375. danger_v2_norm count 0 → 5. danger_v1 rate 0.0098 → 0.0686. Sources: `eval/out/ft2_handwritten_realistic_preds.jsonl`, `eval/out/ft3_handwritten_realistic_preds.jsonl`. Line-level review: `eval/danger_review.md`.
+Paired FT2 vs FT3 (dev): **1** FT3-correct / FT2-wrong, **9** FT2-correct / FT3-wrong, p = 0.021484375. danger_v2_norm count 0 → 9. Sources: `eval/out/ft2_handwritten_realistic_preds.jsonl`, `eval/out/ft3_handwritten_realistic_preds.jsonl`. Line-level review: `eval/danger_review.md`.
 
-Paired FT2 vs T (whole set, **no JSON mode**): **1** T-correct / FT2-wrong, **35** FT2-correct / T-wrong, p = 1.076841726899147e-09. On **T-valid** lines: **66/70** vs **69/70**, p = 0.375 (`eval/out/t_valid.json`). T `parse_fail` 0.2745 and `http_fail` 0.0392 (3 HTTP 500, 1 HTTP 503). danger_v2_norm count 0 = 0.
+Paired FT2 vs T (whole set, **no JSON mode**): **1** T-correct / FT2-wrong, **28** FT2-correct / T-wrong, p = 1.1175870895385742e-07. On **T-valid** lines: **73/98** vs **96/98**, p = 1.5497207641601562e-06 (`eval/out/t_valid.json`). T `http_fail` 0.0392 (3 HTTP 500, 1 HTTP 503).
 
-Paired FT2 vs `gemma31_json` on the same 102 lines: **2** T-correct / FT2-wrong, **4** FT2-correct / T-wrong, p = 0.6875 (tie). json_valid 1.0, parse_fail 0.0, http_fail 0.0, exact 0.9608 [0.9216, 0.9902] vs FT2 0.9804 [0.9510, 1.0]. danger_v2_norm count 0 → 1. Source: `eval/out/gemma31_json_handwritten_realistic_preds.jsonl`.
+Paired FT2 vs `gemma31_json` on the same 102 lines: **2** T-correct / FT2-wrong, **4** FT2-correct / T-wrong, p = 0.6875 (tie). json_valid 1.0, parse_fail 0.0, http_fail 0.0, exact 0.9608 [0.9216, 0.9902] vs FT2 0.9804 [0.9510, 1.0]. danger_v2_norm count 0 → 3. Source: `eval/out/gemma31_json_handwritten_realistic_preds.jsonl`.
 
 **Authorship:** lines were generated in code (`eval/handwritten_realistic.py`), not handwritten by Vedant. Created after FT2 (`5619cee`). **67/102** lines use drug names seen in `data/synth/train.jsonl`.
 
-FT2 remaining misses: 2 inexact lines. `डोलो 650 जरूरत पर` (form `cap` vs gold `tab`; no form cue on the line). `Duphalac 15ml subah 15ml raat khane ke baad 7 din` (`parse_fail` / pred None). Combo brand, insulin units, Hindi three-slot, and missing-frequency ASK are closed by the parser. Source: `eval/out/ft2_handwritten_realistic.json`.
+FT2 remaining misses: 2 inexact lines, both `form`. `डोलो 650 जरूरत पर` (form `cap` vs gold `tab`; no form cue on the line). Duphalac schema-fail is recovered by the stub; form is still the miss. Source: `eval/out/ft2_handwritten_realistic.json`.
 
 **Limits:** no second labeller, photographed originals stay gitignored (HMR CC BY-ND 4.0), gold for this set is the in-file dict next to each generated line.
 
-## Public real-world set: HMR-100 (India), n=…
+## Public real-world set: HMR-100 (India), n=104
 
-Not scored yet. Gold is empty until labelled on the Label REAL page (first 30 HMR pages, pre-filled names, A/N/B/P, labelled/100). After ~100 lines, `scripts/run_hmr_eval_if_ready.py` runs:
+Parser-only scoring of typed gold lines (`data/public_labels/hmr100_gold.jsonl`, 21 photographed pages, 0 train overlap). Images stay gitignored. Sources: `eval/out/b0_fair_hmr100_gold.json`, `eval/out/ft2_hmr100_gold.json`, `eval/out/ft3_hmr100_gold.json`. `gemma31_json` HMR is not in `eval/out/` yet.
 
-```
-uv run python -m eval.eval --system b0_fair --set data/public_labels/hmr100_gold.jsonl
-uv run python -m eval.eval --system ft2 --set data/public_labels/hmr100_gold.jsonl
-uv run python -m eval.eval --system ft3 --set data/public_labels/hmr100_gold.jsonl
-uv run python -m eval.eval --system gemma31_json --set data/public_labels/hmr100_gold.jsonl --workers 3
-```
+| Field | B0-fair | FT2 | FT3 candidate |
+|---|---|---|---|
+| json_valid | 1.0 | 1.0 | 1.0 |
+| parse_fail | 0.0 | 0.0 | 0.0 |
+| http_fail | 0.0 | 0.0 | 0.0 |
+| exact | 0.5577 | 0.7212 | 0.6923 |
+| exact_ci95 | [0.4615, 0.6538] | [0.6346, 0.8077] | [0.6058, 0.7788] |
+| danger_v2 (norm) | 0.3558 | 0.2212 | 0.2596 |
+| dose | 0.8846 | 0.9038 | 0.8846 |
+| drug | 0.9135 | 0.8846 | 0.8462 |
 
-`gemma31_json` on HMR is approved once n≥100. Official T stays `gemma31` (no JSON mode).
+Paired FT2 vs B0-fair: **22** FT2 fixes / **5** regressions, p = 0.0015137195587158203. Paired FT2 vs FT3: **1** FT3 fix / **4** FT3 regressions, p = 0.375 (FT2 ahead). CIs overlap FT2 vs FT3; the FT2 vs B0 gap (16 points) is larger than the ±8–9 interval.
 
-**FT3 keep-rule (not met):** keep v3 only if exact is up on SYNTH **and** HMR with McNemar p<0.05 and **normalised danger_v2 is not up**. SYNTH exact is tied (0/0, p=1.0, both 1.0 after the parser); HMR gold is empty (n=0). On the HW **dev** set FT3 is behind (1/9, p=0.021484375) and danger_v2_norm is up (0 → 0.0490). `.env` `PILLCLERK_TINKER_PATH` stays on v2. Checkpoint `train/checkpoint_v3.json` (n_train=3296, extra `targeted_ft3_danger.jsonl`) and loss log `train/ft3_sft.log` are kept as a candidate. Training: val_nll 1.7098 → 0.0018 (step 610/618). Optional BD-200 (~40 lines) is a notation stress test (`1+0+1`, Bangla durations), not the headline n.
+FT2 remaining misses (29/104): mostly extra brand tokens (`T` shorthand, generic in parentheses), weekly/except-day schedules, SOS q6h, and two-drug nebules. English once/twice/`N puff`/`N ml` copy closed the bulk of the old dose-ASK misses.
+
+**FT3 keep-rule (not met):** keep v3 only if exact is up on SYNTH **and** HMR with McNemar p<0.05 and **normalised danger_v2 is not up**. SYNTH exact is tied (0/0, p=1.0, both 1.0). HMR exact is not up (FT3 0.6923 vs FT2 0.7212, 1/4, p=0.375) and danger_v2_norm is up (0.2212 → 0.2596). On the HW **dev** set FT3 is behind (1/9, p=0.021484375) and danger_v2_norm is up (0 → 0.0882). `.env` `PILLCLERK_TINKER_PATH` stays on v2. Checkpoint `train/checkpoint_v3.json` (n_train=3296, extra `targeted_ft3_danger.jsonl`) and loss log `train/ft3_sft.log` are kept as a candidate. Training: val_nll 1.7098 → 0.0018 (step 610/618). Optional BD-200 (~40 lines) is a notation stress test (`1+0+1`, Bangla durations), not the headline n.
 
 At n≈100, only report model differences larger than the 95% CI (about ±8–9 points).
 
@@ -180,7 +186,7 @@ xychart-beta
     title "Whole-line exact match on Hand-written realistic (n=102) (%)"
     x-axis ["B0-fair", "FT1", "FT2", "FT3 cand.", "T", "T JSON"]
     y-axis "Exact match (%)" 0 --> 100
-    bar [44.1, 83.3, 98.0, 90.2, 64.7, 96.1]
+    bar [52.9, 83.3, 98.0, 90.2, 71.6, 96.1]
 ```
 
 ```mermaid
@@ -188,7 +194,7 @@ xychart-beta
     title "danger_v2_norm on Hand-written realistic (%), lower is better"
     x-axis ["B0-fair", "FT1", "FT2", "FT3 cand.", "T", "T JSON"]
     y-axis "Dangerous errors (%)" 0 --> 100
-    bar [31.37, 9.80, 0, 4.90, 0, 0.98]
+    bar [43.14, 14.71, 0, 8.82, 21.57, 2.94]
 ```
 
 ```mermaid

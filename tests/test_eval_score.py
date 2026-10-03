@@ -99,7 +99,7 @@ def test_rescore_matches_already_dropped_preds_by_line(tmp_path, monkeypatch) ->
                 ),
                 json.dumps(
                     {
-                        "line": "keep-me",
+                        "line": "keep-me OD",
                         "gold": {
                             "drug": "Glycomet",
                             "form": "tab",
@@ -117,7 +117,7 @@ def test_rescore_matches_already_dropped_preds_by_line(tmp_path, monkeypatch) ->
     preds.write_text(
         json.dumps(
             {
-                "line": "keep-me",
+                "line": "keep-me OD",
                 "pred": {
                     "drug": "Glycomet",
                     "form": "tab",
