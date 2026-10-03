@@ -67,7 +67,7 @@ Keys needed (ask before spending):
 
 ## Use the clerk
 
-On Scan, paste the medicine lines from the slip in front of you, then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone. Nothing is pre-loaded.
+On Scan, paste the medicine lines from the slip in front of you. Review opens on the first line, fills from Tinker when the sampler path is set, and asks you to confirm one line at a time. Chart stays locked until ASK cells are gone. Nothing is pre-loaded.
 
 Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`.
 

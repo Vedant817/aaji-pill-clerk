@@ -1,62 +1,81 @@
-"""Line-by-line review. Red = needs_check / ASK. Nothing proceeds until confirmed."""
+"""One line at a time. A human confirms each copy before Chart unlocks."""
 
 from pillclerk.ui import apply_theme, stepper
 from pillclerk.config import tinker_parser_ready
-from pillclerk.schema import CheckField, Dose, Food, Form, Kind, MedLine, Unit
-from pillclerk.validate import extra_rules, schedule_conflicts
+from pillclerk.review import (
+    WIDGET_PREFIX,
+    clear_widget_keys,
+    drafts_need_parse,
+    med_from_fields,
+    n_confirmed,
+    next_unconfirmed,
+)
+from pillclerk.schema import Dose, Food, Form, Kind, MedLine, Unit
+from pillclerk.validate import schedule_conflicts
 
 apply_theme()
 import streamlit as st
 
 stepper("Review")
 st.title("Review")
-st.caption("A human must confirm every line. ASK fields stay red until you fill them.")
+st.caption("Check this line against the slip, then confirm. ASK fields stay red.")
 
 drafts = st.session_state.get("drafts") or []
 if not drafts:
-    st.warning("No lines yet. Load them on the Scan page.")
+    st.warning("No lines yet. Paste them on the Scan page.")
     st.page_link("pages/1_Scan.py", label="← Back to Scan")
     st.stop()
 
 
 def _push_gold(i: int, gold: MedLine) -> None:
     d = gold.dose or Dose()
-    st.session_state[f"drug{i}"] = gold.drug or ""
-    st.session_state[f"str{i}"] = gold.strength or ""
-    st.session_state[f"form{i}"] = gold.form
-    st.session_state[f"kind{i}"] = gold.kind
-    st.session_state[f"food{i}"] = gold.food
-    st.session_state[f"dur{i}"] = int(gold.duration_days or 0)
-    st.session_state[f"n{i}"] = int(gold.every_n_days)
-    st.session_state[f"am{i}"] = float(d.morning)
-    st.session_state[f"noon{i}"] = float(d.afternoon)
-    st.session_state[f"pm{i}"] = float(d.night)
-    st.session_state[f"unit{i}"] = d.unit
-    st.session_state[f"prn{i}"] = int(gold.prn_max_per_day or 0)
-    st.session_state[f"ok{i}"] = False
+    p = f"{WIDGET_PREFIX}{i}_"
+    st.session_state[p + "drug"] = gold.drug or ""
+    st.session_state[p + "str"] = gold.strength or ""
+    st.session_state[p + "form"] = gold.form
+    st.session_state[p + "kind"] = gold.kind
+    st.session_state[p + "food"] = gold.food
+    st.session_state[p + "dur"] = int(gold.duration_days or 0)
+    st.session_state[p + "n"] = int(gold.every_n_days)
+    st.session_state[p + "am"] = float(d.morning)
+    st.session_state[p + "noon"] = float(d.afternoon)
+    st.session_state[p + "pm"] = float(d.night)
+    st.session_state[p + "unit"] = d.unit
+    st.session_state[p + "prn"] = int(gold.prn_max_per_day or 0)
 
+
+def _parse_all() -> None:
+    from pillclerk.infer import get_parser
+
+    parse = get_parser()
+    filled = 0
+    failed = 0
+    next_drafts: list[dict] = []
+    for i, draft in enumerate(drafts):
+        pred = parse(draft["line"])
+        if pred is None:
+            failed += 1
+            next_drafts.append(draft)
+            continue
+        filled += 1
+        next_drafts.append({"line": draft["line"], "gold": pred.model_dump(), "confirmed": False})
+    clear_widget_keys(st.session_state)
+    st.session_state["drafts"] = next_drafts
+    st.session_state["parsed_once"] = True
+    st.session_state["parse_note"] = f"Parser filled {filled} line(s); {failed} stayed ASK."
+    first = next_unconfirmed(next_drafts)
+    st.session_state["review_i"] = 0 if first is None else first
+
+
+if tinker_parser_ready() and drafts_need_parse(drafts) and not st.session_state.get("parsed_once"):
+    with st.spinner("Reading the lines…"):
+        _parse_all()
+    st.rerun()
 
 if tinker_parser_ready():
-    if st.button("Fill fields from Tinker parser", type="primary"):
-        from pillclerk.infer import get_parser
-
-        parse = get_parser()
-        filled = 0
-        failed = 0
-        next_drafts: list[dict] = []
-        for i, draft in enumerate(drafts):
-            pred = parse(draft["line"])
-            if pred is None:
-                failed += 1
-                next_drafts.append(draft)
-                continue
-            filled += 1
-            _push_gold(i, pred)
-            next_drafts.append(
-                {"line": draft["line"], "gold": pred.model_dump(), "confirmed": False}
-            )
-        st.session_state["drafts"] = next_drafts
-        st.session_state["parse_note"] = f"Parser filled {filled} line(s); {failed} stayed ASK."
+    if st.button("Fill fields from Tinker parser"):
+        with st.spinner("Reading the lines…"):
+            _parse_all()
         st.rerun()
 else:
     st.info("Tinker sampler path is not set yet. Fill fields by hand, then confirm each line.")
@@ -67,87 +86,99 @@ if st.session_state.get("parse_note"):
         unsafe_allow_html=True,
     )
 
+drafts = st.session_state.get("drafts") or drafts
+n = len(drafts)
+done = n_confirmed(drafts)
+st.progress(done / n if n else 0)
+m1, m2, m3 = st.columns(3)
+m1.metric("Confirmed", f"{done} / {n}")
+m2.metric("Left", n - done)
+m3.metric("Lines", n)
+
+i = int(st.session_state.get("review_i") or 0)
+i = max(0, min(i, n - 1))
+st.session_state["review_i"] = i
+draft = drafts[i]
+gold = MedLine.model_validate(draft["gold"])
+p = f"{WIDGET_PREFIX}{i}_"
+
 FOODS: list[Food] = ["before", "after", "with", "empty_stomach", "any"]
 FORMS: list[Form] = ["tab", "cap", "syrup", "drops", "inhaler", "injection", "cream", "sachet", "other"]
 KINDS: list[Kind] = ["daily", "prn", "taper"]
 UNITS: list[Unit] = ["tab", "cap", "ml", "drop", "puff", "unit", "sachet", "apply"]
 
-updated: list[dict] = []
-for i, draft in enumerate(drafts):
-    gold = MedLine.model_validate(draft["gold"])
-    title = f"{i + 1}. {draft['line']}"
-    with st.expander(title, expanded=True):
-        st.code(draft["line"])
-        if gold.needs_check:
-            st.markdown(
-                f'<div class="pc-ask">ASK: {", ".join(gold.needs_check)}</div>',
-                unsafe_allow_html=True,
-            )
-        c1, c2, c3 = st.columns(3)
-        drug = c1.text_input("Drug", gold.drug or "", key=f"drug{i}")
-        strength = c2.text_input("Strength", gold.strength or "", key=f"str{i}")
-        form = c3.selectbox("Form", FORMS, index=FORMS.index(gold.form), key=f"form{i}")
-        c1, c2, c3, c4 = st.columns(4)
-        kind = c1.selectbox("Kind", KINDS, index=KINDS.index(gold.kind), key=f"kind{i}")
-        food = c2.selectbox("Food", FOODS, index=FOODS.index(gold.food), key=f"food{i}")
-        duration = c3.number_input(
-            "Duration days (0 = continue)",
-            min_value=0,
-            value=int(gold.duration_days or 0),
-            key=f"dur{i}",
-        )
-        every = c4.number_input("Every N days", min_value=1, value=int(gold.every_n_days), key=f"n{i}")
-        d = gold.dose or Dose()
-        m1, m2, m3, m4 = st.columns(4)
-        morning = m1.number_input("Morning", min_value=0.0, max_value=20.0, value=float(d.morning), step=0.5, key=f"am{i}")
-        afternoon = m2.number_input("Afternoon", min_value=0.0, max_value=20.0, value=float(d.afternoon), step=0.5, key=f"noon{i}")
-        night = m3.number_input("Night", min_value=0.0, max_value=20.0, value=float(d.night), step=0.5, key=f"pm{i}")
-        unit = m4.selectbox("Unit", UNITS, index=UNITS.index(d.unit), key=f"unit{i}")
-        prn_max = st.number_input(
-            "PRN max per day (0 = unset)",
-            min_value=0,
-            value=int(gold.prn_max_per_day or 0),
-            key=f"prn{i}",
-        )
-        confirmed = st.checkbox(
-            "I confirm this line copies the prescription",
-            value=draft.get("confirmed", False),
-            key=f"ok{i}",
-        )
-        checks: list[CheckField] = []
-        if not drug.strip():
-            checks.append("drug")
-        dose = None if kind == "prn" else Dose(morning=morning, afternoon=afternoon, night=night, unit=unit)
-        if kind == "daily" and dose and (dose.morning + dose.afternoon + dose.night) == 0:
-            checks.append("dose")
-        taper = list(gold.taper) if kind == "taper" else []
-        if kind == "taper" and not taper:
-            kind = "daily"
-            checks.append("schedule")
-        med = extra_rules(
-            MedLine(
-                drug=drug.strip() or None,
-                strength=strength.strip() or None,
-                form=form,
-                kind=kind,
-                dose=dose,
-                every_n_days=int(every),
-                taper=taper,
-                food=food,
-                duration_days=int(duration) or None,
-                prn_max_per_day=int(prn_max) or None,
-                needs_check=checks,
-                note=draft["line"],
-            )
-        )
-        if not confirmed:
-            st.caption("Not confirmed yet.")
-        updated.append(
-            {"line": draft["line"], "gold": med.model_dump(), "confirmed": confirmed and not med.needs_check}
-        )
+seed = p + "seeded"
+if not st.session_state.get(seed):
+    _push_gold(i, gold)
+    st.session_state[seed] = True
 
-st.session_state["drafts"] = updated
-conflicts = schedule_conflicts([MedLine.model_validate(d["gold"]) for d in updated])
+st.subheader(f"Line {i + 1} of {n}")
+st.code(draft["line"])
+if draft.get("confirmed"):
+    st.markdown('<div class="pc-ok">Confirmed. Change a field and confirm again if the slip disagrees.</div>', unsafe_allow_html=True)
+
+c1, c2, c3 = st.columns(3)
+drug = c1.text_input("Drug", key=p + "drug")
+strength = c2.text_input("Strength", key=p + "str")
+form = c3.selectbox("Form", FORMS, key=p + "form")
+c1, c2, c3, c4 = st.columns(4)
+kind = c1.selectbox("Kind", KINDS, key=p + "kind")
+food = c2.selectbox("Food", FOODS, key=p + "food")
+duration = c3.number_input("Duration days (0 = continue)", min_value=0, key=p + "dur")
+every = c4.number_input("Every N days", min_value=1, key=p + "n")
+m1, m2, m3, m4 = st.columns(4)
+morning = m1.number_input("Morning", min_value=0.0, max_value=20.0, step=0.5, key=p + "am")
+afternoon = m2.number_input("Afternoon", min_value=0.0, max_value=20.0, step=0.5, key=p + "noon")
+night = m3.number_input("Night", min_value=0.0, max_value=20.0, step=0.5, key=p + "pm")
+unit = m4.selectbox("Unit", UNITS, key=p + "unit")
+prn_max = st.number_input("PRN max per day (0 = unset)", min_value=0, key=p + "prn")
+
+med = med_from_fields(
+    line=draft["line"],
+    drug=drug,
+    strength=strength,
+    form=form,
+    kind=kind,
+    food=food,
+    duration=int(duration),
+    every=int(every),
+    morning=float(morning),
+    afternoon=float(afternoon),
+    night=float(night),
+    unit=unit,
+    prn_max=int(prn_max),
+    taper=list(gold.taper) if gold.taper else [],
+)
+if med.needs_check:
+    st.markdown(
+        f'<div class="pc-ask">ASK: {", ".join(med.needs_check)}</div>',
+        unsafe_allow_html=True,
+    )
+
+drafts[i] = {"line": draft["line"], "gold": med.model_dump(), "confirmed": bool(draft.get("confirmed")) and not med.needs_check}
+st.session_state["drafts"] = drafts
+
+nav1, nav2, nav3 = st.columns([1, 2, 1])
+with nav1:
+    if st.button("Back", disabled=i == 0):
+        st.session_state["review_i"] = i - 1
+        st.rerun()
+with nav2:
+    if st.button("Confirm this line", type="primary", disabled=bool(med.needs_check)):
+        drafts[i] = {"line": draft["line"], "gold": med.model_dump(), "confirmed": True}
+        st.session_state["drafts"] = drafts
+        nxt = next_unconfirmed(drafts, after=i)
+        if nxt is None:
+            st.switch_page("pages/3_Chart.py")
+            st.stop()
+        st.session_state["review_i"] = nxt
+        st.rerun()
+with nav3:
+    if st.button("Next", disabled=i >= n - 1):
+        st.session_state["review_i"] = i + 1
+        st.rerun()
+
+conflicts = schedule_conflicts([MedLine.model_validate(d["gold"]) for d in drafts])
 if conflicts:
     bits = []
     for name, a, b in conflicts:
@@ -161,7 +192,8 @@ if conflicts:
         + "</div>",
         unsafe_allow_html=True,
     )
-if updated and all(d["confirmed"] for d in updated):
+
+if done == n and n:
     st.markdown(
         '<div class="pc-ok">Every line is confirmed. Open Chart to print and download .ics.</div>',
         unsafe_allow_html=True,

@@ -2,6 +2,7 @@
 
 from pillclerk.ui import apply_theme, stepper
 from pillclerk.drafts import drafts_from_text
+from pillclerk.review import clear_review_keys
 
 apply_theme()
 import streamlit as st
@@ -26,7 +27,7 @@ with c1:
 
 if clear:
     st.session_state.pop("drafts", None)
-    st.session_state.pop("parse_note", None)
+    clear_review_keys(st.session_state)
     st.rerun()
 
 if load:
@@ -35,10 +36,10 @@ if load:
         st.warning("Paste at least one line from the prescription.")
     else:
         drafts = drafts_from_text(raw)
+        clear_review_keys(st.session_state)
         st.session_state["drafts"] = drafts
-        st.session_state.pop("parse_note", None)
-        st.success(f"Loaded {len(drafts)} lines. Open Review to confirm each one.")
-        st.page_link("pages/2_Review.py", label="Go to Review →")
+        st.session_state["review_i"] = 0
+        st.switch_page("pages/2_Review.py")
 elif st.session_state.get("drafts"):
     st.info(f"{len(st.session_state['drafts'])} line(s) loaded. Open Review to confirm.")
     st.page_link("pages/2_Review.py", label="Go to Review →")
