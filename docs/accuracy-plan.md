@@ -126,6 +126,12 @@ limit 3, food 1, form 1, kind 1. Multiple fields can fail on one line.
 
 ## Validation
 
+3 October follow-through: [dataset decision and workflow](dataset-selection.md).
+Clean candidate prepared at `data/candidates/clean_v4` (3,079 / 249 rows), offline
+training checks passed, and 20 unused HMR pages reserved at
+`data/acceptance/hmr_v1/manifest.json`. Two-person labels and synthetic sample
+review remain pending. No new training, paid calls, or model accuracy results.
+
 Use `uv run pytest` for schema, notation, scheduling, calendar, review and offline
 evidence regressions. Streamlit AppTest exercises actual page widgets for edit
 revocation, unresolved ASK flags, blank stock and conflict-blocked downloads.

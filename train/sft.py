@@ -118,6 +118,7 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=BATCH)
     ap.add_argument("--name", default="pillclerk-v1")
     ap.add_argument("--train", default="", help="override train jsonl path")
+    ap.add_argument("--val", default="", help="override validation jsonl path for a frozen candidate")
     ap.add_argument(
         "--extra",
         action="append",
@@ -134,7 +135,7 @@ def main() -> None:
     args = ap.parse_args()
 
     train_path = Path(args.train) if args.train else ROOT / "data" / "synth" / "train.jsonl"
-    val_path = ROOT / "data" / "synth" / "val.jsonl"
+    val_path = Path(args.val) if args.val else ROOT / "data" / "synth" / "val.jsonl"
     extra_paths = [Path(p) for p in args.extra]
     if not train_path.is_file():
         raise SystemExit("missing data/synth/train.jsonl — run: uv run python -m train.build_dataset --split")
@@ -142,7 +143,9 @@ def main() -> None:
     train_rows = load_train_rows(train_path, extra_paths, limit=args.limit)
     val_rows = _load(val_path)
     validate_split(train_rows, val_rows, [ROOT / "data/synth/synth_test.jsonl",
-                  ROOT / "data/heldout/handwritten_realistic.jsonl", ROOT / "data/public_labels/hmr100_gold.jsonl"])
+                  ROOT / "data/heldout/handwritten_realistic.jsonl", ROOT / "data/public_labels/hmr100_gold.jsonl",
+                  ROOT / "data/public_labels/bd200_gold.jsonl",
+                  *sorted((ROOT / "data/acceptance").glob("*/gold.jsonl"))])
     if args.check_data:
         print("Training split passed offline checks; no provider calls made.")
         return

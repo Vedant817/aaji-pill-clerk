@@ -1,0 +1,6 @@
+# Preserve frozen artifact bytes on Windows and other checkouts.
+data/candidates/** -text
+data/acceptance/** -text
+train/prepare_candidate.py text eol=lf
+pillclerk/filters.py text eol=lf
+pillclerk/schema.py text eol=lf

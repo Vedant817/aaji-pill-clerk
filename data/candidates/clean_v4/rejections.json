@@ -1,0 +1,78 @@
+{
+  "train": [
+    {
+      "source_index": 729,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 780,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 906,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 1493,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 1517,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 1853,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 2019,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2071,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2091,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2120,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2124,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2145,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2193,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 2228,
+      "reason": "held_out_overlap"
+    },
+    {
+      "source_index": 2277,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2439,
+      "reason": "internal_duplicate"
+    },
+    {
+      "source_index": 2754,
+      "reason": "held_out_overlap"
+    }
+  ],
+  "validation": [
+    {
+      "source_index": 95,
+      "reason": "held_out_overlap"
+    }
+  ]
+}

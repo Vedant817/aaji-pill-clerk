@@ -92,6 +92,18 @@ SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500
 
 ## Results
 
+The next candidate is prepared: **3,079 synthetic training / 249 validation rows**
+with zero normalized-text overlap against the checked evaluation sets. Twenty
+unused HMR pages are reserved for two independent human labeling rounds; gold
+and new model scores are pending. See [dataset selection and labeling instructions](docs/dataset-selection.md).
+Preparation is offline and does not change the active model:
+
+```powershell
+uv run python -m train.prepare_candidate
+uv run python -m train.sft --train data/candidates/clean_v4/train.jsonl --val data/candidates/clean_v4/val.jsonl --check-data
+uv run streamlit run app/Home.py  # Independent prescription labels page
+```
+
 3 October audit: see [accuracy issues and improvement plan](docs/accuracy-plan.md).
 Offline replay of saved FT2 HMR predictions improves exact from **75/104 (72.1%)**
 to **83/104 (79.8%)**, with unflagged dangerous errors **23 → 14**. This is development

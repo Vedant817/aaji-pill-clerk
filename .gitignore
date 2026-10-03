@@ -18,6 +18,10 @@ Thumbs.db
 # labels live in data/heldout/handwritten_realistic.jsonl (committed).
 # Public HMR-100 is CC BY-ND 4.0: never commit images or modified copies.
 data/real/
+# Local annotation histories and gold; only page manifests are redistributed.
+data/acceptance/*/annotations.jsonl
+data/acceptance/*/completed_pages.jsonl
+data/acceptance/*/gold.jsonl
 data/public/
 data/real/real_test.jsonl
 data/real/gt.jsonl

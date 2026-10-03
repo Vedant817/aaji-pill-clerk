@@ -130,7 +130,9 @@ def list_images(dataset: str) -> list[Path]:
     folder = Path(DATASETS[dataset]["dir"])
     if not folder.is_dir():
         return []
-    return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in PHOTOS)
+    from pillclerk.acceptance import reserved_names
+    reserved = reserved_names() if dataset == "hmr100" else set()
+    return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in PHOTOS and p.name not in reserved)
 
 
 def _split_meds(raw: str) -> list[str]:
@@ -238,6 +240,9 @@ def prefill_from_hint(token: str) -> dict:
 
 
 def upsert_gold(dataset: str, row: dict) -> None:
+    from pillclerk.acceptance import reserved_names
+    if dataset == "hmr100" and row["image"] in reserved_names():
+        raise ValueError("Reserved test pages must be labelled in the independent annotation workflow")
     path = Path(DATASETS[dataset]["gold"])
     path.parent.mkdir(parents=True, exist_ok=True)
     key = (row["image"], int(row["line_no"]))

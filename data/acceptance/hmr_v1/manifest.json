@@ -1,0 +1,131 @@
+{
+  "kind": "reserved human annotation queue; no gold or model results yet",
+  "dataset": "chaithanyakota/100-handwritten-medical-records",
+  "source_url": "https://huggingface.co/datasets/chaithanyakota/100-handwritten-medical-records",
+  "license": "CC BY-ND 4.0; original images stay local and are not modified",
+  "image_directory": "data/public/hmr100",
+  "seed": 20261003,
+  "development_labels_sha256": "7dca2bca2419edf2a4319521e5a2e419d5373eee845d7f9e99a2a9676bc3985b",
+  "development_page_names": [
+    "hmr_000.jpg",
+    "hmr_001.jpg",
+    "hmr_002.jpg",
+    "hmr_003.jpg",
+    "hmr_004.jpg",
+    "hmr_005.jpg",
+    "hmr_006.jpg",
+    "hmr_007.jpg",
+    "hmr_008.jpg",
+    "hmr_009.jpg",
+    "hmr_010.jpg",
+    "hmr_011.jpg",
+    "hmr_012.jpg",
+    "hmr_013.jpg",
+    "hmr_014.jpg",
+    "hmr_015.jpg",
+    "hmr_016.jpg",
+    "hmr_017.jpg",
+    "hmr_018.jpg",
+    "hmr_019.jpg",
+    "hmr_020.jpg",
+    "hmr_021.jpg",
+    "hmr_022.jpg",
+    "hmr_023.jpg",
+    "hmr_024.jpg",
+    "hmr_025.jpg",
+    "hmr_026.jpg",
+    "hmr_027.jpg",
+    "hmr_028.jpg",
+    "hmr_029.jpg"
+  ],
+  "source_revision": "afcca9f163561af54fcd145003e550d2d320aafb",
+  "selection": "Hash-ranked unseen pages with medicine-name metadata; names are not shown to annotators",
+  "pages": [
+    {
+      "image": "hmr_085.jpg",
+      "sha256": "4be15468666894ac0fd4625579d0f3f5c288b297d091ef0909dbe5188b5e9f0e"
+    },
+    {
+      "image": "hmr_057.jpg",
+      "sha256": "2a3e35bbfaab425cd0dda339e43729632115c907c41d6ea3b975f596528947fb"
+    },
+    {
+      "image": "hmr_066.jpg",
+      "sha256": "fe86b7f84fa590e6e9932602acd94f4ed355be546af4c0c6e66c19b5d9d9854b"
+    },
+    {
+      "image": "hmr_061.jpg",
+      "sha256": "8cb72b12d5a6ab735eaa0c916d60ec4875035262612530fe04203ed0c1cbdac1"
+    },
+    {
+      "image": "hmr_083.jpg",
+      "sha256": "d4f2ad78c34fe2f9fc4448859fdb8980499be545ea67879df807db229ba09362"
+    },
+    {
+      "image": "hmr_064.jpg",
+      "sha256": "3706c00e1298368be3b387d8e5f6dad1bec44e007271bdb4cbf6f34e372a00ab"
+    },
+    {
+      "image": "hmr_067.jpg",
+      "sha256": "8775c124bf9374710f16959c307e1cdfdd1a0de166b2053ee3da5bd6d565267b"
+    },
+    {
+      "image": "hmr_097.jpg",
+      "sha256": "62a464efb8b780a259e0fa4aa7b16c56773bee42c73df2afd3f96ee19d9446b2"
+    },
+    {
+      "image": "hmr_072.jpg",
+      "sha256": "684be3cab36b5950ca2e37fab35ba77b54a274329066299d474169fa92c14e23"
+    },
+    {
+      "image": "hmr_093.jpg",
+      "sha256": "109adaec88043241a7466ca0d05fc15ca0a4e380c64daf46b74119a3d80d800d"
+    },
+    {
+      "image": "hmr_048.jpg",
+      "sha256": "98ebd6e06087dc7fed0eff1da9ba4285f531b101887561f80199311718bcb620"
+    },
+    {
+      "image": "hmr_094.jpg",
+      "sha256": "6ec7f608560e13dd7ab0c03e06893b7e38aa441e84bb707c931d0465400e5dc2"
+    },
+    {
+      "image": "hmr_080.jpg",
+      "sha256": "e81292619a15e58271ff70ba7cec09bbde2f2e0e61c605f08939e568dc381265"
+    },
+    {
+      "image": "hmr_056.jpg",
+      "sha256": "21c3dc79ee356fc88d2df7e8bc3e647221c88a6ed579d48a309972e1e05bd001"
+    },
+    {
+      "image": "hmr_041.jpg",
+      "sha256": "c6431bcfb3ff5e32803ef436632d37ea1ed132d1399b9a81476cfc067119a6e1"
+    },
+    {
+      "image": "hmr_089.jpg",
+      "sha256": "67807be723404c53c70ac7dfff6054e9dc7a44e55485939491c51fddbffd9ea2"
+    },
+    {
+      "image": "hmr_084.jpg",
+      "sha256": "aae5c2ba6740daca261b9dd95b578e2a8d8fdaf9074596fb16302b53e7216943"
+    },
+    {
+      "image": "hmr_045.jpg",
+      "sha256": "6cb14d25c3cb60ca4ca4f9150659ada5e1aaed9f57ed042466bc3483a3abc5b9"
+    },
+    {
+      "image": "hmr_032.jpg",
+      "sha256": "b4efe2f4d9ebf5c09eb785187ce0def3486a691f0795acb02f68a413ce4b11be"
+    },
+    {
+      "image": "hmr_075.jpg",
+      "sha256": "fed9234bf98baeb2b7408ef250b83eb2f790579b98d0bccea10de1b9b02c10a4"
+    }
+  ],
+  "required_rounds": [
+    "A",
+    "B"
+  ],
+  "gold_status": "pending human labels",
+  "limits": "Separate pages from the same public source, not family data or an independent population"
+}
