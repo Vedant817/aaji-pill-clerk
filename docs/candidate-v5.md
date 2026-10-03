@@ -76,8 +76,36 @@ unflagged form/food/PRN errors. HMR confidence intervals resample pages, not iso
 lines. McNemar remains a line-level exploratory statistic. No score measures image
 reading, independent clinical accuracy or caregiver acceptance.
 
-Results: **pending completion of the actual hosted runs**. FT2 stays active until
-results are available and a candidate's behavior justifies a separate promotion.
+Results: **all eight hosted evaluations completed; FT5 rejected for promotion**.
+The authorized training completed all 579 steps and saved the hosted sampler in
+`train/checkpoint_pillclerk-v5.json`. FT2 remains active; `.env` was not changed.
+
+| Frozen parser cohort | FT2-current exact | FT5 exact | Unflagged danger count, FT2 → FT5 | Raw schema failures, FT2 → FT5 |
+|---|---:|---:|---:|---:|
+| SYNTH, n=397 | 397/397 (100%) | 397/397 (100%) | 0 → 0 | 0 → 0 |
+| Generated realistic, n=102 | 100/102 (98.0%) | 79/102 (77.5%) | 0 → 22 | 1 → 1 |
+| Existing HMR text, n=104 | 75/104 (72.1%) | 69/104 (66.3%) | 21 → 27 | 14 → 13 |
+| AI reference, n=85, exploratory | 22/85 (25.9%) | 22/85 (25.9%) | 37 → 35 | 9 → 15 |
+
+These danger counts use the historical `danger_v2_norm` metric, which omits form,
+food and PRN-limit errors. The aggregate `eval/out/ft5_comparison.json` reports
+those errors separately, matched ASK fields and selective accuracy. Generated
+realistic text has 21 unflagged form mismatches for FT5 versus two for FT2.
+Existing HMR exact-and-ASK falls from 62/104 to 40/104. SYNTH ASK field recall
+improves from 86.5% to 100%, with five new false ASK fields; exact-and-ASK ties.
+The exploratory AI-reference ASK field recall improves from 42.0% to 55.8%, but
+exact match ties and raw schema failures increase. This does not justify promotion.
+
+The paired page bootstrap 95% interval for HMR exact-match delta is −12.0 to −0.8
+percentage points; on generated text, resampling lines gives −28.4 to −11.8 points.
+These are development comparisons with small, previously inspected datasets,
+not independent clinical validation. Concurrent evaluation load differed, so
+these runs do not establish a latency improvement.
+
+Training compute has a conservative bound of $5.83430144 and the eight actual
+sampling runs total $0.38554551 in reserved-token compute bounds: **$6.21984695**.
+This excludes storage and is not an invoice. The billing endpoint did not yet
+return this training session's usage when queried; billed spend remains unverified.
 
 Fresh FT2-current baseline completed: SYNTH 397/397 exact, generated realistic
 100/102, existing HMR 75/104, and AI reference 22/85 (exploratory). Raw schema
@@ -87,3 +115,36 @@ Do not present replay as fresh inference. The new reference is deliberately
 conservative about missing forms, quantities and durations, while historical
 HMR gold has sparse ASK flags. Scores against those two label policies are not
 directly comparable clinical accuracy measurements.
+
+## Remaining accuracy work
+
+The candidate training rows all contain an explicit form cue, while 27/102
+generated evaluation lines omit it. Historical gold often presumes a tablet in
+those cases. This is a coverage and label-policy gap: adding brand lookups or
+guessing a form would conflict with the clerk's copy-only rule. The observed
+association does not isolate the cause of the training regression.
+
+1. Define a consistent source-faithfulness policy for omitted form, quantity and
+   units; preserve the old benchmark and version any corrected labels separately.
+2. Add synthetic hard negatives with omitted form/units and unreadable text,
+   balanced with simple prescriptions. Keep neutral values and ASK rather than
+   inferred clinical fields, and inspect a reproducible sample before training.
+3. Investigate conservative structural recovery for unsupported enum values,
+   retaining valid copied fields while flagging the invalid field. Verify against
+   frozen raw outputs before any new provider calls. This repair is not implemented.
+4. Test a controlled training change, such as fewer epochs or a lower learning
+   rate, separately from dataset changes. A second paid training run needs new
+   authorization; the approved single run has been completed.
+5. Complete caregiver correction and calendar-import acceptance. The assistant's
+   AI labels cannot replace independent human review or establish clinical accuracy.
+
+## Verification — 4 October
+
+The full pytest suite passed (168 tests). The paired comparison ran against all
+four frozen cohorts and validated dataset hashes. Candidate train/validation
+hashes match its saved checkpoint. The configured hosted sampler matches FT2's
+checkpoint; no environment update occurred. Original synthetic and public gold
+files have no diff. New AI reference labels/raw outputs remain gitignored, and
+fresh artifacts contain none of the configured API key values.
+Fresh HMR line-level predictions/raw text also stay local; only their aggregate
+results are committed. Rebuilding the full comparison requires these local files.

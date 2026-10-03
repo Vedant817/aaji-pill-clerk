@@ -1,0 +1,24 @@
+{
+  "state": "tinker://74c28666-710e-5dfc-ae6c-38c6d6675ad3:train:0/weights/pillclerk-v5",
+  "sampler": "tinker://74c28666-710e-5dfc-ae6c-38c6d6675ad3:train:0/sampler_weights/pillclerk-v5",
+  "model": "Qwen/Qwen3-8B",
+  "name": "pillclerk-v5",
+  "n_train": 3079,
+  "training_plan": {
+    "train_rows": 3079,
+    "epochs": 3,
+    "batch": 16,
+    "steps": 579,
+    "validation_rows_used": 64,
+    "validation_calls": 58,
+    "compute_token_upper_bound": 13259776,
+    "compute_usd_upper_bound": 5.834301440000001,
+    "train_usd_per_million": 0.44,
+    "limits": "Compute estimate only; excludes checkpoint storage and sampling. Reject oversized conversations."
+  },
+  "extras": [],
+  "data_sha256": {
+    "data\\candidates\\safety_v5\\train.jsonl": "059b66813fcbd268ff31865792e8893a45b3eb59cc24de9faa960e43f004b824",
+    "data\\candidates\\safety_v5\\val.jsonl": "d37b77e3940ff1fb422fd0405b9076616254975a85e997b02e4330469c97924f"
+  }
+}

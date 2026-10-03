@@ -132,6 +132,16 @@ training checks passed, and 20 unused HMR pages reserved at
 `data/acceptance/hmr_v1/manifest.json`. Two-person labels and synthetic sample
 review remain pending. No new training, paid calls, or model accuracy results.
 
+4 October follow-through supersedes that pending status: the approved single
+hosted run and fresh FT2/FT5 evaluations completed. [Candidate report](candidate-v5.md)
+records the failed promotion: generated exact 100/102 → 79/102, HMR exact 75/104 →
+69/104, and unflagged danger counts 0 → 22 and 21 → 27. FT2 remains active.
+Fresh FT2 HMR is 75/104, not the 83/104 offline replay. Raw failure, matched ASK
+and selective metrics are now captured. The reserved pages have local AI reference
+labels, explicitly exploratory; independent human rounds remain empty. Next work
+is missing-form/unit coverage, consistent label policy and conservative recovery,
+followed by caregiver acceptance. Further paid training requires new authorization.
+
 Use `uv run pytest` for schema, notation, scheduling, calendar, review and offline
 evidence regressions. Streamlit AppTest exercises actual page widgets for edit
 revocation, unresolved ASK flags, blank stock and conflict-blocked downloads.

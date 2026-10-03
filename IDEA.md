@@ -23,6 +23,13 @@
 > 20 reserved HMR pages and created 85 local AI reference lines. These are explicitly
 > unverified, single-agent exploratory labels, not two-person human gold, OCR CER
 > ground truth, or family acceptance. No reserved images/text enter training.
+> **4 October result:** the authorized hosted FT5 run and all eight fresh parser
+> evaluations completed. FT5 is rejected: generated-text exact 100/102 → 79/102,
+> HMR-text exact 75/104 → 69/104, with danger counts 0 → 22 and 21 → 27.
+> FT2 remains active. AI-reference exact ties at 22/85; these labels are exploratory.
+> Compute bounds total $6.219847, excluding storage; billed spend is unverified.
+> See `docs/candidate-v5.md` and `eval/out/ft5_comparison.json`. No accuracy gain
+> or automated image-reading result is claimed from this training experiment.
 >
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
 > 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.

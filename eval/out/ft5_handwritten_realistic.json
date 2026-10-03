@@ -1,0 +1,64 @@
+{
+  "system": "ft5",
+  "set": "data/heldout/handwritten_realistic.jsonl",
+  "n": 102,
+  "json_valid": 1.0,
+  "parse_fail": 0.0,
+  "http_fail": 0.0,
+  "exact": 0.7745098039215687,
+  "exact_ci95": [
+    0.696078431372549,
+    0.8529411764705882
+  ],
+  "exact_norm": 0.7745098039215687,
+  "exact_norm_ci95": [
+    0.696078431372549,
+    0.8529411764705882
+  ],
+  "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
+  "danger": 0.13725490196078433,
+  "danger_v1": 0.13725490196078433,
+  "danger_v2": 0.21568627450980393,
+  "danger_v2_strict": 0.21568627450980393,
+  "danger_v2_norm": 0.21568627450980393,
+  "n_valid": 102,
+  "exact_on_valid": 0.7745098039215687,
+  "ask_recall": 1.0,
+  "false_ask_rate": 0.12371134020618557,
+  "n_gold_ask": 5,
+  "per_field": {
+    "drug": 0.9607843137254902,
+    "strength": 0.9607843137254902,
+    "form": 0.7941176470588235,
+    "kind": 0.9901960784313726,
+    "dose": 0.8137254901960784,
+    "every_n_days": 1.0,
+    "taper": 0.9901960784313726,
+    "food": 1.0,
+    "duration_days": 0.9803921568627451,
+    "prn_max_per_day": 1.0
+  },
+  "p50_s": 3.117074489593506,
+  "p95_s": 4.181687831878662,
+  "error_fields": {
+    "drug": 4,
+    "form": 21,
+    "dose": 19,
+    "strength": 4,
+    "kind": 1,
+    "taper": 1,
+    "duration_days": 2
+  },
+  "dropped_train_duplicates": 0,
+  "dataset_sha256": "794fd6329067b168ee8ed18f37cf6c5c0305f2d4d0e8364db6146468e6e78cda",
+  "postprocessing": "copy_explicit + extra_rules",
+  "label_origins": [
+    "existing_dataset"
+  ],
+  "exploratory_AI_reference": false,
+  "raw_schema_failures": 1,
+  "sampling_compute_upper_usd": 0.02857695,
+  "sampling_budget_usd": 0.3,
+  "checkpoint_sha256": "e6fb548eaa68a5699a73b1cb6141a6aa062fac79d7429838a3abd86f9dd89a86",
+  "sampler": "tinker://74c28666-710e-5dfc-ae6c-38c6d6675ad3:train:0/sampler_weights/pillclerk-v5"
+}

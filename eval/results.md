@@ -214,3 +214,13 @@ xychart-beta
     y-axis "Dangerous errors (%)" 0 --> 100
     bar [28.46, 3.27, 0, 0, 1.01, 1.26]
 ```
+## Fresh FT5 experiment — recorded 4 October 2026
+
+FT5 completed the authorized hosted run and failed promotion. FT2 remains active.
+Matched fresh parser exact counts are SYNTH 397/397 for both; generated realistic
+100/102 → 79/102; existing HMR text 75/104 → 69/104. HMR danger count is 21 → 27.
+The new 85-line AI reference ties at 22/85 and is explicitly exploratory, without
+independent human verification. These are parser results, not OCR or clinical
+accuracy. Historical tables above remain unchanged. See
+[candidate report](../docs/candidate-v5.md) and
+[paired aggregate evidence](out/ft5_comparison.json).

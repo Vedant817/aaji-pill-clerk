@@ -92,10 +92,15 @@ SFT is LoRA rank 32 on Qwen/Qwen3-8B, 3 epochs, batch 16, LR 4e-4. FT2 mixes 500
 
 ## Results
 
-The next candidate is prepared: **3,079 synthetic training / 249 validation rows**
-with zero normalized-text overlap against the checked evaluation sets. Twenty
-unused HMR pages are reserved for two independent human labeling rounds; gold
-and new model scores are pending. See [dataset selection and labeling instructions](docs/dataset-selection.md).
+The authorized FT5 candidate run is complete: **3,079 synthetic training / 249
+validation rows**, with corrected duration ASK labels and zero checked text
+overlaps. **FT5 was rejected; FT2 remains active.** Fresh matched exact scores are
+FT2 → FT5: SYNTH 100% → 100%, generated realistic 98.0% → 77.5%, and HMR typed text
+72.1% → 66.3%. Unflagged dangerous errors also increased on both latter cohorts.
+See [the candidate report and remaining accuracy work](docs/candidate-v5.md).
+Twenty reserved HMR pages have 85 local AI reference labels; those results are
+exploratory. Independent human labeling rounds remain empty. See
+[dataset selection and labeling instructions](docs/dataset-selection.md).
 Preparation is offline and does not change the active model:
 
 ```powershell
