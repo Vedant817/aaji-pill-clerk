@@ -1,0 +1,834 @@
+{
+  "kind": "offline replay of saved raw completions; no provider calls",
+  "limitations": "Development evidence only; AI-reference labels exploratory; no OCR or clinical acceptance",
+  "code_sha256": {
+    "pillclerk/infer.py": "c19129bb58d83b468ca797fac294980066d2080c121f63ba8064add814ccefd5",
+    "pillclerk/recovery.py": "5e77a9469fa236b90dcf5e00b2b3327e2d3c7ac83ea3a2000a362f2d02344f52",
+    "pillclerk/copy_explicit.py": "707fd7c9a97c5305f1559060923eee9aba06029b145f10cd77eabd822324ea5e",
+    "pillclerk/validate.py": "fcf091f0ab6ec39c8ec401f6519a289d3d3fcb2a39200b7b68a9181c99b4eeac"
+  },
+  "systems": {
+    "ft2_current": {
+      "synth_test": {
+        "n": 397,
+        "before": {
+          "n": 397,
+          "exact_count": 397,
+          "exact": 1.0,
+          "exact_and_ask": 0.9874055415617129,
+          "danger_count": 0,
+          "ASK_field_precision": 1.0,
+          "ASK_field_recall": 0.8648648648648649,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 5
+            }
+          },
+          "selective_coverage": 0.9697732997481109,
+          "selective_accuracy": 1.0,
+          "unflagged_field_errors": {}
+        },
+        "after": {
+          "n": 397,
+          "exact_count": 397,
+          "exact": 1.0,
+          "exact_and_ask": 0.9874055415617129,
+          "danger_count": 0,
+          "ASK_field_precision": 1.0,
+          "ASK_field_recall": 0.8648648648648649,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 5
+            }
+          },
+          "selective_coverage": 0.9697732997481109,
+          "selective_accuracy": 1.0,
+          "unflagged_field_errors": {}
+        },
+        "recovery_counts": {
+          "raw_valid": 397
+        },
+        "raw_valid_output_changes": 0,
+        "exact_fixes": 0,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.0,
+          0.0
+        ],
+        "input_sha256": {
+          "data\\synth\\synth_test.jsonl": "8325b4811cbd2d0137a68cc3f4664af65da442b3190d29652067780fd20ea2d5",
+          "eval\\out\\ft2_current_synth_test_raw.jsonl": "2c07e2d5c08835fa9f75bb22007e27f5b9b5cc8ac140012699af5dc11e5c4716",
+          "eval\\out\\ft2_current_synth_test_preds.jsonl": "067ba451fe125bd00cc2de649d6f37a0e67a3947b7a5222bdfff5aa93989ab47"
+        }
+      },
+      "handwritten_realistic": {
+        "n": 102,
+        "before": {
+          "n": 102,
+          "exact_count": 100,
+          "exact": 0.9803921568627451,
+          "exact_and_ask": 0.9803921568627451,
+          "danger_count": 0,
+          "ASK_field_precision": 0.9285714285714286,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.9411764705882353,
+          "selective_accuracy": 0.9895833333333334,
+          "unflagged_field_errors": {
+            "form": 2
+          }
+        },
+        "after": {
+          "n": 102,
+          "exact_count": 100,
+          "exact": 0.9803921568627451,
+          "exact_and_ask": 0.9803921568627451,
+          "danger_count": 0,
+          "ASK_field_precision": 0.7647058823529411,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 5,
+              "fp": 1,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 5,
+              "fp": 1,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.9411764705882353,
+          "selective_accuracy": 0.9895833333333334,
+          "unflagged_field_errors": {
+            "form": 1
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 101,
+          "fields": 1
+        },
+        "raw_valid_output_changes": 0,
+        "exact_fixes": 0,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.0,
+          0.0
+        ],
+        "input_sha256": {
+          "data\\heldout\\handwritten_realistic.jsonl": "794fd6329067b168ee8ed18f37cf6c5c0305f2d4d0e8364db6146468e6e78cda",
+          "eval\\out\\ft2_current_handwritten_realistic_raw.jsonl": "f47dc7fc05f94133e2e257ee8047cf5a355ae15158c8046751d957e0cf1a04ad",
+          "eval\\out\\ft2_current_handwritten_realistic_preds.jsonl": "de8cfea30ad656bc2aedfb1cbc991f2b98bff1a2af97d4974b04a00d26d552ab"
+        }
+      },
+      "hmr100_gold": {
+        "n": 104,
+        "before": {
+          "n": 104,
+          "exact_count": 75,
+          "exact": 0.7211538461538461,
+          "exact_and_ask": 0.5961538461538461,
+          "danger_count": 21,
+          "ASK_field_precision": 0.1282051282051282,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 13,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 2,
+              "fp": 15,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 2,
+              "fp": 5,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.7307692307692307,
+          "selective_accuracy": 0.8157894736842105,
+          "unflagged_field_errors": {
+            "dose": 12,
+            "strength": 8,
+            "duration_days": 3,
+            "food": 1,
+            "prn_max_per_day": 2,
+            "drug": 3
+          }
+        },
+        "after": {
+          "n": 104,
+          "exact_count": 71,
+          "exact": 0.6826923076923077,
+          "exact_and_ask": 0.5769230769230769,
+          "danger_count": 17,
+          "ASK_field_precision": 0.0847457627118644,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 13,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 2,
+              "fp": 25,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 2,
+              "fp": 10,
+              "fn": 0
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 5,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.7115384615384616,
+          "selective_accuracy": 0.8108108108108109,
+          "unflagged_field_errors": {
+            "dose": 12,
+            "strength": 4,
+            "duration_days": 3,
+            "food": 1,
+            "prn_max_per_day": 2,
+            "drug": 3
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 90,
+          "fields": 13,
+          "source_stub": 1
+        },
+        "raw_valid_output_changes": 2,
+        "exact_fixes": 1,
+        "exact_regressions": 5,
+        "exact_delta_page_bootstrap_ci95": [
+          -0.08163265306122448,
+          0.0
+        ],
+        "input_sha256": {
+          "data\\public_labels\\hmr100_gold.jsonl": "7dca2bca2419edf2a4319521e5a2e419d5373eee845d7f9e99a2a9676bc3985b",
+          "eval\\out\\ft2_current_hmr100_gold_raw.jsonl": "a6a88e511aaa4b2fc082763b6bd8a971b8125bb4d794061006faf65dc2a73dab",
+          "eval\\out\\ft2_current_hmr100_gold_preds.jsonl": "4ce0e369f9f5961ad7cd09b4a8a02cda3fa72fd217d4e27cf4cebe7b51e82238"
+        }
+      },
+      "ai_reference": {
+        "n": 85,
+        "before": {
+          "n": 85,
+          "exact_count": 22,
+          "exact": 0.25882352941176473,
+          "exact_and_ask": 0.12941176470588237,
+          "danger_count": 37,
+          "ASK_field_precision": 0.7073170731707317,
+          "ASK_field_recall": 0.42028985507246375,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 32
+            },
+            "dose": {
+              "tp": 24,
+              "fp": 6,
+              "fn": 22
+            },
+            "drug": {
+              "tp": 8,
+              "fp": 9,
+              "fn": 6
+            },
+            "schedule": {
+              "tp": 20,
+              "fp": 8,
+              "fn": 19
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 1
+            }
+          },
+          "selective_coverage": 0.5764705882352941,
+          "selective_accuracy": 0.32653061224489793,
+          "unflagged_field_errors": {
+            "dose": 22,
+            "duration_days": 4,
+            "drug": 12,
+            "strength": 7,
+            "form": 7,
+            "food": 12,
+            "kind": 1
+          }
+        },
+        "after": {
+          "n": 85,
+          "exact_count": 28,
+          "exact": 0.32941176470588235,
+          "exact_and_ask": 0.12941176470588237,
+          "danger_count": 28,
+          "ASK_field_precision": 0.6761904761904762,
+          "ASK_field_recall": 0.5144927536231884,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 6,
+              "fp": 2,
+              "fn": 32
+            },
+            "dose": {
+              "tp": 32,
+              "fp": 7,
+              "fn": 14
+            },
+            "drug": {
+              "tp": 8,
+              "fp": 9,
+              "fn": 6
+            },
+            "schedule": {
+              "tp": 25,
+              "fp": 12,
+              "fn": 14
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 4,
+              "fn": 1
+            }
+          },
+          "selective_coverage": 0.5411764705882353,
+          "selective_accuracy": 0.34782608695652173,
+          "unflagged_field_errors": {
+            "dose": 13,
+            "duration_days": 2,
+            "drug": 12,
+            "form": 6,
+            "food": 12,
+            "strength": 5,
+            "kind": 1
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 76,
+          "fields": 9
+        },
+        "raw_valid_output_changes": 6,
+        "exact_fixes": 6,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.023529411764705882,
+          0.11842105263157894
+        ],
+        "input_sha256": {
+          "data\\reference\\hmr_ai_v1\\ai_reference.jsonl": "9d45e76b786e782a2512138e58135511ee9dbf0f47d057b5cd4d4e36b43a08b9",
+          "eval\\out\\ft2_current_ai_reference_raw.jsonl": "afa844a46c5a1728c4960748dd539ab5215a7724dc9746c25743019dff610884",
+          "eval\\out\\ft2_current_ai_reference_preds.jsonl": "0ef6588cbb25d76f25f99a927b3795b2b0262c72662b809ea81d447aaa979c0a"
+        }
+      }
+    },
+    "ft5": {
+      "synth_test": {
+        "n": 397,
+        "before": {
+          "n": 397,
+          "exact_count": 397,
+          "exact": 1.0,
+          "exact_and_ask": 0.9874055415617129,
+          "danger_count": 0,
+          "ASK_field_precision": 0.8809523809523809,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 11,
+              "fp": 5,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.9445843828715366,
+          "selective_accuracy": 1.0,
+          "unflagged_field_errors": {}
+        },
+        "after": {
+          "n": 397,
+          "exact_count": 397,
+          "exact": 1.0,
+          "exact_and_ask": 0.9874055415617129,
+          "danger_count": 0,
+          "ASK_field_precision": 0.8809523809523809,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "drug": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 12,
+              "fp": 0,
+              "fn": 0
+            },
+            "duration_days": {
+              "tp": 11,
+              "fp": 5,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.9445843828715366,
+          "selective_accuracy": 1.0,
+          "unflagged_field_errors": {}
+        },
+        "recovery_counts": {
+          "raw_valid": 397
+        },
+        "raw_valid_output_changes": 0,
+        "exact_fixes": 0,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.0,
+          0.0
+        ],
+        "input_sha256": {
+          "data\\synth\\synth_test.jsonl": "8325b4811cbd2d0137a68cc3f4664af65da442b3190d29652067780fd20ea2d5",
+          "eval\\out\\ft5_synth_test_raw.jsonl": "5cfb5cb470ea6099c07e2e0b22969e961c641d9c6c2b896f2d371272ea219770",
+          "eval\\out\\ft5_synth_test_preds.jsonl": "43ccb8f1748106500be14fdab0b3bbeddd0fe75713312af2af31723ad8db367b"
+        }
+      },
+      "handwritten_realistic": {
+        "n": 102,
+        "before": {
+          "n": 102,
+          "exact_count": 79,
+          "exact": 0.7745098039215687,
+          "exact_and_ask": 0.7352941176470589,
+          "danger_count": 22,
+          "ASK_field_precision": 0.52,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 2,
+              "fp": 11,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.8333333333333334,
+          "selective_accuracy": 0.8235294117647058,
+          "unflagged_field_errors": {
+            "drug": 4,
+            "form": 21,
+            "dose": 19,
+            "strength": 4,
+            "kind": 1,
+            "taper": 1,
+            "duration_days": 2
+          }
+        },
+        "after": {
+          "n": 102,
+          "exact_count": 79,
+          "exact": 0.7745098039215687,
+          "exact_and_ask": 0.7352941176470589,
+          "danger_count": 21,
+          "ASK_field_precision": 0.4642857142857143,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 2,
+              "fp": 11,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 0
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 5,
+              "fp": 1,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 5,
+              "fp": 1,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.8333333333333334,
+          "selective_accuracy": 0.8235294117647058,
+          "unflagged_field_errors": {
+            "drug": 4,
+            "form": 20,
+            "dose": 18,
+            "strength": 3,
+            "kind": 1,
+            "taper": 1,
+            "duration_days": 2
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 101,
+          "fields": 1
+        },
+        "raw_valid_output_changes": 0,
+        "exact_fixes": 0,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.0,
+          0.0
+        ],
+        "input_sha256": {
+          "data\\heldout\\handwritten_realistic.jsonl": "794fd6329067b168ee8ed18f37cf6c5c0305f2d4d0e8364db6146468e6e78cda",
+          "eval\\out\\ft5_handwritten_realistic_raw.jsonl": "216e0a28761386d1ce9c057fe4f4a75f20af4ebb613552aed329a2461ef3f9b9",
+          "eval\\out\\ft5_handwritten_realistic_preds.jsonl": "c079b059daab8c3c7083bad73ae9112467344770c49b030e2aae9ee964107f41"
+        }
+      },
+      "hmr100_gold": {
+        "n": 104,
+        "before": {
+          "n": 104,
+          "exact_count": 69,
+          "exact": 0.6634615384615384,
+          "exact_and_ask": 0.38461538461538464,
+          "danger_count": 27,
+          "ASK_field_precision": 0.08064516129032258,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 0,
+              "fp": 25,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 12,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 2,
+              "fp": 15,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 2,
+              "fp": 5,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.5192307692307693,
+          "selective_accuracy": 0.7407407407407407,
+          "unflagged_field_errors": {
+            "dose": 14,
+            "form": 3,
+            "strength": 9,
+            "drug": 7,
+            "duration_days": 3,
+            "food": 1,
+            "prn_max_per_day": 2
+          }
+        },
+        "after": {
+          "n": 104,
+          "exact_count": 65,
+          "exact": 0.625,
+          "exact_and_ask": 0.3557692307692308,
+          "danger_count": 23,
+          "ASK_field_precision": 0.05434782608695652,
+          "ASK_field_recall": 1.0,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 0,
+              "fp": 31,
+              "fn": 0
+            },
+            "drug": {
+              "tp": 1,
+              "fp": 12,
+              "fn": 0
+            },
+            "schedule": {
+              "tp": 2,
+              "fp": 27,
+              "fn": 0
+            },
+            "dose": {
+              "tp": 2,
+              "fp": 13,
+              "fn": 0
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 4,
+              "fn": 0
+            }
+          },
+          "selective_coverage": 0.4807692307692308,
+          "selective_accuracy": 0.74,
+          "unflagged_field_errors": {
+            "dose": 14,
+            "form": 3,
+            "strength": 5,
+            "drug": 7,
+            "duration_days": 2,
+            "food": 1,
+            "prn_max_per_day": 2
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 91,
+          "fields": 13
+        },
+        "raw_valid_output_changes": 4,
+        "exact_fixes": 2,
+        "exact_regressions": 6,
+        "exact_delta_page_bootstrap_ci95": [
+          -0.09183673469387756,
+          0.011111111111111112
+        ],
+        "input_sha256": {
+          "data\\public_labels\\hmr100_gold.jsonl": "7dca2bca2419edf2a4319521e5a2e419d5373eee845d7f9e99a2a9676bc3985b",
+          "eval\\out\\ft5_hmr100_gold_raw.jsonl": "d2102560efdb5428c3bdfcf2b620d30438e1aa71220cf06fc9c02bb5287a21a3",
+          "eval\\out\\ft5_hmr100_gold_preds.jsonl": "aaade995cc86ae1c804866394da8f878f0644bf241e454a4b19e26701d5a90fd"
+        }
+      },
+      "ai_reference": {
+        "n": 85,
+        "before": {
+          "n": 85,
+          "exact_count": 22,
+          "exact": 0.25882352941176473,
+          "exact_and_ask": 0.2,
+          "danger_count": 35,
+          "ASK_field_precision": 0.7333333333333333,
+          "ASK_field_recall": 0.5579710144927537,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 27,
+              "fp": 0,
+              "fn": 11
+            },
+            "dose": {
+              "tp": 24,
+              "fp": 6,
+              "fn": 22
+            },
+            "drug": {
+              "tp": 9,
+              "fp": 14,
+              "fn": 5
+            },
+            "schedule": {
+              "tp": 17,
+              "fp": 8,
+              "fn": 22
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1
+            }
+          },
+          "selective_coverage": 0.32941176470588235,
+          "selective_accuracy": 0.39285714285714285,
+          "unflagged_field_errors": {
+            "dose": 23,
+            "duration_days": 3,
+            "drug": 12,
+            "strength": 6,
+            "form": 7,
+            "food": 12,
+            "kind": 1
+          }
+        },
+        "after": {
+          "n": 85,
+          "exact_count": 28,
+          "exact": 0.32941176470588235,
+          "exact_and_ask": 0.2,
+          "danger_count": 26,
+          "ASK_field_precision": 0.7050359712230215,
+          "ASK_field_recall": 0.7101449275362319,
+          "ASK_field_counts": {
+            "duration_days": {
+              "tp": 33,
+              "fp": 4,
+              "fn": 5
+            },
+            "dose": {
+              "tp": 33,
+              "fp": 7,
+              "fn": 13
+            },
+            "drug": {
+              "tp": 9,
+              "fp": 14,
+              "fn": 5
+            },
+            "schedule": {
+              "tp": 23,
+              "fp": 11,
+              "fn": 16
+            },
+            "strength": {
+              "tp": 0,
+              "fp": 5,
+              "fn": 1
+            }
+          },
+          "selective_coverage": 0.3058823529411765,
+          "selective_accuracy": 0.4230769230769231,
+          "unflagged_field_errors": {
+            "dose": 14,
+            "duration_days": 1,
+            "drug": 12,
+            "form": 6,
+            "food": 12,
+            "strength": 2,
+            "kind": 1
+          }
+        },
+        "recovery_counts": {
+          "raw_valid": 70,
+          "fields": 14,
+          "source_stub": 1
+        },
+        "raw_valid_output_changes": 7,
+        "exact_fixes": 6,
+        "exact_regressions": 0,
+        "exact_delta_page_bootstrap_ci95": [
+          0.0273972602739726,
+          0.11
+        ],
+        "input_sha256": {
+          "data\\reference\\hmr_ai_v1\\ai_reference.jsonl": "9d45e76b786e782a2512138e58135511ee9dbf0f47d057b5cd4d4e36b43a08b9",
+          "eval\\out\\ft5_ai_reference_raw.jsonl": "461231296b5937d0d3a51073cf147769354f2d660adee6afe0dd406120953ec1",
+          "eval\\out\\ft5_ai_reference_preds.jsonl": "90dc23a4ee278e85fef67e65060c7e86851095b2a9420b92d0d22fa1da1c00ad"
+        }
+      }
+    }
+  }
+}

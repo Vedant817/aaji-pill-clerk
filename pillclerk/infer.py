@@ -13,6 +13,7 @@ from typing import Any
 from pillclerk import config
 from pillclerk.copy_explicit import copy_explicit, stub_from_line
 from pillclerk.privacy import strip_pii
+from pillclerk.recovery import recover_fields
 from pillclerk.schema import SYSTEM_PROMPT, MedLine
 from pillclerk.validate import extra_rules
 
@@ -114,11 +115,54 @@ def parse_ollama(line: str, model: str | None = None) -> MedLine | None:
             {"role": "user", "content": line},
         ],
     )
+    return process_completion(r.message.content, line)[0]
+
+
+def process_completion(text: str, line: str) -> tuple[MedLine, dict]:
+    """One shared provider/replay pipeline, with raw schema failures kept visible."""
+    from pydantic import ValidationError
+
+    blob = _extract_json(text)
     try:
-        med = extra_rules(MedLine.model_validate_json(r.message.content))
-        return extra_rules(copy_explicit(med, line))
-    except Exception:
-        return extra_rules(copy_explicit(stub_from_line(line), line))
+        med = MedLine.model_validate_json(blob)
+    except ValidationError:
+        try:
+            salvage = recover_fields(json.loads(blob))
+        except (ValueError, TypeError):
+            salvage = None
+        if salvage is not None:
+            med, replacements = salvage
+            pred = extra_rules(copy_explicit(med, line))
+            fallback = extra_rules(copy_explicit(stub_from_line(line), line))
+            checks = set(pred.needs_check + replacements["needs_check"] + fallback.needs_check)
+            # A form explicitly copied from the source is available even if the
+            # model's spelling was invalid. Other invalid fields remain withheld.
+            overrides = {k: v for k, v in replacements.items() if k not in {"form", "needs_check"}}
+            pred = MedLine.model_validate({**pred.model_dump(), **overrides, "needs_check": sorted(checks)})
+            # Salvage must not silently grant trust to fields absent/different in
+            # the previous conservative fallback. Keep them visible for review.
+            for name in ("drug", "strength", "dose", "food", "duration_days", "prn_max_per_day",
+                         "form", "kind", "every_n_days", "taper"):
+                if getattr(pred, name) != getattr(fallback, name):
+                    checks.add("schedule" if name in {"form", "kind", "every_n_days", "taper"}
+                               else "dose" if name == "prn_max_per_day" else name)
+            pred = MedLine.model_validate({**pred.model_dump(), "needs_check": sorted(checks)})
+            return extra_rules(pred), {"raw_schema_valid": False, "recovery_used": True,
+                "recovery_kind": "fields", "withheld_fields": sorted(set(replacements) - {"needs_check"})}
+        pred = extra_rules(copy_explicit(stub_from_line(line), line))
+        return pred, {"raw_schema_valid": False, "recovery_used": True,
+            "recovery_kind": "source_stub", "withheld_fields": []}
+    pred = extra_rules(copy_explicit(extra_rules(med), line))
+    checks = sorted(set(pred.needs_check + med.needs_check))
+    value = {**pred.model_dump(), "needs_check": checks}
+    # Source-copy helpers must not resolve a model's explicit uncertainty on
+    # behalf of the caregiver, even when they can reconstruct a slot pattern.
+    if med.dose is None and "dose" in med.needs_check:
+        value["dose"] = None
+    pred = MedLine.model_validate(value)
+    return extra_rules(pred), {
+        "raw_schema_valid": True, "recovery_used": False,
+        "recovery_kind": None, "withheld_fields": []}
 
 
 def as_token_ids(ids: Any) -> list[int]:
@@ -178,18 +222,12 @@ def make_tinker_parser(
         model_input = tinker.ModelInput.from_ints(prompt_tokens)
         res = sc.sample(prompt=model_input, num_samples=1, sampling_params=params).result()
         text = tokenizer.decode(res.sequences[0].tokens)
-        error = None
-        recovered = False
-        try:
-            med = extra_rules(MedLine.model_validate_json(_extract_json(text)))
-            pred = extra_rules(copy_explicit(med, clean))
-        except Exception:
-            error, recovered = "raw_schema", True
-            pred = extra_rules(copy_explicit(stub_from_line(clean), clean))
+        pred, recovery = process_completion(text, clean)
+        error = "raw_schema" if recovery["recovery_used"] else None
         if detailed:
             return ParseOutcome(pred=pred, raw=text, error=error,
                 finish_reason=str(getattr(res.sequences[0], "stop_reason", "unknown")),
-                accepted_config={"raw_schema_valid": not recovered, "recovery_used": recovered,
+                accepted_config={**recovery,
                     "input_tokens": len(prompt_tokens), "output_tokens": len(res.sequences[0].tokens),
                     "sampling_compute_upper_usd": reserved_usd, "sampling_budget_usd": sampling_budget_usd})
         return pred
