@@ -65,9 +65,9 @@ Keys needed (ask before spending):
 - `GEMINI_API_KEY` — 31B teacher on synthetic + hand-written realistic **text** only. Model id `gemma-4-31b-it`. Never used for photos.
 - `BACKBOARD_API_KEY` — optional. Only if `LLM_BACKEND=backboard`
 
-## Demo (synthetic slip)
+## Use the clerk
 
-On Scan, tap **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`), then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone.
+On Scan, paste the medicine lines from the slip in front of you, then Review → Fill fields from Tinker parser → confirm every line → Chart. The chart stays locked until ASK cells are gone. Nothing is pre-loaded.
 
 Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`.
 

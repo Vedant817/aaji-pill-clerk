@@ -71,13 +71,17 @@ def test_extract_json_strips_think_blocks() -> None:
     assert _extract_json(raw).startswith("{")
 
 
-def test_demo_slip_loads_ten_ask_drafts() -> None:
-    raw = (ROOT / "data" / "demo" / "prescriptions" / "aaji_sample.txt").read_text(encoding="utf-8")
+def test_pasted_lines_become_ask_drafts() -> None:
+    raw = "Tab Atorva 10mg 0-0-1 after food x 30 days\nTab Telma 40mg 1-0-0 empty stomach x 30 days"
     drafts = drafts_from_text(raw)
-    assert len(drafts) == 10
-    assert drafts[0]["line"].startswith("TAB. Glycomet")
+    assert len(drafts) == 2
+    assert drafts[0]["gold"]["drug"] is None
     assert drafts[0]["gold"]["needs_check"]
     assert drafts[0]["confirmed"] is False
+    scan = (ROOT / "app" / "pages" / "1_Scan.py").read_text(encoding="utf-8")
+    assert "Load demo slip" not in scan
+    assert "aaji_sample" not in scan
+    assert "Glycomet" not in scan
 
 
 def test_schedule_conflicts_ignores_identical_copies() -> None:

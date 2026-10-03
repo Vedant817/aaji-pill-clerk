@@ -10,7 +10,7 @@ Pill Clerk is a **clerk, not a clinician**. It copies what the slip says into a 
 
 ## Demo
 
-Local Streamlit: Scan → **Load demo slip** (`data/demo/prescriptions/aaji_sample.txt`) → Review (fill from Tinker, resolve ASK, confirm) → Chart (print HTML, download `.ics`). Script: `docs/demo_script.md`.
+Local Streamlit: Scan → paste the lines from the slip → Review (fill from Tinker, resolve ASK, confirm) → Chart (print HTML, download `.ics`). Nothing is pre-loaded. Script: `docs/demo_script.md`.
 
 ## Results
 
