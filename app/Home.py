@@ -25,7 +25,7 @@ st.markdown(
 st.markdown(
     """
 <div class="pc-grid">
-  <div class="pc-tile"><b>1. Scan</b><br/>Paste one medicine line per row. Photos stay on this laptop.</div>
+  <div class="pc-tile"><b>1. Scan</b><br/>Read a photo locally or paste medicine lines. Check the text against the slip.</div>
   <div class="pc-tile"><b>2. Review</b><br/>The clerk fills JSON. You fix ASK cells and confirm each line.</div>
   <div class="pc-tile"><b>3. Chart</b><br/>Print the fridge chart and download <code>.ics</code> reminders.</div>
 </div>

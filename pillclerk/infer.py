@@ -321,7 +321,8 @@ def get_parser() -> ParseFn:
     path = config._get("PILLCLERK_TINKER_PATH") or None
     if not path:
         raise RuntimeError("Fine-tuned sampler is not configured. Set PILLCLERK_TINKER_PATH or review manually.")
-    return make_tinker_parser(path)
+    budget = config._get("PILLCLERK_SAMPLING_BUDGET_USD")
+    return make_tinker_parser(path, sampling_budget_usd=float(budget) if budget else None)
 
 
 def main() -> None:

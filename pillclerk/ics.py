@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, timezone
 from hashlib import sha256
 
 from icalendar import Alarm, Calendar, Event
@@ -19,10 +19,12 @@ def to_ics(plan: list[Dosing], slot_times: dict[str, time] | None = None) -> byt
     cal = Calendar()
     cal.add("prodid", "-//Pill Clerk//EN")
     cal.add("version", "2.0")
+    exported_at = datetime.now(timezone.utc)
     for i, d in enumerate(plan):
         unit = d.unit
         summary = f"💊 {d.med.drug} {d.med.strength or ''}: {frac(d.amount)} {unit} ({d.med.food})"
         ev = Event()
+        ev.add("dtstamp", exported_at)
         ev.add("summary", summary)
         ev.add("dtstart", datetime.combine(d.start, times[d.slot]))
         ev.add("duration", timedelta(minutes=10))

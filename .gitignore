@@ -62,3 +62,7 @@ train/checkpoint_v3_unofficial.json
 .idea/
 .vscode/
 *.swp
+
+# Local verification service/device diagnostics; never submission artifacts.
+artifacts/acceptance/server.*
+artifacts/acceptance/emulator.log

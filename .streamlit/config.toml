@@ -7,3 +7,8 @@ font = "sans serif"
 
 [browser]
 gatherUsageStats = false
+
+[server]
+# Hosted Tinker needs tokenizers, not vision models. Watching lazy imports in
+# transformers probes optional torchvision modules and stalls page transitions.
+fileWatcherType = "none"

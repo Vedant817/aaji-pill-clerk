@@ -53,3 +53,27 @@ def test_chart_stock_is_blank_per_medicine_and_conflicts_stop_exports():
     assert not at.exception
     assert not at.get("download_button")
     assert not at.number_input
+
+
+def test_review_restores_draft_and_resolved_ask_after_page_widget_cleanup(monkeypatch):
+    import streamlit as st
+    from pillclerk import config
+    monkeypatch.setattr(config, "tinker_parser_ready", lambda: False)
+    monkeypatch.setenv("PARSER_BACKEND", "tinker")
+    monkeypatch.setattr(st, "page_link", lambda *args, **kwargs: None)
+    line = "Tab Example 10 mg 1-0-0 x7d"
+    med = MedLine(drug="Example", strength="10 mg", duration_days=7,
+                  dose=Dose(morning=1), note=line)
+    # Streamlit removes page-specific widgets on navigation but keeps non-widget
+    # state. Model the exact state observed after visiting Chart in the browser.
+    at = AppTest.from_file(str(ROOT / "app/pages/2_Review.py"))
+    at.session_state["pc_r_0_seeded"] = True
+    at.session_state["drafts"] = [{"line": line, "gold": med.model_dump(),
+        "confirmed": True, "parser_checks": ["strength"], "resolved_checks": ["strength"]}]
+    at.run()
+    assert not at.exception
+    assert at.text_input(key="pc_r_0_drug").value == "Example"
+    assert at.number_input(key="pc_r_0_am").value == 1
+    assert at.checkbox(key="pc_r_0_resolve_strength").value
+    assert at.session_state["drafts"][0]["confirmed"]
+    assert not at.session_state["drafts"][0]["gold"]["needs_check"]

@@ -7,7 +7,7 @@ apply_theme()
 import streamlit as st
 
 st.title("History")
-st.caption("Saved on this laptop only. Real prescriptions are never uploaded.")
+st.caption("Saved on this laptop. Photos stay local; text parsing may use the configured hosted service.")
 meds = load_meds()
 if not meds:
     st.info("Nothing saved yet. Confirm a chart, then tap Save to local history.")

@@ -120,7 +120,10 @@ KINDS: list[Kind] = ["daily", "prn", "taper"]
 UNITS: list[Unit] = ["tab", "cap", "ml", "drop", "puff", "unit", "sachet", "apply"]
 
 seed = p + "seeded"
-if not st.session_state.get(seed):
+# Streamlit removes widget state when another page is visited. The separate
+# seeded flag survives; reseed missing widgets from the saved draft on return.
+field_keys = ("drug", "str", "form", "kind", "food", "dur", "n", "am", "noon", "pm", "unit", "prn")
+if not st.session_state.get(seed) or any(p + key not in st.session_state for key in field_keys):
     _push_gold(i, gold)
     st.session_state[seed] = True
 
@@ -187,11 +190,15 @@ if med.needs_check:
 # Parser uncertainty must be explicitly resolved by the caregiver.
 parser_checks = draft.get("parser_checks", gold.needs_check)
 unresolved = []
+resolved = []
 for check in parser_checks:
-    if not st.checkbox(f"I checked {check} against the prescription and resolved the ASK", key=p + "resolve_" + check):
+    if not st.checkbox(f"I checked {check} against the prescription and resolved the ASK",
+                       value=check in draft.get("resolved_checks", []), key=p + "resolve_" + check):
         unresolved.append(check)
+    else:
+        resolved.append(check)
 med = med.model_copy(update={"needs_check": sorted(set(med.needs_check + unresolved))})
-drafts[i] = updated_draft({**draft, "parser_checks": parser_checks}, med)
+drafts[i] = updated_draft({**draft, "parser_checks": parser_checks, "resolved_checks": resolved}, med)
 st.session_state["drafts"] = drafts
 done = n_confirmed(drafts)
 

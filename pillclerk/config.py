@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Literal
 
 LlmBackend = Literal["template", "gemini", "backboard", "tinker"]
-ExtractBackend = Literal["manual", "ollama"]
+ExtractBackend = Literal["manual", "ollama", "windows"]
 ParserBackend = Literal["tinker", "ollama"]
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,8 +61,8 @@ def extract_backend() -> ExtractBackend:
             "or EXTRACT_BACKEND=ollama (local gemma4:e4b). Gemini is text-only for "
             "the 31B teacher on synthetic / hand-written realistic lines."
         )
-    if value not in ("manual", "ollama"):
-        raise ValueError(f"EXTRACT_BACKEND must be manual or ollama, got {value!r}")
+    if value not in ("manual", "ollama", "windows"):
+        raise ValueError(f"EXTRACT_BACKEND must be manual, ollama or windows, got {value!r}")
     return value  # type: ignore[return-value]
 
 
