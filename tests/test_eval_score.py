@@ -267,21 +267,31 @@ def test_parse_medline_blob_skips_inner_dose_object() -> None:
 
 
 def test_t_valid_json_matches_preds() -> None:
+    from eval.report import exact_on_valid, load_preds
+
     t = json.loads(Path("eval/out/t_valid.json").read_text(encoding="utf-8"))
-    assert t["synth"]["n_valid"] == 350
-    assert t["synth"]["t_exact_on_valid"] == 346
-    assert t["synth"]["other_exact_on_valid"] == 342
-    assert t["synth"]["mcnemar"]["n01_b_fixes"] == 8
-    assert t["synth"]["mcnemar"]["n10_b_regresses"] == 4
-    assert t["hw"]["n_valid"] == 70
-    assert t["hw"]["t_exact_on_valid"] == 64
-    assert t["hw"]["other_exact_on_valid"] == 64
+    synth = exact_on_valid(
+        load_preds(Path("eval/out/gemma31_synth_test_preds.jsonl")),
+        load_preds(Path("eval/out/ft2_synth_test_preds.jsonl")),
+    )
+    hw = exact_on_valid(
+        load_preds(Path("eval/out/gemma31_handwritten_realistic_preds.jsonl")),
+        load_preds(Path("eval/out/ft2_handwritten_realistic_preds.jsonl")),
+    )
+    assert t["synth"]["n_valid"] == synth["n_valid"]
+    assert t["synth"]["t_exact_on_valid"] == synth["t_exact_on_valid"]
+    assert t["synth"]["other_exact_on_valid"] == synth["other_exact_on_valid"]
+    assert t["synth"]["mcnemar"] == synth["mcnemar"]
+    assert t["hw"]["n_valid"] == hw["n_valid"]
+    assert t["hw"]["t_exact_on_valid"] == hw["t_exact_on_valid"]
+    assert t["hw"]["other_exact_on_valid"] == hw["other_exact_on_valid"]
     results = Path("eval/results.md").read_text(encoding="utf-8")
-    assert "346/350" in results
-    assert "64/70" in results
+    assert f"{t['synth']['t_exact_on_valid']}/{t['synth']['n_valid']}" in results
+    assert f"{t['hw']['t_exact_on_valid']}/{t['hw']['n_valid']}" in results
     assert "schema-validity" in results
     assert "danger_v2_norm" in results
     assert "generated in code" in results
+    assert "rescored_from_preds" in results
 
 
 def test_b0_fair_saved_run_beats_schema_fail_b0() -> None:

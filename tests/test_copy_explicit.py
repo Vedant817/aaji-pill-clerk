@@ -44,6 +44,65 @@ def test_does_not_invent_dose_slots() -> None:
     assert "dose" in out.needs_check
 
 
+def test_copies_combo_brand_and_devanagari_surface() -> None:
+    telma = MedLine(drug="Telma", strength="40 mg/5 mg", form="tab", dose=Dose(morning=1, unit="tab"))
+    out = copy_explicit(telma, "Tab Telma AM 40mg/5mg OD ES 1/12")
+    assert out.drug == "Telma AM"
+    assert out.strength == "40mg/5mg"
+    hindi = MedLine(drug="Telma", strength="40 mg", form="tab", dose=Dose(morning=1, unit="tab"))
+    out_h = copy_explicit(hindi, "टेल्मा 40 सुबह एक खाली पेट 30 दिन")
+    assert out_h.drug == "टेल्मा"
+    assert out_h.strength == "40"
+
+
+def test_asks_when_frequency_is_missing() -> None:
+    med = MedLine(
+        drug="Ascoril LS",
+        form="syrup",
+        dose=Dose(morning=1, unit="ml"),
+        food="after",
+        duration_days=5,
+        needs_check=[],
+    )
+    out = extra_rules(copy_explicit(med, "SYR. Ascoril LS AFTER FOOD x 5 DAYS"))
+    assert out.dose is None
+    assert "dose" in out.needs_check
+
+
+def test_copies_insulin_units_and_three_time_words() -> None:
+    lantus = MedLine(
+        drug="Lantus",
+        strength="12 unit",
+        form="tab",
+        dose=Dose(morning=0, night=1, unit="unit"),
+    )
+    out = extra_rules(copy_explicit(lantus, "Lantus 12 unit raat ko"))
+    assert out.form == "injection"
+    assert out.strength is None
+    assert out.dose is not None and out.dose.night == 12 and out.dose.morning == 0
+    tears = MedLine(
+        drug="Refresh Tears",
+        form="drops",
+        dose=Dose(morning=1, unit="drop"),
+        duration_days=15,
+    )
+    out_t = extra_rules(copy_explicit(tears, "Refresh Tears drops subah dopahar raat 15 din"))
+    assert out_t.dose is not None
+    assert (out_t.dose.morning, out_t.dose.afternoon, out_t.dose.night) == (1, 1, 1)
+    assert out_t.dose.unit == "drop"
+
+
+def test_raat_ko_ek_is_night_only() -> None:
+    med = MedLine(
+        drug="Telma AM",
+        form="tab",
+        dose=Dose(morning=1, night=1, unit="tab"),
+        duration_days=30,
+    )
+    out = copy_explicit(med, "Tab Telma AM 40 mg/5 mg raat ko ek 30 din")
+    assert out.dose is not None and out.dose.morning == 0 and out.dose.night == 1
+
+
 def test_every_style_writes_a_form_token() -> None:
     gold = MedLine(
         drug="Asthalin",

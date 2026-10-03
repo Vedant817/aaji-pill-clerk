@@ -5,15 +5,15 @@
   "json_valid": 0.9949622166246851,
   "parse_fail": 0.0,
   "http_fail": 0.005037783375314861,
-  "exact": 0.9571788413098237,
+  "exact": 0.9622166246851386,
   "exact_ci95": [
-    0.9370277078085643,
-    0.9748110831234257
+    0.9420654911838791,
+    0.9798488664987406
   ],
-  "exact_norm": 0.9571788413098237,
+  "exact_norm": 0.9622166246851386,
   "exact_norm_ci95": [
-    0.9370277078085643,
-    0.9748110831234257
+    0.9420654911838791,
+    0.9798488664987406
   ],
   "norm_rule": "strength: number+unit; drug: Devanagari\u2192Latin BRAND_ALIASES",
   "danger": 0.0025188916876574307,
@@ -22,7 +22,7 @@
   "danger_v2_strict": 0.012594458438287154,
   "danger_v2_norm": 0.012594458438287154,
   "n_valid": 395,
-  "exact_on_valid": 0.9620253164556962,
+  "exact_on_valid": 0.9670886075949368,
   "ask_recall": 0.9411764705882353,
   "false_ask_rate": 0.1736842105263158,
   "n_gold_ask": 17,
@@ -31,18 +31,16 @@
     "strength": 0.9924433249370277,
     "form": 0.9949622166246851,
     "kind": 0.9949622166246851,
-    "dose": 0.9622166246851386,
+    "dose": 0.9672544080604534,
     "every_n_days": 0.9949622166246851,
     "taper": 0.9949622166246851,
     "food": 0.9949622166246851,
     "duration_days": 0.9899244332493703,
     "prn_max_per_day": 0.9949622166246851
   },
-  "p50_s": 40.79961395263672,
-  "p95_s": 124.34164500236511,
   "error_fields": {
     "drug": 5,
-    "dose": 15,
+    "dose": 13,
     "duration_days": 4,
     "strength": 3,
     "form": 2,
@@ -53,17 +51,9 @@
     "prn_max_per_day": 2
   },
   "dropped_train_duplicates": 3,
-  "gemini_accepted_config": {
-    "maxOutputTokens": 1024,
-    "responseMimeType": "application/json",
-    "responseSchema": true,
-    "temperature": 0.0,
-    "thinkingConfig": true
-  },
-  "gemini_accepted_config_counts": {
-    "{\"maxOutputTokens\": 1024, \"responseMimeType\": \"application/json\", \"responseSchema\": true, \"temperature\": 0.0, \"thinkingConfig\": true}": 397
-  },
-  "json_mode": true,
+  "p50_s": 40.79961395263672,
+  "p95_s": 124.34164500236511,
+  "rescored_from_preds": true,
   "payload_summary": {
     "count": 896,
     "sets": {

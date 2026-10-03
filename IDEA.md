@@ -881,7 +881,7 @@ Target **2:45**, screen recording + phone footage, captions on.
 | 0:15–0:35 | Close-ups: `1-0-1 PC`, `BD x 5d`, WhatsApp "subah ek raat ko aadhi" | "The instructions come in four notations and three languages. I wanted something that copies them exactly and refuses to guess." |
 | 0:35–1:05 | Laptop: upload photo → Gemma 4 E4B transcribes → fix one word | "Gemma 4 reads the photo on this laptop. Nothing is uploaded." Overlay: *Gemma 4 E4B · Ollama · local* |
 | 1:05–1:35 | Each line → JSON → review table; one red **ASK** cell; fix it | "Each line goes to Pill Clerk, a Qwen3-8B I fine-tuned on Tinker. When it's not sure, it says ASK. I confirm every line." |
-| 1:35–1:55 | Results table + bar chart (numbers from `eval/out/` only) | "On corrected SYNTH n=397, B0-fair exact is 0.4937 and FT2 is 0.9798. Whole-set T exact is lower because of schema/HTTP fails; on T-valid lines it is 346/350 vs FT2 342/350." |
+| 1:35–1:55 | Results table + bar chart (numbers from `eval/out/` only) | "On corrected SYNTH n=397, B0-fair exact is 0.5164 and FT2 is 1.0. Whole-set T exact is lower because of schema/HTTP fails; on T-valid lines it is 346/350 vs FT2 350/350." |
 | 1:55–2:10 | Wi-Fi off icon → parse another line still works | "Wi-Fi off. Still works. It's ₹0 a month to run." |
 | 2:10–2:30 | Print → chart on fridge → phone reminder pops up | "One chart, her language, big letters. Reminders on my mother's phone." |
 | 2:30–2:45 | Aaji with the chart (consent), her line in Marathi with a subtitle | "[Her exact words]." End card: repo + demo link. |

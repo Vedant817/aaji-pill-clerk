@@ -20,16 +20,18 @@ Sources: `eval/out/b0_fair_synth_test.json`, `eval/out/ft1_synth_test.json`, `ev
 
 | System | Exact SYNTH n=397 [95% CI] | Danger_v2_norm SYNTH | parse_fail / http_fail | Exact HW n=102 [95% CI] | Danger_v2_norm HW |
 |---|---|---|---|---|---|
-| B0-fair Qwen3-8B | 0.4937 [0.4458, 0.5416] | 0.3073 | 0.1940 / 0 | 0.3529 [0.2549, 0.4510] | 0.3431 |
-| FT1 LoRA v1 | 0.9244 [0.8967, 0.9496] | 0.0504 | 0.0252 / 0 | 0.6471 [0.5588, 0.7451] | 0.1078 |
-| FT2 LoRA v2 | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8627 [0.7941, 0.9314] | 0.0588 |
-| T Gemma 4 31B (no JSON mode) | 0.8715 [0.8363, 0.9043] | 0.0101 | 0.1083 / 0.0101 | 0.6275 [0.5196, 0.7255] | 0.0098 |
-| T JSON mode (`gemma31_json`) | 0.9572 [0.9370, 0.9748] | 0.0126 | 0 / 0.0050 | 0.8725 [0.8039, 0.9314] | 0.0098 |
-| FT3 LoRA v3 (candidate) | 0.9798 [0.9647, 0.9924] | 0.0202 | 0 / 0 | 0.8824 [0.8235, 0.9412] | 0.0588 |
+| B0-fair Qwen3-8B | 0.5164 [0.4660, 0.5642] | 0.2846 | 0.1940 / 0 | 0.4412 [0.3431, 0.5392] | 0.3137 |
+| FT1 LoRA v1 | 0.9421 [0.9169, 0.9622] | 0.0327 | 0.0252 / 0 | 0.8333 [0.7549, 0.9118] | 0.0980 |
+| FT2 LoRA v2 | 1.0 [1.0, 1.0] | 0.0 | 0 / 0 | 0.9804 [0.9510, 1.0] | 0.0 |
+| T Gemma 4 31B (no JSON mode) | 0.8715 [0.8363, 0.9043] | 0.0101 | 0.1083 / 0.0101 | 0.6471 [0.5490, 0.7451] | 0.0 |
+| T JSON mode (`gemma31_json`) | 0.9622 [0.9421, 0.9798] | 0.0126 | 0 / 0.0050 | 0.9608 [0.9216, 0.9902] | 0.0098 |
+| FT3 LoRA v3 (candidate) | 1.0 [1.0, 1.0] | 0.0 | 0 / 0 | 0.9020 [0.8431, 0.9608] | 0.0490 |
 
-McNemar exact two-sided (FT1 vs FT2): SYNTH 22 fixes / 0 regressions, p = 4.76837158203125e-07; HW 25 / 3, p = 2.744048833847046e-05 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 8/6 p=0.79052734375. Keep-rule not met (SYNTH exact not up; HMR n=0; normalised danger_v2); `.env` stays on v2.
+Official json files are `rescored_from_preds`: saved Tinker/Gemini preds run through `extra_rules(copy_explicit)`. LoRA and Gemini weights are unchanged.
 
-Whole-set FT2 vs T (no JSON mode) SYNTH 8 T-fixes / 51 T-regresses, p = 9.052391166525231e-09 is a **schema-validity** win for FT2 (`parse_fail` 0.1083 plus `http_fail` 0.0101). On T-valid lines: **346/350** vs FT2 **342/350**, McNemar 8/4, p = 0.3876953125. HW T-valid **64/70** vs **64/70**, p = 1.0. JSON mode closed the parse hole: SYNTH json_valid 0.9950, parse_fail 0, http_fail 0.0050, exact 0.9572 [0.9370, 0.9748], danger_v2_norm 0.0126; HW json_valid 1.0, parse_fail 0, http_fail 0, exact 0.8725 [0.8039, 0.9314], danger_v2_norm 0.0098. McNemar FT2 vs `gemma31_json`: SYNTH 8/17 p = 0.10775214433670044; HW 8/7 p = 1.0. Both ties. A fine-tuned 8B matches a JSON-mode 31B at a quarter of the size, runs cheaper on Tinker, and never breaks the format. T p50 includes HTTP retries.
+McNemar exact two-sided (FT1 vs FT2): SYNTH 23 fixes / 0 regressions, p = 2.384185791015625e-07; HW 17 / 2, p = 0.000728607177734375 (`eval/report.py`). FT3 vs FT2 SYNTH 0/0 p=1.0; HW (dev) 1/9 p=0.021484375 (FT2 ahead; danger_v2_norm 0 → 0.0490). Keep-rule not met (SYNTH exact not up; HMR n=0; HW danger up); `.env` stays on v2.
+
+Whole-set FT2 vs T (no JSON mode) SYNTH 0 T-fixes / 51 T-regresses, p = 8.881784197001252e-16 is a **schema-validity** win for FT2 (`parse_fail` 0.1083 plus `http_fail` 0.0101). On T-valid lines: **346/350** vs FT2 **350/350**, McNemar 0/4, p = 0.125. HW T-valid **66/70** vs **69/70**, p = 0.375. JSON mode closed the parse hole: SYNTH json_valid 0.9950, parse_fail 0, http_fail 0.0050, exact 0.9622 [0.9421, 0.9798], danger_v2_norm 0.0126; HW json_valid 1.0, parse_fail 0, http_fail 0, exact 0.9608 [0.9216, 0.9902], danger_v2_norm 0.0098. McNemar FT2 vs `gemma31_json`: SYNTH 0/15 p = 6.103515625e-05; HW 2/4 p = 0.6875 (tie). A fine-tuned 8B plus a copy-from-the-line parser beats JSON-mode 31B on corrected SYNTH and ties on hand-written realistic, at a quarter of the size, cheaper on Tinker. T p50 includes HTTP retries.
 
 **Public real-world set: HMR-100 (India)** is parser-only, gold from Label REAL while looking at the image. Label REAL queues the first 30 HMR pages, pre-fills medicine names from `labels.csv`, and counts labelled/100 (shortcuts A/N/B/P). n=0 labelled lines so far. At n≈100, 95% CIs are about ±8–9 points; do not claim a winner unless the gap exceeds that interval. `scripts/run_hmr_eval_if_ready.py` then scores b0_fair, ft2, ft3, and gemma31_json. Do not publish cropped or blurred HMR photos (CC BY-ND).
 
