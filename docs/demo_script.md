@@ -1,15 +1,24 @@
-# 90-second recording plan (user-supplied synthetic input)
+# Synthetic browser demo
 
-Local app: http://localhost:8501. Choose explicitly labelled synthetic text from a training fixture for recording. The app starts empty and has no demo-loading button. Keep private and public dataset photos out of the recording.
+The actual recording is [demo.mp4](../artifacts/acceptance/demo.mp4): 85 seconds, silent, played at 2.22x speed with a visible synthetic/AI-verification label. The [raw recording](../artifacts/acceptance/browser-workflow-raw.mp4) is retained. It is a real browser run, not a rendered mock UI or evidence of human acceptance.
 
-**0:00–0:15 Scan.** Open Scan. Paste the chosen synthetic lines yourself. Explain that a caregiver can upload a local reference photo and type what is written; automatic OCR is unverified. Tap **Load lines**.
+The input is [synthetic-slip.png](../artifacts/acceptance/synthetic-slip.png), rendered from two existing template training-fixture lines recorded in [scenario.json](../artifacts/acceptance/scenario.json). It is not a real prescription and is never loaded automatically by the app.
 
-**0:15–0:50 Review with ASK.** Tap **Fill fields from Tinker parser**. Walk one line: show the original text next to JSON fields. If a cell is **red ASK**, say: the clerk will not guess; we copy from the slip or leave it for the pharmacist. Confirm each line (human sign-off). Chart stays locked until ASK is gone.
+## What it shows
 
-**0:50–1:15 Chart.** Open Chart. Start date today, language Marathi. Scroll the big-font fridge table (☀️ / 🌤️ / 🌙). Point at the footer: clerk copy, not medical advice. Download **fridge-chart.html**.
+1. Upload the synthetic printed reference on Scan and run the installed Windows OCR engine.
+2. Remove the non-medicine header, check both copied lines against the image, and sign off.
+3. Load lines and wait for live hosted FT2 parsing. The recording includes the real wait; speed-up applies to the entire recording.
+4. Compare each field with the synthetic source. Confirm the tablet and syrup lines.
+5. Show the Marathi chart, including the half-tablet night dose and course end dates.
+6. Click the chart and calendar download controls. Actual export responses were retrieved and validated separately; no phone import is shown.
 
-Show units and taper dates. Stock is blank until the caregiver enters it per medicine. Conflicts and schedules the chart cannot represent block export.
+The agent operated the browser as a simulated caregiver. Do not describe these clicks as a real friend's signoff, independent human annotation, or clinical validation.
 
-**1:15–1:30 .ics.** Download **reminders.ics**. Say: import on the caregiver phone; SOS stays “when needed”. Close on: always confirm with the doctor or pharmacist.
+## Suggested spoken narration
 
-If Tinker is down, still demo the lock: unconfirmed lines block Chart.
+“This is synthetic test input. Windows reads the printed text locally; handwriting accuracy is still unverified. I check the text before it reaches the hosted parser. Every line needs confirmation. The chart copies the written doses and dates. The calendar export contains recurring events and alarms, but the intended phone still needs an import and alarm check.”
+
+## Further acceptance
+
+Browser safety checks and artifacts are documented in [browser-acceptance.md](browser-acceptance.md). A real caregiver handover, independent human labels, phone import, publication links, and consented feedback remain TODO. Do not record private or public dataset photographs.

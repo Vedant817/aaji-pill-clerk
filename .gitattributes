@@ -4,3 +4,5 @@ data/acceptance/** -text
 train/prepare_candidate.py text eol=lf
 pillclerk/filters.py text eol=lf
 pillclerk/schema.py text eol=lf
+# Calendar downloads require CRLF regardless of the checkout platform.
+*.ics -text whitespace=trailing-space,space-before-tab,cr-at-eol

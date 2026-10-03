@@ -1,0 +1,34 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "phone_import_verified": false,
+  "timezone": "floating local wall clock",
+  "event_count": 4,
+  "events": [
+    {
+      "summary": "💊 Doxy 100 mg: 1 tab (before)",
+      "start": "2026-10-04T08:00:00",
+      "occurrences": 7,
+      "alarm_seconds": 0
+    },
+    {
+      "summary": "💊 Doxy 100 mg: ½ tab (before)",
+      "start": "2026-10-04T21:00:00",
+      "occurrences": 7,
+      "alarm_seconds": 0
+    },
+    {
+      "summary": "💊 Ambrolite 30 mg/5 ml: 5 ml (any)",
+      "start": "2026-10-04T08:00:00",
+      "occurrences": 3,
+      "alarm_seconds": 0
+    },
+    {
+      "summary": "💊 Ambrolite 30 mg/5 ml: 5 ml (any)",
+      "start": "2026-10-04T21:00:00",
+      "occurrences": 3,
+      "alarm_seconds": 0
+    }
+  ],
+  "chart_checks_passed": true
+}

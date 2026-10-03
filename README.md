@@ -43,7 +43,7 @@ Every model call sits behind an env switch:
 | Variable | Default | What it controls |
 |---|---|---|
 | `LLM_BACKEND` | `template` | Synthetic messy text (`template` is free). Optional: `gemini` (AI Studio), `backboard`, `tinker` |
-| `EXTRACT_BACKEND` | `manual` | Paste/type lines. Photos never leave the laptop. Local `gemma4:e4b` OCR is not installed and is not claimed. |
+| `EXTRACT_BACKEND` | `manual` | Paste/type lines; optional `windows` uses installed local OCR, or `ollama` uses a locally installed vision model. Handwriting accuracy is unverified. |
 | `PARSER_BACKEND` | `tinker` | Line → JSON (`tinker` hosted fine-tune) |
 
 DigitalOcean is **dropped**. Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Backboard is an optional drop-in with the same chat interface. Public demo: **render.yaml provided; not deployed** (`$PORT`, synthetic data only).
@@ -67,7 +67,23 @@ Keys needed (ask before spending):
 
 ## Use the clerk
 
-On Scan, paste the medicine lines from the slip in front of you. Review opens on the first line, fills from Tinker when the sampler path is set, and asks you to confirm one line at a time. Chart stays locked until ASK cells are gone. Nothing is pre-loaded.
+On Scan, paste medicine lines, or upload a photo and use the configured local extractor. Windows OCR was exercised on one clean synthetic printed image; this does not establish handwriting accuracy. Check extracted text against the photo, remove non-medicine lines, then sign off before loading. Review fills from Tinker and asks you to confirm each line. Chart stays locked until every line is confirmed and ASK cells are resolved. Nothing is pre-loaded.
+
+```powershell
+# Uses process-only overrides; does not change .env or download a model.
+uv run python -m scripts.run_local --windows-ocr --sampling-budget-usd 0.05
+```
+
+The optional sampling cap applies to each parser instance and excludes storage;
+it is not an account-wide spending limit. Windows OCR uses installed language
+support (`WINDOWS_OCR_LANGUAGE=en-US`). Other systems can use manual input or
+an already installed Ollama model. Source changes require restarting the app;
+file watching is disabled to avoid probing optional Transformers vision modules.
+
+Browser acceptance uses an explicitly synthetic fixture outside runtime code.
+See [verification evidence and remaining acceptance](docs/browser-acceptance.md).
+Calendar event times are floating local times (08:00 remains 08:00 in the
+importing calendar's timezone). Verify the intended phone's import and alarms.
 
 Hand-written realistic (n=102, not photographed) lives in `data/heldout/handwritten_realistic.jsonl`.
 

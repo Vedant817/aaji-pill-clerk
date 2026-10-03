@@ -7,7 +7,7 @@ This is a **clerk**. It copies the prescription into a chart. It does not decide
 1. Daylight. Fill the frame with the medicine lines. One slip per photo.
 2. Cover faces, letterhead, and phone numbers.
 3. Hindi / Marathi / Hinglish lines are useful. Type what you see, including `[?]` for unreadable letters.
-4. Do not send the photo to the internet. Type the line on **Label REAL** (or paste on **Scan**) while looking at the image.
+4. Keep the photo local. On **Scan**, type the line or use a configured local extractor. Check every character against the photo and remove headings before signing off the extracted text. Windows OCR has only been tested on one synthetic printed slip; handwriting accuracy is unverified.
 
 ## What a red ASK means
 
@@ -31,6 +31,15 @@ A red **ASK** cell means the clerk is not sure about that field (drug, dose, sch
 2. Open it on the caregiver's phone and add it to the calendar.
 3. Alarms follow the slot times on the chart (morning / afternoon / night).
 4. SOS / PRN medicines are listed as “when needed”, not as timed alarms.
+5. Reminder times are local wall-clock times in the importing calendar. Check the calendar's timezone, the first and last date, the dose/unit, and whether alarms are enabled. Imported files do not prove that a phone will display an alarm.
+
+## Actual handover checklist (not completed by agent simulation)
+
+Use a separate test calendar and an explicitly synthetic source before entering a real prescription. Record device/calendar app, timezone, import result, recurrence end dates, and whether a test alarm appeared. Delete the test calendar afterward.
+
+Then let the intended caregiver use Scan → Review → Chart themselves. Ask them to compare every line and explain an ASK field. Record their own feedback and permission before sharing it. No caregiver identity, quote, consent, independent label, or alarm delivery can be supplied by an AI pretending to be that person.
+
+Current evidence is in `docs/browser-acceptance.md`; real caregiver handover and phone calendar acceptance remain TODO.
 
 ## Always confirm with the doctor or pharmacist
 

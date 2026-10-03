@@ -15,6 +15,14 @@
 > implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
 >
 > **Weekend overrides (source of truth over later sections):**
+> **4 October browser acceptance correction:** optional `EXTRACT_BACKEND=windows`
+> now reads photos through the installed local Windows OCR engine. One clean
+> synthetic printed slip was read exactly; handwriting accuracy remains unverified.
+> Scan requires checking OCR text before loading. Browser navigation exposed lost
+> Review widget values; fields and resolved ASK signoffs now restore from drafts.
+> Calendar events now include required UTC DTSTAMP; reminder times are local wall
+> clock times. See `docs/browser-acceptance.md` for actual evidence and remaining
+> device/human acceptance. These corrections supersede older OCR and replay claims.
 > **3 October candidate follow-through:** clean_v4 is frozen (3,079 train / 249 val,
 > zero checked normalized-text overlap). AI review found 92 train / 10 validation
 > examples missing duration ASK flags; safety_v5 adds those flags without changing
@@ -76,7 +84,7 @@
 
 - **Scan is paste/type** (`EXTRACT_BACKEND=manual`). Local Gemma 4 E4B OCR is not on this laptop and is not claimed. Photos stay on the machine.
 - **A small open model, Qwen3-8B, fine-tuned with Tinker** (LoRA SFT) turns each messy line ("Tab Glycomet GP1 1-0-1 PC x 30d", "सकाळी एक, रात्री अर्धी") into **strict JSON**. When it isn't sure, it says **"ASK"** instead of guessing.
-- **Training data is template-rendered, correct by construction:** code samples the gold JSON first, then a Python template writes the messy line. All **3096** `train.jsonl` rows have `renderer=template`. Gemma 4 31B (`gemma-4-31b-it` on Google AI Studio) is the measured 31B teacher only; it did **not** write the training set. Whole-set exact vs FT2 is a schema-validity gap until `gemma31_json` is run. Public demo: **`render.yaml` provided; not deployed**.
+- **Training data is template-rendered; labels require validation:** code samples the gold JSON first, then a Python template writes the messy line. All **3096** `train.jsonl` rows have `renderer=template`. Gemma 4 31B (`gemma-4-31b-it` on Google AI Studio) is the measured 31B teacher only; it did **not** write the training set. Whole-set exact vs FT2 is a schema-validity gap until `gemma31_json` is run. Public demo: **`render.yaml` provided; not deployed**.
 - **The headline result** is a measured table on held-out synthetic lines plus **Public real-world set: HMR-100 (India)** once labelled: base Qwen3-8B vs **fine-tuned Qwen3-8B** vs Gemma 4 31B. It reports exact match, **danger_v2_norm**, parse_fail, and http_fail. Whole-set FT2 vs T exact is a schema-validity gap unless `gemma31_json` shows otherwise. T latency includes HTTP retries; do not use it as a Tinker speed claim.
 - **A human signs off on every line.** The tool copies what the doctor wrote. It never advises on doses.
 
