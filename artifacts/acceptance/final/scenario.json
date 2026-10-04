@@ -1,0 +1,51 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "source": "data/candidates/uncertainty_v6_final/train.jsonl",
+  "rows": [
+    {
+      "line": "Tab Doxy 100 mg subah ek raat ko aadhi khane se pehle 7 din",
+      "gold": {
+        "drug": "Doxy",
+        "strength": "100 mg",
+        "form": "tab",
+        "kind": "daily",
+        "dose": {
+          "morning": 1.0,
+          "afternoon": 0.0,
+          "night": 0.5,
+          "unit": "tab"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "before",
+        "duration_days": 7,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    },
+    {
+      "line": "Syr Ambrolite 30 mg/5 ml 5 ml-0 ml-5 ml x3d",
+      "gold": {
+        "drug": "Ambrolite",
+        "strength": "30 mg/5 ml",
+        "form": "syrup",
+        "kind": "daily",
+        "dose": {
+          "morning": 5.0,
+          "afternoon": 0.0,
+          "night": 5.0,
+          "unit": "ml"
+        },
+        "every_n_days": 1,
+        "taper": [],
+        "food": "any",
+        "duration_days": 3,
+        "prn_max_per_day": null,
+        "note": null,
+        "needs_check": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "method": "Native Google Calendar Settings > Import & export; actual browser-downloaded recheck/pillclerk.ics",
+  "ui_result": "Imported 4 out of 4 events.",
+  "timezone": "Asia/Kolkata",
+  "expanded_occurrences": 20,
+  "series": [
+    {
+      "summary": "💊 Doxy 100 mg: 1 tab (before)",
+      "start": "2026-10-04T08:00:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=7;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "instance_count": 7,
+      "last_instance": "2026-10-10T08:00:00+05:30"
+    },
+    {
+      "summary": "💊 Ambrolite 30 mg/5 ml: 5 ml (any)",
+      "start": "2026-10-04T08:00:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "instance_count": 3,
+      "last_instance": "2026-10-06T08:00:00+05:30"
+    },
+    {
+      "summary": "💊 Ambrolite 30 mg/5 ml: 5 ml (any)",
+      "start": "2026-10-04T21:00:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "instance_count": 3,
+      "last_instance": "2026-10-06T21:00:00+05:30"
+    },
+    {
+      "summary": "💊 Doxy 100 mg: ½ tab (before)",
+      "start": "2026-10-04T21:00:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=7;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "instance_count": 7,
+      "last_instance": "2026-10-10T21:00:00+05:30"
+    }
+  ],
+  "phone_recurrence_observation": false,
+  "audible_alarm_observation": false,
+  "cleanup": "Temporary synthetic test calendar deleted through its own Google Calendar settings; bounded read returned HTTP 404 NOT_FOUND."
+}

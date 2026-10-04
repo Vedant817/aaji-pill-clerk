@@ -15,6 +15,16 @@
 > implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
 >
 > **Weekend overrides (source of truth over later sections):**
+> **4 October final V6 and acceptance check:** separately authorized V6 trained
+> all 615 steps but is rejected. Fresh matched FT2/V6 exact counts are SYNTH
+> 397/351 of 397, generated 99/59 of 102 and HMR 71/50 of 104; HMR danger
+> 17/22. FT2 stays active and .env is unchanged. Combined compute upper bound
+> $6.60552631 excludes storage and is not billed spend. Native Google web ICS
+> import passed: four series, 20 occurrences, IST times/course limits/popup
+> reminders preserved; test calendar deleted with 404 read-back. Latest browser
+> exports preserve source/check provenance. Full suite: 232 tests. Real caregiver,
+> independent human gold and physical-phone recurrence/sound remain unverified.
+> See docs/candidate-v6.md and artifacts/acceptance/final/export-verification.json.
 > **4 October reverification:** 199 tests pass. The browser workflow was exercised
 > again with live hosted FT2, actual downloads, confirmation revocation, and refill
 > dates. Android emulator import and actual displayed notifications now pass in

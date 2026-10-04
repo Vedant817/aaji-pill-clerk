@@ -66,3 +66,9 @@ train/checkpoint_v3_unofficial.json
 # Local verification service/device diagnostics; never submission artifacts.
 artifacts/acceptance/server.*
 artifacts/acceptance/emulator.log
+
+# Fresh candidate evaluation raw public text stays local.
+eval/out/ft2_v6baseline_hmr100_gold_preds.jsonl
+eval/out/ft2_v6baseline_hmr100_gold_raw.jsonl
+eval/out/ft6_hmr100_gold_preds.jsonl
+eval/out/ft6_hmr100_gold_raw.jsonl

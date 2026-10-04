@@ -1,0 +1,26 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "version": "39e2f48",
+  "workflow": "Uploaded actual synthetic-slip.png, manually transcribed it, live FT2 parse, inspected both forms, confirmed both, filled source/check provenance, clicked both download buttons; fetched the exact browser media response bytes",
+  "event_count": 4,
+  "occurrence_counts": [
+    7,
+    7,
+    3,
+    3
+  ],
+  "local_hours": [
+    8,
+    21
+  ],
+  "chart_language": "mr",
+  "provenance_verified": true,
+  "popup_alarm_seconds": 0,
+  "phone_import_verified": false,
+  "chart_checks_passed": true,
+  "sha256": {
+    "pillclerk.ics": "4ac8fe40e99a4521292d0b75645111a63c024c60b4ca343851e5156ea591a75f",
+    "fridge-chart.html": "4a6f011dca10c208e0d30cc2377bda3ddcf93144337f02ac140ca2410ce29aa6"
+  }
+}

@@ -6,3 +6,6 @@ pillclerk/filters.py text eol=lf
 pillclerk/schema.py text eol=lf
 # Calendar downloads require CRLF regardless of the checkout platform.
 *.ics -text whitespace=trailing-space,space-before-tab,cr-at-eol
+
+# Keep actual ICS export bytes and RFC5545 folded-line spaces intact.
+*.ics -text whitespace=-blank-at-eol
