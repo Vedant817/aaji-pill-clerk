@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "method": "Google Calendar connector: direct event creation followed by event read-back",
+  "calendar": "primary",
+  "start": "2026-10-04T15:01:12+05:30",
+  "end": "2026-10-04T15:02:12+05:30",
+  "reminders": {
+    "use_default": false,
+    "overrides": [
+      {
+        "method": "popup",
+        "minutes": 0
+      }
+    ]
+  },
+  "visibility": "private",
+  "transparency": "transparent",
+  "google_event_storage_verified": true,
+  "ics_import_verified": false,
+  "physical_phone_notification_verified": null,
+  "audible_alarm_verified": null,
+  "calendar_listing_status": "ACCESS_TOKEN_SCOPE_INSUFFICIENT; primary event search/create/read succeeded",
+  "limits": "One non-medical test. Direct event creation does not establish ICS import, phone sync, notification delivery, caregiver feedback or clinical accuracy."
+}

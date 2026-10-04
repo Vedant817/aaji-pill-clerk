@@ -5,11 +5,14 @@ paid integration is needed. Actual Google Calendar import and physical-phone
 notification delivery are still pending. The T3 shared browser currently redirects
 to the public Calendar page instead of a signed-in calendar. The earlier passing
 emulator test used Fossify Calendar, not Google Calendar.
-The installed Google Calendar connector was also checked: listing calendars
-returned missing-permissions/scopes and explicitly required reauthentication.
-No test events were written to Google Calendar. Reconnect it with calendar access
-before attempting connector-based verification; API event creation alone would
-still not prove ICS import or physical-phone notification delivery.
+After the user reconnected, calendar listing still returned missing-permissions,
+but primary-calendar event search, creation and read-back succeeded. No further
+reconnection is needed for those actions. A single private, non-medical notification
+test was created for 4 October 2026 at 15:01:12 IST with an at-start popup reminder.
+The event is transparent (does not mark the user busy) and has no invited guests.
+See [API read-back evidence](../artifacts/acceptance/google-calendar-api-verification.json).
+Physical-phone delivery is awaiting the user's observation. This direct API check
+does not verify ICS import. The event ID needed for later cleanup stays gitignored.
 
 ## Import and sync
 

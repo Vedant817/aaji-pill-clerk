@@ -144,11 +144,13 @@ Feature work stops 5 October at 10:00 IST; submission deadline is 12:29 IST.
 The user selected Android + Google Calendar for the physical-phone check.
 [Specific import, fresh notification-test and human-label steps](android-google-calendar.md)
 are prepared. Google Calendar requires computer import followed by phone sync.
-An authenticated Google Calendar session and the intended phone are unavailable
-to the agent, so this acceptance remains pending.
-The installed connector additionally refused calendar listing due to missing
-permissions/scopes and requested reauthentication. No Google Calendar events were
-created. The notification-file generator was run and its actual output parsed:
+After the user reconnected Google Calendar, listing calendars still lacked a
+scope, but primary-calendar event search/create/read worked. One private,
+transparent, non-medical test event was created for 15:01:12 IST on 4 October and
+read back with the requested zero-minute popup reminder. No guests were invited.
+See [Google API evidence](../artifacts/acceptance/google-calendar-api-verification.json).
+This does not verify ICS import or physical-phone delivery; the latter awaits the
+user's actual observation. The notification-file generator was also run and its actual output parsed:
 one UTC event, a ten-minute delay, and one at-start display alarm were verified.
 The final full test run after adding the name diagnostic passed **203 tests**.
 One earlier run timed out during a Chart test's three-second Streamlit startup
