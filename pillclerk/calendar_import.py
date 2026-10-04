@@ -49,6 +49,7 @@ def google_events(raw: bytes, timezone_name: str, *, synthetic: bool = False) ->
         end = (start.astimezone(timezone.utc) + duration).astimezone(zone)
         result.append({"source_uid": uid, "payload": {
             "title": ("[Synthetic test] " if synthetic else "") + title,
+            "description": str(event.get("DESCRIPTION", "")),
             "start_time": start.isoformat(), "end_time": end.isoformat(),
             "timezone_str": timezone_name, "attendees": [], "add_google_meet": False,
             "recurrence": ["RRULE:" + rule.to_ical().decode("ascii")],

@@ -14,8 +14,8 @@ def test_review_edit_revokes_confirmation_and_preserves_parser_ask(monkeypatch):
     monkeypatch.setenv("PARSER_BACKEND", "tinker")
     # Test page widgets independently of Streamlit's multipage routing.
     monkeypatch.setattr(st, "page_link", lambda *args, **kwargs: None)
-    line = "Tab Example 1-0-0"
-    med = MedLine(drug="Example", dose=Dose(morning=1), note=line)
+    line = "Tab Example 1-0-0 x7 days"
+    med = MedLine(drug="Example", dose=Dose(morning=1), duration_days=7, note=line)
     at = AppTest.from_file(str(ROOT / "app/pages/2_Review.py"))
     at.session_state["drafts"] = [{"line": line, "gold": med.model_dump(), "confirmed": True}]
     at.run()
@@ -38,8 +38,8 @@ def test_review_edit_revokes_confirmation_and_preserves_parser_ask(monkeypatch):
 
 
 def test_chart_stock_is_blank_per_medicine_and_conflicts_stop_exports():
-    med = MedLine(drug="Example", dose=Dose(morning=1))
-    line = "Tab Example 1-0-0"
+    med = MedLine(drug="Example", dose=Dose(morning=1), duration_days=7)
+    line = "Tab Example 1-0-0 x7 days"
     draft = {"line": line, "gold": med.model_dump(), "confirmed": True}
     # Chart imports can exceed Streamlit's three-second test default on Windows.
     # Keep a bounded wait while still asserting actual widgets/export blockers.
@@ -79,3 +79,23 @@ def test_review_restores_draft_and_resolved_ask_after_page_widget_cleanup(monkey
     assert at.checkbox(key="pc_r_0_resolve_strength").value
     assert at.session_state["drafts"][0]["confirmed"]
     assert not at.session_state["drafts"][0]["gold"]["needs_check"]
+
+
+def test_invalid_edit_revokes_confirmation_before_validation_stops_page(monkeypatch):
+    import streamlit as st
+    from pillclerk import config
+    monkeypatch.setattr(config, "tinker_parser_ready", lambda: False)
+    monkeypatch.setenv("PARSER_BACKEND", "tinker")
+    monkeypatch.setattr(st, "page_link", lambda *args, **kwargs: None)
+    source = "Tab SyntheticA 1-0-0 x7 days"
+    med = MedLine(drug="SyntheticA", dose=Dose(morning=1), duration_days=7, note=source)
+    at = AppTest.from_file(str(ROOT / "app/pages/2_Review.py"), default_timeout=10)
+    at.session_state["drafts"] = [{"line": source, "gold": med.model_dump(), "confirmed": True}]
+    at.run()
+    at.number_input(key="pc_r_0_am").set_value(5.0).run()
+    assert at.error and not at.exception
+    assert not at.session_state["drafts"][0]["confirmed"]
+    chart = AppTest.from_file(str(ROOT / "app/pages/3_Chart.py"), default_timeout=10)
+    chart.session_state["drafts"] = at.session_state["drafts"]
+    chart.run()
+    assert not chart.exception and not chart.get("download_button")

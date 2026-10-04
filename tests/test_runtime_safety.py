@@ -13,8 +13,8 @@ from pillclerk.schema import Dose, MedLine, TaperStep
 
 
 def test_edit_revokes_signoff_and_conflicts_block_export():
-    med = MedLine(drug="Example", dose=Dose(morning=1))
-    draft = {"line": "Tab Example 1-0-0", "gold": med.model_dump(), "confirmed": True}
+    med = MedLine(drug="Example", dose=Dose(morning=1), duration_days=7)
+    draft = {"line": "Tab Example 1-0-0 x7 days", "gold": med.model_dump(), "confirmed": True}
     assert updated_draft(draft, med)["confirmed"]
     changed = med.model_copy(update={"food": "after"})
     assert not updated_draft(draft, changed)["confirmed"]

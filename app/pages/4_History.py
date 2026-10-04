@@ -1,8 +1,9 @@
 """Active meds and change history (SQLite)."""
 
-from pillclerk.ui import apply_theme
+from pillclerk.ui import apply_theme, FOOD_NAMES, SCHEDULE_NAMES, ASK_NAMES
 from html import escape
 from pillclerk.store import load_meds, load_history
+from pillclerk.provenance import context_text
 
 apply_theme()
 import streamlit as st
@@ -25,11 +26,13 @@ else:
             f"""
 <div class="pc-card">
   <b>{escape(m.drug or "ASK")}</b> {escape(m.strength or "")}
-  <div class="pc-lede">{schedule} · {dose} · {m.food} · {duration}</div>
+  <div class="pc-lede">{schedule} · {dose} · {FOOD_NAMES[m.food]} · {duration}</div>
 </div>
 """,
             unsafe_allow_html=True,
         )
+        if m.note:
+            st.text(m.note)
         if m.kind == "prn":
             st.text(f"Recorded PRN maximum: {m.prn_max_per_day} per day" if m.prn_max_per_day is not None
                     else "PRN maximum not recorded — check the prescription")
@@ -45,22 +48,25 @@ if history:
     st.caption("Newest first, up to 100 copies. Compare the recorded fields with the prescription. Earlier copies are for reference; this page does not change the active chart.")
     for revision in history:
         with st.expander(f"Copy {revision['id']} · {revision['saved_at']}"):
+            if revision.get("context"):
+                st.text(context_text(revision["context"]))
             if revision["note"]:
                 st.text(revision["note"])
             st.table([{
                 "Medicine": med.drug or "ASK",
                 "Strength": med.strength or "Not recorded",
                 "Form": med.form,
-                "Schedule": med.kind,
+                "Schedule": SCHEDULE_NAMES[med.kind],
                 "Morning": med.dose.morning if med.dose else "—",
                 "Afternoon": med.dose.afternoon if med.dose else "—",
                 "Night": med.dose.night if med.dose else "—",
                 "Unit": med.dose.unit if med.dose else "—",
-                "Food": med.food,
+                "Food": FOOD_NAMES[med.food],
                 "Days": med.duration_days if med.duration_days is not None else "No end date recorded",
                 "Every N days": med.every_n_days,
                 "PRN maximum/day": med.prn_max_per_day or "Not recorded",
-                "ASK": ", ".join(med.needs_check) or "—",
+                "ASK": ", ".join(ASK_NAMES[field] for field in med.needs_check) or "—",
+                "Written instructions": med.note or "Not recorded",
             } for med in revision["meds"]])
             for med in revision["meds"]:
                 if med.taper:

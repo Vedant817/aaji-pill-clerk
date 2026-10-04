@@ -21,9 +21,16 @@ A red **ASK** cell means the clerk is not sure about that field (drug, dose, sch
 
 1. Scan (or paste) the lines → Review → confirm every line.
 2. Open **Chart**.
-3. Pick the start date and language (Marathi / Hindi / English).
-4. Download **fridge-chart.html** and print it. Stick it on the fridge.
-5. The footer says it is a clerk copy, not medical advice.
+3. Enter a prescription reference and checker initials in **Source and check record**.
+   Leave prescription date blank if it is not recorded; do not invent it.
+4. Pick the start date and language (Marathi / Hindi / English).
+5. Download **fridge-chart.html**, open it in your browser and choose Print with landscape orientation.
+6. The footer includes the source/check record and says it is a clerk copy, not medical advice.
+
+Copy other written instructions, such as an eye/site, on Review. A course length
+of zero means no end date was recorded; it does not mean continue. If the
+prescription explicitly instructs continuation without an end date, verify that
+instruction using the separate checkbox. Otherwise leave ASK and seek clarification.
 
 ## Importing the `.ics`
 

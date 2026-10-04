@@ -32,19 +32,23 @@ def connect(path: Path = DEFAULT_DB) -> sqlite3.Connection:
             payload TEXT NOT NULL
         )"""
     )
+    for table in ("meds", "history"):
+        if "context" not in {row[1] for row in conn.execute(f"PRAGMA table_info({table})")}:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN context TEXT NOT NULL DEFAULT '{{}}'")
     conn.commit()
     return conn
 
 
-def save_meds(meds: list[MedLine], note: str = "", path: Path = DEFAULT_DB) -> None:
+def save_meds(meds: list[MedLine], note: str = "", path: Path = DEFAULT_DB, *, context: dict | None = None) -> None:
     payload = json.dumps([m.model_dump() for m in meds], ensure_ascii=False)
     now = datetime.now().isoformat(timespec="seconds")
+    context_json = json.dumps(context or {}, ensure_ascii=False)
     with closing(connect(path)) as conn, conn:
         conn.execute("DELETE FROM meds")
-        conn.execute("INSERT INTO meds (saved_at, payload) VALUES (?, ?)", (now, payload))
+        conn.execute("INSERT INTO meds (saved_at, payload, context) VALUES (?, ?, ?)", (now, payload, context_json))
         conn.execute(
-            "INSERT INTO history (saved_at, note, payload) VALUES (?, ?, ?)",
-            (now, note, payload),
+            "INSERT INTO history (saved_at, note, payload, context) VALUES (?, ?, ?, ?)",
+            (now, note, payload, context_json),
         )
         conn.commit()
 
@@ -63,9 +67,10 @@ def load_history(path: Path = DEFAULT_DB, limit: int = 100) -> list[dict]:
         raise ValueError("History limit must be between 1 and 1000")
     with closing(connect(path)) as conn:
         rows = conn.execute(
-            "SELECT id, saved_at, note, payload FROM history ORDER BY id DESC LIMIT ?",
+            "SELECT id, saved_at, note, payload, context FROM history ORDER BY id DESC LIMIT ?",
             (limit,),
         ).fetchall()
     return [{"id": row[0], "saved_at": row[1], "note": row[2] or "",
-             "meds": [MedLine.model_validate(item) for item in json.loads(row[3])]}
+             "meds": [MedLine.model_validate(item) for item in json.loads(row[3])],
+             "context": json.loads(row[4])}
             for row in rows]

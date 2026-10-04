@@ -42,6 +42,14 @@
 > the printed chart. Both are fixed; language/schedule labels are clearer.
 > Full suite: 220 tests. `docs/simulated-caregiver-review.md` contains explicitly
 > simulated feedback, not a human testimonial, consent or clinical validation.
+> **4 October four-role follow-through:** caregiver, QA, first-time-user and PM
+> subagents verified the feedback fixes. Further reproduced gaps are fixed:
+> invalid edits revoke signoff, unknown duration stays ASK unless written ongoing
+> instructions are explicitly verified, copied notes survive all outputs, and
+> source/check/start/time context is preserved in exports and saved revisions.
+> Full final suite: 232 tests. The publication draft includes the open-innovation
+> answer; publication/public video and real human/device observations are still
+> pending. See `docs/role-verification.md`. No paid calls or human evidence added.
 > Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
 > OCR and Gemma each processed the 20 reserved public pages; transcription errors
 > remain. Each probe found 1/62 full published labels under a narrow exact-presence

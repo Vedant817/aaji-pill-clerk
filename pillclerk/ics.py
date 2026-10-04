@@ -8,14 +8,15 @@ from hashlib import sha256
 from icalendar import Alarm, Calendar, Event
 
 from pillclerk.schedule import SLOTS, Dosing
+from pillclerk.provenance import context_text, reminder_times
 
 
 def frac(x: float) -> str:
     return {0.5: "½", 1.5: "1½"}.get(x, f"{x:g}")
 
 
-def to_ics(plan: list[Dosing], slot_times: dict[str, time] | None = None) -> bytes:
-    times = slot_times or SLOTS
+def to_ics(plan: list[Dosing], slot_times: dict[str, time] | None = None, *, context: dict | None = None) -> bytes:
+    times = reminder_times(slot_times, context)
     cal = Calendar()
     cal.add("prodid", "-//Pill Clerk//EN")
     cal.add("version", "2.0")
@@ -26,6 +27,9 @@ def to_ics(plan: list[Dosing], slot_times: dict[str, time] | None = None) -> byt
         ev = Event()
         ev.add("dtstamp", exported_at)
         ev.add("summary", summary)
+        description = "\n\n".join(part for part in (d.med.note, context_text(context)) if part)
+        if description:
+            ev.add("description", description)
         ev.add("dtstart", datetime.combine(d.start, times[d.slot]))
         ev.add("duration", timedelta(minutes=10))
         rule: dict = {"freq": "daily", "interval": d.every_n_days}

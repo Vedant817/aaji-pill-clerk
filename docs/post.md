@@ -38,9 +38,20 @@ High synthetic accuracy can hide problems in real notation. Template generation 
 
 Browser testing also found that returning to Review could lose widget values. Review now restores its fields and resolved ASK checks from the saved draft. A confirmed line must still be confirmed again after an edit.
 
-A browser check passed with live hosted FT2 parsing and actual exports. The latest local suite passed **215 tests**, including caregiver correction, parser failure, annotation disagreement and history revision checks. History now exposes previous saved copies and optional source notes. These are agent-operated checks using synthetic fixtures and temporary storage.
+A browser check passed with live hosted FT2 parsing and actual exports at its recorded version. The latest local suite passed **232 tests**, including caregiver correction, parser failure, annotation disagreement and history revision checks. Four AI role reviewers (caregiver, QA, user and PM) checked the implementation using synthetic fixtures and temporary storage. Their feedback fixed invalid edits leaving old confirmation, unknown duration becoming indefinite reminders, and written administration details disappearing from outputs. Exports now carry source/check context, with missing prescription dates recorded honestly. These role reviews are not human caregiver acceptance. See [role verification](role-verification.md).
 
 An Android emulator imported the synthetic calendar and displayed actual reminders for both night events. The user also reported a notification on a physical Android phone for a separate non-medical Google Calendar test. Four series from the exported ICS passed Google API create/read checks for times, counts and reminders, followed by verified cleanup. Native Google web file import, physical-phone recurrence and audible alarms remain unverified. See [the verification report](reverification.md) and [implementation evidence](implementation-completion.md).
+
+## Why does open innovation matter?
+
+For this project, open innovation means another family can inspect what was
+copied, how the schedule was calculated and where the model failed. Sharing the
+Apache-2.0 code, synthetic generator and regression tests makes those decisions
+reviewable and adaptable without publishing private prescriptions. Reporting
+poor handwriting results and rejected training runs is part of that openness:
+high synthetic scores should not hide uncertainty on a real slip. Community
+contributions can improve language support and accessibility while preserving
+human confirmation and the rule that the app never chooses a dose.
 
 ## Before publication
 

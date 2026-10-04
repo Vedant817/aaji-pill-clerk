@@ -7,6 +7,7 @@ from datetime import time, timedelta
 
 from pillclerk.schedule import Dosing, SLOTS
 from pillclerk.schema import MedLine
+from pillclerk.provenance import context_text, reminder_times
 
 LABELS = {
     "en": {
@@ -21,6 +22,10 @@ LABELS = {
         "any": "",
         "prn": "Only if needed",
         "days": "days",
+        "no_end": "No end date recorded — verify written continuation",
+        "every": "every {n} days",
+        "maximum": "max {n}/day",
+        "footer": "Clerk copy of the prescription. Not medical advice. If anything looks different, ask the doctor or pharmacist.",
         "ask": "ASK",
     },
     "mr": {
@@ -35,6 +40,10 @@ LABELS = {
         "any": "",
         "prn": "गरज लागली तरच",
         "days": "दिवस",
+        "no_end": "शेवटची तारीख नोंदलेली नाही — पुढे चालू ठेवण्याची लिखित सूचना तपासा",
+        "every": "दर {n} दिवसांनी",
+        "maximum": "कमाल {n}/दिवस",
+        "footer": "डॉक्टरांच्या प्रिस्क्रिप्शनची प्रत. हा वैद्यकीय सल्ला नाही. फरक दिसल्यास डॉक्टर किंवा फार्मासिस्टला विचारा.",
         "ask": "विचारा",
     },
     "hi": {
@@ -49,6 +58,10 @@ LABELS = {
         "any": "",
         "prn": "जरूरत पर ही",
         "days": "दिन",
+        "no_end": "अंतिम तारीख दर्ज नहीं है — जारी रखने का लिखित निर्देश जाँचें",
+        "every": "हर {n} दिन",
+        "maximum": "अधिकतम {n}/दिन",
+        "footer": "डॉक्टर के पर्चे की प्रति। यह चिकित्सा सलाह नहीं है। कोई अंतर दिखे तो डॉक्टर या फार्मासिस्ट से पूछें।",
         "ask": "पूछें",
     },
 }
@@ -64,16 +77,18 @@ def chart_html(
     footer: str = "",
     prn: list[MedLine] | None = None,
     slot_times: dict[str, time] | None = None,
+    context: dict | None = None,
 ) -> str:
     L = LABELS.get(lang, LABELS["en"])
-    times = slot_times or SLOTS
+    times = reminder_times(slot_times, context)
     rows: list[str] = []
     for slot in ("morning", "afternoon", "night"):
         cells = "".join(
             f"<div class='pill'><b>{escape(d.med.drug or L['ask'])}</b> {escape(d.med.strength or '')}"
             f"<br/>{_amt(d.amount)} {L['tab'] if d.unit == 'tab' else escape(d.unit)} · {L[d.med.food]}"
-            f"<br/>{d.start.isoformat()} → {(d.start + timedelta(days=d.days - 1)).isoformat() if d.days else 'until changed'}"
-            f"{' · every ' + str(d.every_n_days) + ' days' if d.every_n_days > 1 else ''}</div>"
+            f"<br/>{d.start.isoformat()} → {(d.start + timedelta(days=d.days - 1)).isoformat() if d.days else L['no_end']}"
+            f"{' · ' + L['every'].format(n=d.every_n_days) if d.every_n_days > 1 else ''}"
+            f"{'<br/>' + escape(d.med.note) if d.med.note else ''}</div>"
             for d in plan
             if d.slot == slot
         ) or "—"
@@ -84,7 +99,8 @@ def chart_html(
             f"<br/>{L['prn']}"
             f"{' · ' + L[m.food] if L[m.food] else ''}"
             f"{' · ' + str(m.duration_days) + ' ' + L['days'] if m.duration_days is not None else ''}"
-            f"{' · max ' + str(m.prn_max_per_day) + '/day' if m.prn_max_per_day else ''}</div>"
+            f"{' · ' + L['maximum'].format(n=m.prn_max_per_day) if m.prn_max_per_day else ''}"
+            f"{'<br/>' + escape(m.note) if m.note else ''}</div>"
             for m in prn
         )
         rows.append(f"<tr><th>{L['prn']}</th><td>{cells}</td></tr>")
@@ -100,4 +116,4 @@ td{{font-size:28px}}
 .ask{{border-color:#DC2626;color:#DC2626}}
 footer{{font-size:16px;margin-top:16px;color:#475569}}
 </style>
-<table>{''.join(rows)}</table><footer>{escape(footer)}</footer>"""
+<table>{''.join(rows)}</table><footer style="white-space:pre-line">{escape(context_text(context, lang))}\n{escape(footer)}</footer>"""

@@ -10,16 +10,16 @@ from pillclerk.schedule import expand
 from pillclerk.schema import MedLine
 
 
-@pytest.mark.parametrize("language,food,days", [
-    ("en", "after food", "3 days"),
-    ("mr", "जेवणानंतर", "3 दिवस"),
-    ("hi", "खाने के बाद", "3 दिन"),
+@pytest.mark.parametrize("language,food,days,maximum", [
+    ("en", "after food", "3 days", "max 2/day"),
+    ("mr", "जेवणानंतर", "3 दिवस", "कमाल 2/दिवस"),
+    ("hi", "खाने के बाद", "3 दिन", "अधिकतम 2/दिन"),
 ])
-def test_prn_food_and_duration_print_without_creating_timed_reminders(language, food, days):
+def test_prn_food_and_duration_print_without_creating_timed_reminders(language, food, days, maximum):
     med = MedLine(drug="SyntheticPRN", kind="prn", food="after", duration_days=3, prn_max_per_day=2)
     plan = expand([med], date(2026, 10, 4))
     output = chart_html(plan, lang=language, prn=[med])
-    assert food in output and days in output and "max 2/day" in output
+    assert food in output and days in output and maximum in output
     assert not Calendar.from_ical(to_ics(plan)).walk("VEVENT")
 
 

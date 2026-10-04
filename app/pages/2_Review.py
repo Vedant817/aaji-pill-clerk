@@ -1,6 +1,6 @@
 """One line at a time. A human confirms each copy before Chart unlocks."""
 
-from pillclerk.ui import apply_theme, stepper
+from pillclerk.ui import apply_theme, stepper, FOOD_NAMES, SCHEDULE_NAMES, ASK_NAMES
 from pillclerk.config import parser_backend, tinker_parser_ready
 from pillclerk.review import (
     WIDGET_PREFIX,
@@ -13,6 +13,7 @@ from pillclerk.review import (
 )
 from pillclerk.schema import Dose, Food, Form, Kind, MedLine, Unit, TaperStep
 from pillclerk.validate import schedule_conflicts
+from html import escape
 
 apply_theme()
 import streamlit as st
@@ -43,6 +44,7 @@ def _push_gold(i: int, gold: MedLine) -> None:
     st.session_state[p + "pm"] = float(d.night)
     st.session_state[p + "unit"] = d.unit
     st.session_state[p + "prn"] = int(gold.prn_max_per_day or 0)
+    st.session_state[p + "note"] = gold.note or ""
 
 
 def _parse_all() -> None:
@@ -122,7 +124,7 @@ UNITS: list[Unit] = ["tab", "cap", "ml", "drop", "puff", "unit", "sachet", "appl
 seed = p + "seeded"
 # Streamlit removes widget state when another page is visited. The separate
 # seeded flag survives; reseed missing widgets from the saved draft on return.
-field_keys = ("drug", "str", "form", "kind", "food", "dur", "n", "am", "noon", "pm", "unit", "prn")
+field_keys = ("drug", "str", "form", "kind", "food", "dur", "n", "am", "noon", "pm", "unit", "prn", "note")
 if not st.session_state.get(seed) or any(p + key not in st.session_state for key in field_keys):
     _push_gold(i, gold)
     st.session_state[seed] = True
@@ -138,9 +140,9 @@ strength = c2.text_input("Strength", key=p + "str")
 form = c3.selectbox("Form", FORMS, key=p + "form")
 c1, c2, c3, c4 = st.columns(4)
 kind = c1.selectbox("Schedule type", KINDS, key=p + "kind",
-                    format_func=lambda value: {"daily": "Scheduled doses", "prn": "When needed (PRN)", "taper": "Taper (changing doses)"}[value])
-food = c2.selectbox("Food", FOODS, key=p + "food")
-duration = c3.number_input("Duration days (0 = continue)", min_value=0, key=p + "dur")
+                    format_func=SCHEDULE_NAMES.__getitem__)
+food = c2.selectbox("Food", FOODS, key=p + "food", format_func=FOOD_NAMES.__getitem__)
+duration = c3.number_input("Course length in days (0 = not recorded)", min_value=0, key=p + "dur")
 every = c4.number_input("Repeat every (days)", min_value=1, key=p + "n",
                        help="1 means every day; 2 means every other day. Copy the written interval. Ask the doctor or pharmacist if it is unclear.")
 m1, m2, m3, m4 = st.columns(4)
@@ -149,6 +151,12 @@ afternoon = m2.number_input("Afternoon", min_value=0.0, max_value=20.0, step=0.5
 night = m3.number_input("Night", min_value=0.0, max_value=20.0, step=0.5, key=p + "pm")
 unit = m4.selectbox("Unit", UNITS, key=p + "unit")
 prn_max = st.number_input("PRN max per day (0 = unset)", min_value=0, key=p + "prn")
+note = st.text_area("Other written instructions", key=p + "note",
+                    help="Copy administration details such as the written eye/site instruction. Compare them with the source; do not add instructions.")
+ongoing = False
+if duration == 0:
+    ongoing = st.checkbox("The prescription explicitly says to continue with no end date; I checked this against the source",
+                          value=draft.get("ongoing_confirmed", False), key=p + "ongoing")
 taper = list(gold.taper)
 if kind == "taper":
     import pandas as pd
@@ -159,6 +167,8 @@ if kind == "taper":
     try:
         taper = [TaperStep(days=row["days"], dose=Dose(**{k: row[k] for k in ("morning", "afternoon", "night", "unit")})) for row in rows]
     except (ValueError, TypeError, KeyError):
+        drafts[i] = {**draft, "confirmed": False}
+        st.session_state["drafts"] = drafts
         st.error("Each taper step needs positive days, valid doses, and a unit. Check the prescription.")
         st.stop()
 
@@ -178,14 +188,20 @@ try:
         unit=unit,
         prn_max=int(prn_max),
         taper=taper,
+        note=note,
     )
 except ValueError:
+    drafts[i] = {**draft, "confirmed": False}
+    st.session_state["drafts"] = drafts
     st.error("These fields do not form a valid prescription copy. Check the dose, unit, and schedule.")
     st.stop()
 
+if med.duration_days is None and not ongoing:
+    med = med.model_copy(update={"needs_check": sorted(set(med.needs_check + ["duration_days"]))})
+
 if med.needs_check:
     st.markdown(
-        f'<div class="pc-ask">ASK: {", ".join(med.needs_check)}</div>',
+        f'<div class="pc-ask">ASK: {", ".join(ASK_NAMES[field] for field in med.needs_check)}</div>',
         unsafe_allow_html=True,
     )
 
@@ -194,13 +210,14 @@ parser_checks = draft.get("parser_checks", gold.needs_check)
 unresolved = []
 resolved = []
 for check in parser_checks:
-    if not st.checkbox(f"I checked {check} against the prescription and resolved the ASK",
+    if not st.checkbox(f"I checked {ASK_NAMES[check]} against the prescription and resolved the ASK",
                        value=check in draft.get("resolved_checks", []), key=p + "resolve_" + check):
         unresolved.append(check)
     else:
         resolved.append(check)
 med = med.model_copy(update={"needs_check": sorted(set(med.needs_check + unresolved))})
-drafts[i] = updated_draft({**draft, "parser_checks": parser_checks, "resolved_checks": resolved}, med)
+drafts[i] = updated_draft({**draft, "parser_checks": parser_checks, "resolved_checks": resolved,
+                           "ongoing_confirmed": ongoing}, med)
 st.session_state["drafts"] = drafts
 done = n_confirmed(drafts)
 
@@ -234,7 +251,7 @@ if conflicts:
         )
     st.markdown(
         '<div class="pc-ask">Same drug, different copy. Clerk keeps both; a human picks. '
-        + " · ".join(bits)
+        + escape(" · ".join(bits))
         + "</div>",
         unsafe_allow_html=True,
     )

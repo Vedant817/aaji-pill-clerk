@@ -62,6 +62,14 @@ clinical correctness.
 
 ## Verification
 
+The latest four-role follow-through is in [role-verification.md](role-verification.md).
+After the additional signoff, duration, instructions, provenance and display
+fixes, the final full suite passed **232 tests in 37.94 seconds**. Source/check
+context is required before downloads/save, dates are never fabricated, and
+legacy SQLite copies retain their original records with empty context.
+These results supersede earlier suite counts below; prior browser/device evidence
+remains tied to the recorded versions and is not newly claimed by role tests.
+
 - Full suite after role-workflow fixes: **215 tests passed** (22.78 seconds on the final run). New tests exercise rejected/ambiguous calendar
   input, actual export recurrence mapping, explicit annotation fields, consent
   filtering, attribution, and failed/successful local form submission.

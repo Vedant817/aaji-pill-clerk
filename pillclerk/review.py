@@ -26,6 +26,7 @@ def med_from_fields(
     unit: Unit,
     prn_max: int,
     taper: list | None = None,
+    note: str | None = None,
 ) -> MedLine:
     checks: list[CheckField] = []
     if not (drug or "").strip():
@@ -53,7 +54,7 @@ def med_from_fields(
             duration_days=int(duration) or None,
             prn_max_per_day=int(prn_max) or None,
             needs_check=checks,
-            note=line,
+            note=(note or "").strip() or line,
         )
     )
 
@@ -79,6 +80,9 @@ def export_blockers(drafts: list[dict[str, Any]]) -> list[str]:
     blockers = []
     if any(not d.get("confirmed") for d in drafts) or any(m.needs_check for m in meds):
         blockers.append("Confirm every line and resolve every ASK field on Review.")
+    if any(m.duration_days is None and not d.get("ongoing_confirmed")
+           for m, d in zip(meds, drafts, strict=True)):
+        blockers.append("An end date is missing. Enter the written course length or explicitly verify written continuation on Review before exporting reminders.")
     if schedule_conflicts(meds):
         blockers.append("Conflicting copies of the same medicine must be resolved before export.")
     if any(guard_schedule(m.model_copy(update={"needs_check": []}), d["line"]).needs_check
@@ -112,5 +116,8 @@ def clear_widget_keys(state: dict[str, Any]) -> None:
 
 def clear_review_keys(state: dict[str, Any]) -> None:
     clear_widget_keys(state)
+    for key in list(state):
+        if key.startswith("pc_chart_"):
+            state.pop(key, None)
     for key in ("review_i", "parsed_once", "parse_note"):
         state.pop(key, None)

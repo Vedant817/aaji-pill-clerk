@@ -24,6 +24,12 @@ ASK = "#DC2626"
 ON_ASK = "#FFFFFF"
 RING = "#0369A1"
 
+FOOD_NAMES = {"before": "Before food", "after": "After food", "with": "With food",
+              "empty_stomach": "Empty stomach", "any": "No written food instruction"}
+SCHEDULE_NAMES = {"daily": "Scheduled doses", "prn": "When needed (PRN)", "taper": "Taper (changing doses)"}
+ASK_NAMES = {"drug": "Medicine name", "strength": "Strength", "dose": "Dose",
+             "food": "Food instruction", "duration_days": "Course length", "schedule": "Schedule"}
+
 FONTS_HREF = (
     "https://fonts.googleapis.com/css2?"
     "family=Figtree:wght@400;500;600;700&"
