@@ -13,6 +13,8 @@ import json
 import os
 import subprocess
 import sys
+from urllib.parse import urlparse
+from ipaddress import ip_address
 
 from pillclerk import config
 from pillclerk.privacy import PrivacyError, is_photo_path, is_real_path
@@ -33,8 +35,6 @@ def extract_from_image(path: str) -> list[str]:
         return transcribe_windows(p)
     if (is_photo_path(p) or is_real_path(p)) and backend != "ollama":
         raise PrivacyError("Prescription photos stay on this laptop. Use local Ollama or type the line.")
-    import ollama
-
     return transcribe_local(path)
 
 
@@ -70,18 +70,57 @@ def transcribe_windows(path: Path) -> list[str]:
 def transcribe_local(path: str) -> list[str]:
     """Always local Ollama. Never Gemini. Used for photographed slips."""
     import ollama
+    import httpx
 
-    r = ollama.chat(
-        model=config.OLLAMA_EXTRACT_MODEL,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    "Transcribe each medicine line of this prescription verbatim, one per line. "
-                    "Write [?] for unreadable characters."
-                ),
-                "images": [path],
-            }
-        ],
-    )
+    client = local_ocr_client()
+    model = config.OLLAMA_EXTRACT_MODEL
+    # Model aliases can redirect through Ollama Cloud even on a local daemon.
+    try:
+        metadata = client._request_raw("POST", "/api/show", json={"model": model}).json()
+    except (httpx.HTTPError, ollama.ResponseError, ConnectionError, ValueError) as exc:
+        raise RuntimeError("Local OCR model is unavailable. Start Ollama or type the lines.") from exc
+    if not isinstance(metadata, dict):
+        raise RuntimeError("Local OCR returned invalid model information. Type the lines instead.")
+    if metadata.get("remote_host") or metadata.get("remote_model"):
+        raise PrivacyError("Photo extraction requires a locally stored model, not an Ollama Cloud alias.")
+    try:
+        r = client.chat(
+            model=model,
+            think=False,
+            options={"temperature": 0, "num_ctx": 4096, "num_predict": 1024},
+            messages=[
+                {
+                    "role": "user",
+                    "content": (
+                        "Transcribe each medicine line of this prescription verbatim, one per line. "
+                        "Write [?] for unreadable characters."
+                    ),
+                    "images": [path],
+                }
+            ],
+        )
+    except (httpx.HTTPError, ollama.ResponseError, ConnectionError) as exc:
+        raise RuntimeError("Local OCR failed or timed out. Type the lines instead.") from exc
+    if r.done_reason == "length":
+        raise RuntimeError("Local OCR output was truncated. Type the lines or read a smaller photo.")
     return lines_from_text(r.message.content or "")
+
+
+def local_ocr_client():
+    """Restrict image requests to loopback and bound connection/read waits."""
+    import ollama
+    import httpx
+
+    host = config._get("OLLAMA_HOST", "http://127.0.0.1:11434")
+    if "://" not in host:
+        host = "http://" + host
+    parsed = urlparse(host)
+    try:
+        loopback = parsed.hostname == "localhost" or ip_address(parsed.hostname or "").is_loopback
+    except ValueError:
+        loopback = False
+    if not loopback or parsed.scheme not in {"http", "https"} or parsed.username or parsed.password:
+        raise PrivacyError("Photo extraction requires Ollama on this laptop's loopback address.")
+    if "cloud" in config.OLLAMA_EXTRACT_MODEL.casefold():
+        raise PrivacyError("Photo extraction requires a local Ollama model; cloud tags are disabled.")
+    return ollama.Client(host=host, timeout=httpx.Timeout(300, connect=5), trust_env=False)

@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 from pillclerk.config import ROOT
-from pillclerk.public_data import HMR_DIR, load_gold
+from pillclerk.acceptance import DEFAULT_DIR, final_gold, page_path
 
 OUT = ROOT / "eval" / "out" / "ocr_cer.json"
 
@@ -43,22 +43,30 @@ def cer(ref: str, hyp: str) -> float:
 
 def e4b_available() -> bool:
     try:
-        import ollama  # noqa: F401
-    except ImportError:
+        from pillclerk import config
+        from pillclerk.ocr import local_ocr_client
+        client = local_ocr_client()
+        models = client.list().models
+        return any(m.model == config.OLLAMA_EXTRACT_MODEL for m in models)
+    except Exception:
         return False
-    from shutil import which
-
-    return which("ollama") is not None
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pages", type=int, default=20)
+    ap.add_argument("--queue", type=Path, default=DEFAULT_DIR)
     a = ap.parse_args()
-    gold_rows = load_gold("hmr100")
+    if a.pages < 1:
+        ap.error("pages must be positive")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        gold_rows = final_gold(a.queue)
+    except ValueError:
+        gold_rows = []
     pages = sorted({r.get("image") for r in gold_rows if r.get("image")})[: a.pages]
     if not gold_rows or not pages:
-        out = {"n_pages": 0, "n_lines": 0, "cer": None, "note": "no confirmed HMR gold yet"}
+        out = {"n_pages": 0, "n_lines": 0, "cer": None, "note": "no finalized independent human transcription gold yet"}
         OUT.write_text(json.dumps(out, indent=2), encoding="utf-8")
         print(json.dumps(out, indent=2))
         return 0
@@ -67,7 +75,7 @@ def main() -> int:
             "n_pages": 0,
             "n_lines": 0,
             "cer": None,
-            "note": "gemma4:e4b / ollama not on this laptop; local OCR not claimed",
+            "note": "configured local Ollama extraction model unavailable; local OCR not scored",
         }
         OUT.write_text(json.dumps(out, indent=2), encoding="utf-8")
         print(json.dumps(out, indent=2))
@@ -77,16 +85,19 @@ def main() -> int:
 
     recs: list[dict] = []
     for image in pages:
-        path = HMR_DIR / str(image)
-        if not path.is_file():
-            continue
+        path = page_path(str(image), a.queue)
         hyp_lines = transcribe_local(str(path))
-        refs = [r["line"] for r in gold_rows if r.get("image") == image]
-        for i, ref in enumerate(refs):
-            hyp = hyp_lines[i] if i < len(hyp_lines) else " ".join(hyp_lines)
-            recs.append({"image": image, "ref": ref, "hyp": hyp, "cer": cer(ref, hyp)})
-    mean = sum(r["cer"] for r in recs) / len(recs) if recs else None
-    out = {"n_pages": len(pages), "n_lines": len(recs), "cer": mean, "lines": recs}
+        rows = sorted([r for r in gold_rows if r.get("image") == image], key=lambda r: r["line_no"])
+        ref, hyp = "\n".join(r["line"] for r in rows), "\n".join(hyp_lines)
+        # Full-page medicine transcription catches omissions and extra lines;
+        # never silently substitute the whole page for a missing indexed line.
+        recs.append({"image": image, "n_lines": len(rows), "reference_characters": len(ref),
+                     "edit_distance": levenshtein(ref, hyp), "output_lines": len(hyp_lines)})
+    characters = sum(r["reference_characters"] for r in recs)
+    mean = sum(r["edit_distance"] for r in recs) / characters if characters else None
+    out = {"n_pages": len(recs), "n_lines": sum(r["n_lines"] for r in recs), "cer": mean,
+           "method": "character-weighted full-page medicine transcription, including line breaks",
+           "pages": recs}
     OUT.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({k: out[k] for k in ("n_pages", "n_lines", "cer")}, indent=2))
     return 0
