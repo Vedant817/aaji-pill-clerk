@@ -10,7 +10,7 @@ Pill Clerk only copies the prescription. It never chooses or changes a dose. Unc
 
 ## What the app does
 
-Scan accepts a local photo or pasted text. Optional Windows OCR uses the installed engine without downloading a model or uploading an image; local Ollama is another extraction option. Extracted text must be checked against the photo before loading it. Windows OCR has only been exercised on a clean, explicitly synthetic printed slip; handwriting accuracy is unverified.
+Scan accepts a local photo or pasted text. Optional Windows OCR uses the installed engine without downloading a model or uploading an image; local Ollama is another extraction option. Extracted text must be checked against the photo before loading it. Both engines were run on 20 public handwritten pages and made transcription errors; manual input remains the default. CER remains unscored until independent human transcriptions are finalized.
 
 The checked text goes to a Qwen3-8B parser served through Tinker. Review shows the original line beside editable fields. Chart produces a large-font printable HTML chart in Marathi, Hindi, or English and an `.ics` file with reminder alarms. Refill dates use stock entered by the caregiver. The app starts empty; no patient or demo regimen is loaded automatically.
 
@@ -37,6 +37,8 @@ One corrected candidate, FT5, was trained within the approved budget. It regress
 High synthetic accuracy can hide problems in real notation. Template generation does not guarantee correct labels: the audit found missing uncertainty flags and dose-unit errors, and the corrected candidate records those fixes. General schema recovery now preserves uncertainty instead of converting an invalid dose into a guessed value.
 
 Browser testing also found that returning to Review could lose widget values. Review now restores its fields and resolved ASK checks from the saved draft. A confirmed line must still be confirmed again after an edit.
+
+A fresh browser check passed with live hosted FT2 parsing and actual exports; 199 tests passed. An Android emulator imported the synthetic calendar and displayed actual reminders for both night events. This is one emulator/calendar-app check, not proof of behavior on the intended caregiver phone or of audible alarms. See [the verification report](reverification.md).
 
 ## Before publication
 

@@ -21,4 +21,4 @@ The agent operated the browser as a simulated caregiver. Do not describe these c
 
 ## Further acceptance
 
-Browser safety checks and artifacts are documented in [browser-acceptance.md](browser-acceptance.md). A real caregiver handover, independent human labels, phone import, publication links, and consented feedback remain TODO. Do not record private or public dataset photographs.
+Browser safety checks and artifacts are documented in [browser-acceptance.md](browser-acceptance.md). A separate [recheck](reverification.md) verified Android emulator import and notifications; that test is not in this video. A real caregiver handover, independent human labels, intended physical-phone import, publication links, and consented feedback remain TODO. Do not record private or public dataset photographs.

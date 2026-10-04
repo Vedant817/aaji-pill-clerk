@@ -67,7 +67,7 @@ Keys needed (ask before spending):
 
 ## Use the clerk
 
-On Scan, paste medicine lines, or upload a photo and use the configured local extractor. Windows OCR was exercised on one clean synthetic printed image; this does not establish handwriting accuracy. Check extracted text against the photo, remove non-medicine lines, then sign off before loading. Review fills from Tinker and asks you to confirm each line. Chart stays locked until every line is confirmed and ASK cells are resolved. Nothing is pre-loaded.
+On Scan, paste medicine lines, or upload a photo and use the configured local extractor. Windows OCR and local Gemma were each tested on 20 public handwritten pages; both made transcription errors. Manual input remains the default. Check extracted text against the photo, remove non-medicine lines, then sign off before loading. Review fills from Tinker and asks you to confirm each line. Chart stays locked until every line is confirmed and ASK cells are resolved. Nothing is pre-loaded.
 
 ```powershell
 # Uses process-only overrides; does not change .env or download a model.
@@ -82,6 +82,10 @@ file watching is disabled to avoid probing optional Transformers vision modules.
 
 Browser acceptance uses an explicitly synthetic fixture outside runtime code.
 See [verification evidence and remaining acceptance](docs/browser-acceptance.md).
+The [fresh verification report](docs/reverification.md) records 199 passing tests,
+local handwriting probes, portable Ollama setup, and actual Android emulator
+calendar import and notification delivery. Independent human labels, caregiver
+feedback, and the intended physical phone remain unverified.
 Calendar event times are floating local times (08:00 remains 08:00 in the
 importing calendar's timezone). Verify the intended phone's import and alarms.
 

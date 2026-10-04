@@ -1,0 +1,157 @@
+{
+  "backend": "ollama",
+  "model": "gemma4:e4b-it-qat",
+  "pages_attempted": 20,
+  "pages_with_text": 20,
+  "pages_without_text": 0,
+  "pages_failed": 0,
+  "published_label_exact_presence": {
+    "found": 1,
+    "total": 62
+  },
+  "cer": null,
+  "human_verified": false,
+  "note": "Exploratory normalized exact presence of nonempty full published medicine labels in page OCR output. Not medicine-line alignment, dose accuracy, or OCR CER. AI references are not CER gold.",
+  "pages": [
+    {
+      "image": "hmr_085.jpg",
+      "output_lines": 16,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_057.jpg",
+      "output_lines": 12,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_066.jpg",
+      "output_lines": 3,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_061.jpg",
+      "output_lines": 11,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 9
+    },
+    {
+      "image": "hmr_083.jpg",
+      "output_lines": 20,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 4
+    },
+    {
+      "image": "hmr_064.jpg",
+      "output_lines": 11,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_067.jpg",
+      "output_lines": 5,
+      "failed": false,
+      "exact_published_labels_found": 1,
+      "published_labels": 4
+    },
+    {
+      "image": "hmr_097.jpg",
+      "output_lines": 19,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 2
+    },
+    {
+      "image": "hmr_072.jpg",
+      "output_lines": 6,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 4
+    },
+    {
+      "image": "hmr_093.jpg",
+      "output_lines": 4,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_048.jpg",
+      "output_lines": 27,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 2
+    },
+    {
+      "image": "hmr_094.jpg",
+      "output_lines": 7,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 2
+    },
+    {
+      "image": "hmr_080.jpg",
+      "output_lines": 6,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_056.jpg",
+      "output_lines": 3,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 2
+    },
+    {
+      "image": "hmr_041.jpg",
+      "output_lines": 5,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_089.jpg",
+      "output_lines": 3,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 1
+    },
+    {
+      "image": "hmr_084.jpg",
+      "output_lines": 10,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_045.jpg",
+      "output_lines": 4,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 4
+    },
+    {
+      "image": "hmr_032.jpg",
+      "output_lines": 8,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 3
+    },
+    {
+      "image": "hmr_075.jpg",
+      "output_lines": 8,
+      "failed": false,
+      "exact_published_labels_found": 0,
+      "published_labels": 1
+    }
+  ]
+}

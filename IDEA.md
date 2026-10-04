@@ -15,6 +15,18 @@
 > implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
 >
 > **Weekend overrides (source of truth over later sections):**
+> **4 October reverification:** 199 tests pass. The browser workflow was exercised
+> again with live hosted FT2, actual downloads, confirmation revocation, and refill
+> dates. Android emulator import and actual displayed notifications now pass in
+> Fossify Calendar; intended physical-phone and caregiver acceptance remain TODO.
+> Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
+> OCR and Gemma each processed the 20 reserved public pages; transcription errors
+> remain. Each probe found 1/62 full published labels under a narrow exact-presence
+> check, not clinical accuracy or CER. Manual transcription remains the default.
+> CER now refuses unverified AI/development labels and stays null until independent
+> human gold is finalized. See `docs/reverification.md`; these results supersede
+> older "not installed" / "device failed" statements below. No fine-tuned Qwen
+> weights were downloaded, merged, or converted.
 > **4 October browser acceptance correction:** optional `EXTRACT_BACKEND=windows`
 > now reads photos through the installed local Windows OCR engine. One clean
 > synthetic printed slip was read exactly; handwriting accuracy remains unverified.
@@ -46,7 +58,7 @@
 > and missing-form examples. It is not trained. See `docs/offline-followthrough.md`.
 >
 > 1. **Do not** download, merge, or convert the fine-tuned model locally. Skip every GGUF/merge step. The fine-tuned Qwen3-8B is trained **and** served through **Tinker's hosted API only**.
-> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Local `gemma4:e4b` OCR is not installed and is **not claimed**.
+> 2. Every model call sits behind an env switch: `LLM_BACKEND`, `EXTRACT_BACKEND`, `PARSER_BACKEND`. Default `EXTRACT_BACKEND=manual` (paste/type/WhatsApp). Optional Windows OCR and local `gemma4:e4b-it-qat` are tested; handwriting reliability is **not claimed**.
 > 3. DigitalOcean is **dropped** (historical: early drafts used DO Serverless for Gemma). No card. Default `LLM_BACKEND=template` (free Python messy-text). Gemma 4 31B is Google AI Studio (`GEMINI_API_KEY`, model `gemma-4-31b-it`). Optional Backboard. Public demo: **`render.yaml` provided; not deployed** (`$PORT`, synthetic data only). Do not enter the Render category unless we deploy.
 
 ---

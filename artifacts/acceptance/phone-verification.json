@@ -1,0 +1,37 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "device": "Android API 36 emulator, Google Play x86_64",
+  "calendar": "Fossify Calendar 1.11.0",
+  "calendar_source": "https://github.com/FossifyOrg/Calendar/releases/tag/1.11.0",
+  "timezone": "Asia/Calcutta",
+  "source_ics_sha256": "1a5b739d8c4ec7c566fb202f9c4d8ff8747c1d39e095709780fa60b22225f129",
+  "emulated_import_verified": true,
+  "physical_phone_verified": false,
+  "visible_events": 4,
+  "observed_local_times": [
+    "08:00",
+    "21:00"
+  ],
+  "inspected_night_recurrences": [
+    {
+      "drug": "Doxy",
+      "quantity": "1/2 tab",
+      "repeat": "daily",
+      "count": 7,
+      "alarm": "At start"
+    },
+    {
+      "drug": "Ambrolite",
+      "quantity": "5 ml",
+      "repeat": "daily",
+      "count": 3,
+      "alarm": "At start"
+    }
+  ],
+  "notification_display_verified": true,
+  "notification_test": "Only the disposable emulator clock was advanced to 2026-10-04 20:59:50 IST. Actual calendar notifications appeared for both 21:00 events; no notification was injected. Clock was restored afterward.",
+  "audible_alarm_verified": false,
+  "device_failures": "Default startup failed. A fresh AVD booted with host graphics and Vulkan disabled; Android system services later restarted. A 4096 MB restart retained imported events and completed the notification check.",
+  "limits": "This verifies one emulator and calendar app with synthetic input. It does not establish behavior on the intended caregiver phone, alarm sound, clinical accuracy, or human acceptance."
+}

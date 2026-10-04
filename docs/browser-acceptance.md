@@ -1,6 +1,6 @@
 # Browser acceptance evidence — 4 October 2026
 
-This is AI-operated verification of an explicitly synthetic caregiver scenario. It is not independent human annotation, family consent, a friend's review, medical validation, or a real phone-calendar import.
+This is AI-operated verification of an explicitly synthetic caregiver scenario. It is not independent human annotation, family consent, a friend's review, or medical validation. The original browser run below did not import a calendar. A later recheck verified actual import and notifications on an Android emulator: see [reverification.md](reverification.md).
 
 ## Changes verified
 
@@ -50,7 +50,7 @@ The recording uses synthetic printed input and live parsing. It does not demonst
 
 Verification used the existing approved Tinker allowance and a $0.05 **per-parser-instance** cap. Three successful two-line parse batches were exercised, including a retry after the navigation bug. This cap resets for a new parser instance and excludes storage; it is not billed-spend evidence or an account-wide limit. No additional training was started, and FT2 remains active. No fresh accuracy benchmark was inferred from these six synthetic calls.
 
-Android device opening failed. The installed emulator's normal boot crashed with exit 3221225477 (0xC0000005). A software-emulation retry stayed offline and was stopped. No system image was downloaded. iOS is unavailable on this Windows environment.
+During this original run, Android device opening failed. The installed emulator's normal boot crashed with exit 3221225477 (0xC0000005). A software-emulation retry stayed offline and was stopped. A later recheck repaired the Windows device helper and verified calendar import and displayed reminders in a fresh Android emulator. See [device evidence](../artifacts/acceptance/phone-verification.json). No system image was downloaded. iOS is unavailable on this Windows environment.
 
 Still required:
 - Import into the intended phone calendar; check timezone, recurrence end dates, and an actual alarm.
