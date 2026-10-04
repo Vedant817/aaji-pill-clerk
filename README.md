@@ -85,7 +85,9 @@ See [verification evidence and remaining acceptance](docs/browser-acceptance.md)
 The [fresh verification report](docs/reverification.md) records 199 passing tests,
 local handwriting probes, portable Ollama setup, and actual Android emulator
 calendar import and notification delivery. Independent human labels, caregiver
-feedback, and the intended physical phone remain unverified.
+feedback, and Google Calendar ICS import remain unverified. The user subsequently
+confirmed that a directly created Google Calendar test notification appeared on
+their Android phone; this does not verify the exported ICS import path.
 For the user's chosen Android + Google Calendar setup, follow the
 [import, notification and human acceptance checklist](docs/android-google-calendar.md).
 Calendar event times are floating local times (08:00 remains 08:00 in the

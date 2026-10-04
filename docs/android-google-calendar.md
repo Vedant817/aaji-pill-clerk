@@ -1,8 +1,9 @@
 # Android + Google Calendar acceptance
 
 Target chosen by the user: Android with Google Calendar. No new service key or
-paid integration is needed. Actual Google Calendar import and physical-phone
-notification delivery are still pending. The T3 shared browser currently redirects
+paid integration is needed. Actual Google Calendar ICS import remains pending;
+the user confirmed notification delivery on their Android phone for a directly
+created test event. The T3 shared browser redirects
 to the public Calendar page instead of a signed-in calendar. The earlier passing
 emulator test used Fossify Calendar, not Google Calendar.
 After the user reconnected, calendar listing still returned missing-permissions,
@@ -11,8 +12,11 @@ reconnection is needed for those actions. A single private, non-medical notifica
 test was created for 4 October 2026 at 15:01:12 IST with an at-start popup reminder.
 The event is transparent (does not mark the user busy) and has no invited guests.
 See [API read-back evidence](../artifacts/acceptance/google-calendar-api-verification.json).
-Physical-phone delivery is awaiting the user's observation. This direct API check
-does not verify ICS import. The event ID needed for later cleanup stays gitignored.
+The user reported **“Notification appeared”** after the scheduled time. Exact
+delivery time, sound, phone model and Android/app versions were not supplied. The
+completed synthetic event was deleted and Google returned `status: cancelled` on
+read-back. This direct API check does not verify ICS import. The event ID stays
+gitignored; no account address is included in the shared evidence.
 
 ## Import and sync
 

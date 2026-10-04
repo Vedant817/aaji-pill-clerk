@@ -18,8 +18,14 @@
   "transparency": "transparent",
   "google_event_storage_verified": true,
   "ics_import_verified": false,
-  "physical_phone_notification_verified": null,
+  "physical_phone_notification_verified": true,
+  "notification_evidence_source": "User report in this thread: Notification appeared",
+  "notification_report_recorded_at_utc": "2026-10-04T09:32:24Z",
+  "device": "Android phone; model and Android/app versions not supplied",
+  "exact_notification_delivery_time": null,
   "audible_alarm_verified": null,
+  "test_event_cleanup_verified": true,
+  "cleanup_method": "Deleted the same synthetic event; subsequent Google Calendar read returned status cancelled",
   "calendar_listing_status": "ACCESS_TOKEN_SCOPE_INSUFFICIENT; primary event search/create/read succeeded",
-  "limits": "One non-medical test. Direct event creation does not establish ICS import, phone sync, notification delivery, caregiver feedback or clinical accuracy."
+  "limits": "One non-medical event stored by Google Calendar and phone notification confirmed by the user. No independent screen capture or exact delivery timestamp. Does not establish ICS import, recurrence/end-date correctness on the phone, alarm sound, caregiver workflow acceptance, independent labels or clinical accuracy."
 }

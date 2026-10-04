@@ -41,7 +41,10 @@ Use a separate test calendar and an explicitly synthetic source before entering 
 
 Then let the intended caregiver use Scan → Review → Chart themselves. Ask them to compare every line and explain an ASK field. Record their own feedback and permission before sharing it. No caregiver identity, quote, consent, independent label, or alarm delivery can be supplied by an AI pretending to be that person.
 
-Current evidence is in [reverification.md](reverification.md); real caregiver handover and intended physical-phone acceptance remain TODO.
+Current evidence is in [reverification.md](reverification.md). The user confirmed
+an Android Google Calendar notification for a directly created synthetic event;
+that event was removed afterward. Real caregiver handover, exported ICS import,
+phone recurrence/end dates, and alarm sound remain TODO.
 
 ## Always confirm with the doctor or pharmacist
 

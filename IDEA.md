@@ -19,6 +19,10 @@
 > again with live hosted FT2, actual downloads, confirmation revocation, and refill
 > dates. Android emulator import and actual displayed notifications now pass in
 > Fossify Calendar; intended physical-phone and caregiver acceptance remain TODO.
+> Later, the connected Google Calendar API stored a private non-medical reminder
+> and the user confirmed its notification appeared on Android. The test event was
+> deleted with cancelled-status read-back. This verifies one user-reported
+> notification, not exported ICS import, recurrence end dates or caregiver use.
 > Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
 > OCR and Gemma each processed the 20 reserved public pages; transcription errors
 > remain. Each probe found 1/62 full published labels under a narrow exact-presence

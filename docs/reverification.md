@@ -13,7 +13,8 @@ human annotation, or clinical validation.
 | Actual downloaded chart and ICS | Four events; correct quantities, units, local times, recurrence counts, UTC DTSTAMP and alarms |
 | Android calendar import | Four events persisted in Fossify Calendar 1.11.0 on an Android API 36 emulator |
 | Android reminder delivery | Actual notifications appeared for both 21:00 events after advancing only the disposable emulator's clock |
-| Intended caregiver's physical phone / audible alarm | Unverified |
+| Google Calendar notification on Android phone | User reported “Notification appeared” for the directly created test |
+| Google Calendar ICS import / audible alarm | Unverified |
 | Caregiver feedback / independent human labels | Unverified; two annotation rounds remain empty |
 
 The browser check used process-only Windows extraction and a $0.05 sampling
@@ -149,8 +150,11 @@ scope, but primary-calendar event search/create/read worked. One private,
 transparent, non-medical test event was created for 15:01:12 IST on 4 October and
 read back with the requested zero-minute popup reminder. No guests were invited.
 See [Google API evidence](../artifacts/acceptance/google-calendar-api-verification.json).
-This does not verify ICS import or physical-phone delivery; the latter awaits the
-user's actual observation. The notification-file generator was also run and its actual output parsed:
+The user then reported **“Notification appeared”** on the Android phone. This is
+user-reported delivery for one directly created non-medical event; ICS import,
+recurrence end dates on the phone and alarm sound remain unverified. The completed
+test event was deleted and a subsequent read returned `status: cancelled`.
+The notification-file generator was also run and its actual output parsed:
 one UTC event, a ten-minute delay, and one at-start display alarm were verified.
 The final full test run after adding the name diagnostic passed **203 tests**.
 One earlier run timed out during a Chart test's three-second Streamlit startup
