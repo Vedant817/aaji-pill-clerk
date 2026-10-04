@@ -37,6 +37,11 @@
 > latest copy. Role tests use synthetic fixtures/temporary storage and do not
 > count as caregiver feedback or independent human gold. Native Google Calendar
 > opened authenticated, then the browser host disconnected before ICS import.
+> **4 October caregiver subagent feedback:** an AI caregiver-role reviewer
+> reproduced missing History instructions and missing PRN food/course length in
+> the printed chart. Both are fixed; language/schedule labels are clearer.
+> Full suite: 220 tests. `docs/simulated-caregiver-review.md` contains explicitly
+> simulated feedback, not a human testimonial, consent or clinical validation.
 > Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
 > OCR and Gemma each processed the 20 reserved public pages; transcription errors
 > remain. Each probe found 1/62 full published labels under a narrow exact-presence

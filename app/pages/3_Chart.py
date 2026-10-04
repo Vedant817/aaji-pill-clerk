@@ -47,7 +47,8 @@ for blocker in export_blockers(drafts):
 
 c1, c2, c3 = st.columns(3)
 start = c1.date_input("Start date", value=date.today())
-lang = c2.selectbox("Chart language", ["mr", "hi", "en"], index=0)
+lang = c2.selectbox("Chart language", ["mr", "hi", "en"], index=0,
+                    format_func=lambda value: {"mr": "मराठी (Marathi)", "hi": "हिन्दी (Hindi)", "en": "English"}[value])
 st.caption("Set caregiver reminder times. Check these against the prescription before exporting.")
 time_cols = st.columns(3)
 slot_times = {slot: col.time_input(slot.capitalize(), value=default)

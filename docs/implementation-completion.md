@@ -86,6 +86,20 @@ publication/consented caregiver feedback cannot be replaced with simulated succe
 
 ## Agent role follow-through
 
+### Caregiver subagent review
+
+The user subsequently requested a caregiver-role subagent. Its observed feedback
+and labelled simulated quote are saved in [simulated-caregiver-review.md](simulated-caregiver-review.md).
+It reproduced omitted active History units/intervals/taper steps/PRN limits and
+omitted food/course length in the PRN fridge chart. Both displays now preserve
+these copied instructions; missing end dates remain described as unrecorded.
+Language names and schedule labels are clearer. No clinical values were changed,
+no PRN timed alarms were added, and no human acceptance record was created.
+
+The full suite after these fixes: **220 tests passed in 14.77 seconds**. Regression
+tests check PRN food/duration in English, Hindi and Marathi, absence of PRN timed
+events, unknown fields staying unwritten, and active History details.
+
 The user requested agent-operated role checks. The added tests exercise empty Scan,
 ASK corrections, confirmation revocation and blocked exports, a failed parser,
 new input clearing old signoffs, stock calculation, and saved history revisions.

@@ -5,7 +5,7 @@ from streamlit.testing.v1 import AppTest
 
 from pillclerk import config, store
 from pillclerk.drafts import drafts_from_text
-from pillclerk.schema import Dose, MedLine
+from pillclerk.schema import Dose, MedLine, TaperStep
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -112,3 +112,25 @@ def test_saved_revisions_visible_and_user_text_is_literal(tmp_path, monkeypatch)
     assert at.table[1].value.iloc[0]["Medicine"] == old.drug
     assert at.table[1].value.iloc[0]["Morning"] == old.dose.morning
     assert at.table[0].value.iloc[0]["Night"] == new.dose.night
+
+
+def test_active_history_preserves_units_intervals_tapers_and_prn_limits(monkeypatch):
+    models = [
+        MedLine(drug="Synthetic syrup", form="syrup", dose=Dose(morning=5, night=5, unit="ml"), every_n_days=2, duration_days=7),
+        MedLine(drug="Synthetic taper", kind="taper", dose=None,
+                taper=[TaperStep(days=2, dose=Dose(morning=1)), TaperStep(days=3, dose=Dose(night=.5))], duration_days=5),
+        MedLine(drug="Synthetic PRN", kind="prn", dose=None, prn_max_per_day=2, duration_days=3),
+        MedLine(drug="Synthetic missing duration", dose=Dose(morning=1), duration_days=None),
+    ]
+    monkeypatch.setattr(store, "load_meds", lambda: models)
+    monkeypatch.setattr(store, "load_history", lambda: [])
+    at = page("4_History")
+    assert not at.exception
+    cards = "\n".join(item.value for item in at.markdown)
+    assert "5-0-5 ml" in cards and "every 2 day(s)" in cards
+    assert "No end date recorded" in cards and "continue days" not in cards
+    assert any("Recorded PRN maximum: 2 per day" == item.value for item in at.text)
+    steps = at.table[0].value
+    assert list(steps["Days"]) == [2, 3]
+    assert list(steps["Night"]) == [0, .5]
+    assert list(steps["Unit"]) == ["tab", "tab"]

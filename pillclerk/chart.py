@@ -20,6 +20,7 @@ LABELS = {
         "empty_stomach": "empty stomach",
         "any": "",
         "prn": "Only if needed",
+        "days": "days",
         "ask": "ASK",
     },
     "mr": {
@@ -33,6 +34,7 @@ LABELS = {
         "empty_stomach": "उपाशीपोटी",
         "any": "",
         "prn": "गरज लागली तरच",
+        "days": "दिवस",
         "ask": "विचारा",
     },
     "hi": {
@@ -46,6 +48,7 @@ LABELS = {
         "empty_stomach": "खाली पेट",
         "any": "",
         "prn": "जरूरत पर ही",
+        "days": "दिन",
         "ask": "पूछें",
     },
 }
@@ -79,6 +82,8 @@ def chart_html(
         cells = "".join(
             f"<div class='pill'><b>{escape(m.drug or L['ask'])}</b> {escape(m.strength or '')}"
             f"<br/>{L['prn']}"
+            f"{' · ' + L[m.food] if L[m.food] else ''}"
+            f"{' · ' + str(m.duration_days) + ' ' + L['days'] if m.duration_days is not None else ''}"
             f"{' · max ' + str(m.prn_max_per_day) + '/day' if m.prn_max_per_day else ''}</div>"
             for m in prn
         )

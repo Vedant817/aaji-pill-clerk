@@ -93,9 +93,12 @@ For the user's chosen Android + Google Calendar setup, follow the
 The [completed implementation report](docs/implementation-completion.md) covers
 the ICS-to-Google payload validator, structured independent-label form, and local
 caregiver/device observations with consented aggregate export. The full suite
-passes 215 tests, including agent role checks for correction, parser failure,
+passes 220 tests, including agent role checks for correction, parser failure,
 new-input reset and saved revisions. History now displays earlier copies and
 optional source notes. Both evidence-collection pages start unanswered.
+The [simulated caregiver subagent review](docs/simulated-caregiver-review.md)
+records attributed feedback and fixes for missing History instructions and PRN
+chart food/course length. It is separate from actual caregiver acceptance.
 Calendar event times are floating local times (08:00 remains 08:00 in the
 importing calendar's timezone). Verify the intended phone's import and alarms.
 

@@ -13,19 +13,31 @@ meds = load_meds()
 if not meds:
     st.info("Nothing saved yet. Confirm a chart, then tap Save to local history.")
 else:
+    st.subheader("Active saved copy")
     for m in meds:
         dose = ""
         if m.dose:
-            dose = f"{m.dose.morning:g}-{m.dose.afternoon:g}-{m.dose.night:g}"
+            dose = f"{m.dose.morning:g}-{m.dose.afternoon:g}-{m.dose.night:g} {m.dose.unit}"
+        schedule = (f"Scheduled · every {m.every_n_days} day(s)" if m.kind == "daily"
+                    else "When needed (PRN)" if m.kind == "prn" else "Taper — follow recorded steps")
+        duration = f"{m.duration_days} days" if m.duration_days is not None else "No end date recorded — check the prescription"
         st.markdown(
             f"""
 <div class="pc-card">
   <b>{escape(m.drug or "ASK")}</b> {escape(m.strength or "")}
-  <div class="pc-lede">{m.kind} · {dose} · {m.food} · {m.duration_days or "continue"} days</div>
+  <div class="pc-lede">{schedule} · {dose} · {m.food} · {duration}</div>
 </div>
 """,
             unsafe_allow_html=True,
         )
+        if m.kind == "prn":
+            st.text(f"Recorded PRN maximum: {m.prn_max_per_day} per day" if m.prn_max_per_day is not None
+                    else "PRN maximum not recorded — check the prescription")
+        if m.taper:
+            st.table([{"Step": i + 1, "Days": step.days,
+                       "Morning": step.dose.morning, "Afternoon": step.dose.afternoon,
+                       "Night": step.dose.night, "Unit": step.dose.unit}
+                      for i, step in enumerate(m.taper)])
 
 history = load_history()
 if history:
@@ -45,7 +57,7 @@ if history:
                 "Night": med.dose.night if med.dose else "—",
                 "Unit": med.dose.unit if med.dose else "—",
                 "Food": med.food,
-                "Days": med.duration_days if med.duration_days is not None else "Not recorded / continue",
+                "Days": med.duration_days if med.duration_days is not None else "No end date recorded",
                 "Every N days": med.every_n_days,
                 "PRN maximum/day": med.prn_max_per_day or "Not recorded",
                 "ASK": ", ".join(med.needs_check) or "—",
