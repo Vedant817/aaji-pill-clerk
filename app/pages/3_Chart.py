@@ -63,13 +63,14 @@ html = chart_html(
 )
 components.html(html, height=460, scrolling=True)
 d1, d2, d3 = st.columns(3)
+history_note = st.text_input("History note (optional)", help="Record the source or reason for this saved copy. Avoid names and contact details.")
 with d1:
     st.download_button("Download fridge chart.html", html.encode("utf-8"), "fridge-chart.html", "text/html")
 with d2:
     st.download_button("Download reminders.ics", to_ics(plan, slot_times=slot_times), "pillclerk.ics", "text/calendar")
 with d3:
     if st.button("Save to local history"):
-        save_meds(meds, note="confirmed")
+        save_meds(meds, note=history_note.strip())
         st.success("Saved on this laptop (SQLite).")
 
 with st.expander("Add reminders to Google Calendar on Android"):

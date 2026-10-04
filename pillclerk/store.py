@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import closing
 from datetime import datetime
 from pathlib import Path
 
@@ -38,7 +39,7 @@ def connect(path: Path = DEFAULT_DB) -> sqlite3.Connection:
 def save_meds(meds: list[MedLine], note: str = "", path: Path = DEFAULT_DB) -> None:
     payload = json.dumps([m.model_dump() for m in meds], ensure_ascii=False)
     now = datetime.now().isoformat(timespec="seconds")
-    with connect(path) as conn:
+    with closing(connect(path)) as conn, conn:
         conn.execute("DELETE FROM meds")
         conn.execute("INSERT INTO meds (saved_at, payload) VALUES (?, ?)", (now, payload))
         conn.execute(
@@ -49,8 +50,22 @@ def save_meds(meds: list[MedLine], note: str = "", path: Path = DEFAULT_DB) -> N
 
 
 def load_meds(path: Path = DEFAULT_DB) -> list[MedLine]:
-    with connect(path) as conn:
+    with closing(connect(path)) as conn:
         row = conn.execute("SELECT payload FROM meds ORDER BY id DESC LIMIT 1").fetchone()
     if not row:
         return []
     return [MedLine.model_validate(x) for x in json.loads(row[0])]
+
+
+def load_history(path: Path = DEFAULT_DB, limit: int = 100) -> list[dict]:
+    """Return saved copies newest first; never interpret or apply an old dose."""
+    if not 1 <= limit <= 1000:
+        raise ValueError("History limit must be between 1 and 1000")
+    with closing(connect(path)) as conn:
+        rows = conn.execute(
+            "SELECT id, saved_at, note, payload FROM history ORDER BY id DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+    return [{"id": row[0], "saved_at": row[1], "note": row[2] or "",
+             "meds": [MedLine.model_validate(item) for item in json.loads(row[3])]}
+            for row in rows]

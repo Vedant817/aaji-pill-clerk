@@ -62,7 +62,7 @@ clinical correctness.
 
 ## Verification
 
-- Full suite: **212 tests passed**. New tests exercise rejected/ambiguous calendar
+- Full suite after role-workflow fixes: **215 tests passed** (22.78 seconds on the final run). New tests exercise rejected/ambiguous calendar
   input, actual export recurrence mapping, explicit annotation fields, consent
   filtering, attribution, and failed/successful local form submission.
   An empty record with every check unobserved cannot inflate acceptance counts.
@@ -83,6 +83,39 @@ claims need fresh unseen pages and independent labels.
 Implementation is ready for the remaining real observations. Human participation,
 native Google ICS import and physical-phone recurrence checks, alarm sound, and
 publication/consented caregiver feedback cannot be replaced with simulated success.
+
+## Agent role follow-through
+
+The user requested agent-operated role checks. The added tests exercise empty Scan,
+ASK corrections, confirmation revocation and blocked exports, a failed parser,
+new input clearing old signoffs, stock calculation, and saved history revisions.
+They use synthetic inputs and temporary databases, with no paid model calls.
+Existing annotation tests exercise separate rounds, disagreement, re-attestation,
+changed images and frozen gold; they create no labels in the real acceptance queue.
+
+This exposed a real implementation gap: History stored earlier copies but showed
+only the active copy. It now displays the latest 100 saved revisions, their exact
+fields and optional user-entered notes. Older copies do not alter the active chart.
+Drug/strength HTML is escaped; notes and recorded fields display as literal text.
+SQLite connections close after each operation. No patient or demo record is added.
+
+An authenticated native Google Calendar page was reached, but the collaborative
+browser host disconnected before file import. No imported series or successful
+native-import result was observed; the API-bridge evidence remains separate.
+
+The fallback browser loaded the synthetic reference image and both transcribed
+lines. Live FT2 filled both copies correctly (Doxy 1/0/0.5 tab for 7 days, before
+food; Ambrolite 5/0/5 ml for 3 days). The first line was confirmed and the second
+reviewed. Hosted parsing took several minutes; the browser process closed before
+the second confirmation/export. This repeat is partial, not a newly completed
+browser acceptance. The earlier completed browser export evidence remains valid
+for its recorded version, and the current complete workflow passed AppTest.
+
+The updated server was restarted and its health endpoint returned `ok`. A fresh
+fallback browser reached the History heading before its process also closed.
+Direct History navigation produced two initial framework 404s for route-relative
+health/host-config requests, then loaded. The cause of the browser process closure
+was not established; no final screenshot or new end-to-end recording is claimed.
 
 The current local app is running at `http://127.0.0.1:8502` with manual extraction
 and a $0.05 cap per parser instance (not an account-wide limit; storage excluded).

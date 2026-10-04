@@ -54,6 +54,11 @@ phone recurrence/end dates, and alarm sound remain TODO.
 
 ## Always confirm with the doctor or pharmacist
 
+On Chart, optionally enter a **History note** describing the source of a change,
+then select **Save to local history**. History shows the active copy and up to 100
+saved revisions, newest first. Expand a revision to compare its exact recorded
+fields with the slip. Viewing an old copy does not make it the active schedule.
+
 - If two slips name the same tablet with different times, the clerk shows both. Ask which one to follow.
 - If the chart disagrees with the paper, trust the paper and the pharmacist.
 - Pill Clerk never recommends a substitute or a new dose.

@@ -31,6 +31,12 @@
 > observations and exports only consented aggregate counts. Full suite: 212 tests.
 > See `docs/implementation-completion.md`. No human labels/feedback were fabricated,
 > and no additional training or public deployment was performed.
+> **4 October agent role checks:** 215 tests pass, including Scan/ASK correction,
+> edit revocation, parser failure, new-input reset and saved-copy history. History
+> now exposes earlier revisions and optional source notes instead of only the
+> latest copy. Role tests use synthetic fixtures/temporary storage and do not
+> count as caregiver feedback or independent human gold. Native Google Calendar
+> opened authenticated, then the browser host disconnected before ICS import.
 > Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
 > OCR and Gemma each processed the 20 reserved public pages; transcription errors
 > remain. Each probe found 1/62 full published labels under a narrow exact-presence

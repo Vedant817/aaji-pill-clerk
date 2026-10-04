@@ -38,13 +38,15 @@ High synthetic accuracy can hide problems in real notation. Template generation 
 
 Browser testing also found that returning to Review could lose widget values. Review now restores its fields and resolved ASK checks from the saved draft. A confirmed line must still be confirmed again after an edit.
 
-A fresh browser check passed with live hosted FT2 parsing and actual exports; 199 tests passed. An Android emulator imported the synthetic calendar and displayed actual reminders for both night events. This is one emulator/calendar-app check, not proof of behavior on the intended caregiver phone or of audible alarms. See [the verification report](reverification.md).
+A browser check passed with live hosted FT2 parsing and actual exports. The latest local suite passed **215 tests**, including caregiver correction, parser failure, annotation disagreement and history revision checks. History now exposes previous saved copies and optional source notes. These are agent-operated checks using synthetic fixtures and temporary storage.
+
+An Android emulator imported the synthetic calendar and displayed actual reminders for both night events. The user also reported a notification on a physical Android phone for a separate non-medical Google Calendar test. Four series from the exported ICS passed Google API create/read checks for times, counts and reminders, followed by verified cleanup. Native Google web file import, physical-phone recurrence and audible alarms remain unverified. See [the verification report](reverification.md) and [implementation evidence](implementation-completion.md).
 
 ## Before publication
 
-- Add the real repository URL and verified synthetic-demo video link.
+- Repository: [Vedant817/aaji-pill-clerk](https://github.com/Vedant817/aaji-pill-clerk). Latest local acceptance commits still need publication. The synthetic recording is at `artifacts/acceptance/demo.mp4`; add a publicly accessible video link after upload and verification.
 - Record actual caregiver use, their permission to share feedback, and their own words. **TODO: real handover.**
-- Verify importing the exported `.ics` in the intended phone calendar and check recurrence, timezone, and alarm behaviour. **TODO: device acceptance.**
+- Complete native `.ics` import and physical-phone recurrence, timezone and sound checks. One user-reported Google Calendar phone notification has passed; it does not establish the remaining checks.
 - Keep private prescription files and public dataset photos out of screenshots and recordings.
 
 The repository uses Apache-2.0. The fine-tuned model is trained and served through Tinker; no local weight download, merge, or GGUF conversion is required. Google AI Studio teacher comparisons are historical text-only experiments, not the source of the template training data. Public deployment is not claimed.
