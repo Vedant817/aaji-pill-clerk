@@ -72,6 +72,11 @@ with d3:
         save_meds(meds, note="confirmed")
         st.success("Saved on this laptop (SQLite).")
 
+with st.expander("Add reminders to Google Calendar on Android"):
+    st.write("On a computer, open Google Calendar with the same account used on the phone. In Settings → Import & export, select the downloaded ICS and choose the destination calendar. Import once, then enable that calendar and sync on Android.")
+    st.write("Check the local reminder times, quantities and final recurrence dates against this chart. Check each event's notification setting and Android's Calendar notification permission. An exported alarm does not prove the phone will display or sound a reminder.")
+    st.link_button("Google Calendar import instructions", "https://support.google.com/calendar/answer/37118?co=GENIE.Platform%3DDesktop&hl=en")
+
 st.subheader("Stock and refill dates")
 for i, m in enumerate(meds):
     if m.kind != "daily" or not m.dose:
