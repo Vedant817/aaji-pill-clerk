@@ -1,0 +1,38 @@
+{
+  "kind": "exploratory saved OCR name-presence audit; no model calls",
+  "reference_sha256": "9d45e76b786e782a2512138e58135511ee9dbf0f47d057b5cd4d4e36b43a08b9",
+  "results": {
+    "windows": {
+      "reference_origin": "ai_single_agent",
+      "human_verified": false,
+      "pages": 20,
+      "reference_lines": 85,
+      "pages_with_text": 17,
+      "pages_failed": 0,
+      "distinct_known_name_presence": {
+        "found": 6,
+        "total": 62
+      },
+      "unknown_drug_reference_lines": 14,
+      "cer": null,
+      "limits": "Case-insensitive contiguous ASCII letter/number token presence within any OCR line on the same page. Distinct names only; no alignment or extra-name penalty. AI references may be wrong. Does not score strength, dose, omissions of repeated orders, clinical accuracy or CER.",
+      "raw_sha256": "61c1066f5c373891b122551d2c596f952ed8a53603978e5b37d1315dca68a025"
+    },
+    "ollama": {
+      "reference_origin": "ai_single_agent",
+      "human_verified": false,
+      "pages": 20,
+      "reference_lines": 85,
+      "pages_with_text": 20,
+      "pages_failed": 0,
+      "distinct_known_name_presence": {
+        "found": 20,
+        "total": 62
+      },
+      "unknown_drug_reference_lines": 14,
+      "cer": null,
+      "limits": "Case-insensitive contiguous ASCII letter/number token presence within any OCR line on the same page. Distinct names only; no alignment or extra-name penalty. AI references may be wrong. Does not score strength, dose, omissions of repeated orders, clinical accuracy or CER.",
+      "raw_sha256": "04bb6ce6dfb238706204a725b45e0621224c87fc592d40a5b471bc0b64ce1166"
+    }
+  }
+}

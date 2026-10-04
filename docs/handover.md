@@ -28,7 +28,7 @@ A red **ASK** cell means the clerk is not sure about that field (drug, dose, sch
 ## Importing the `.ics`
 
 1. On Chart, download **reminders.ics**.
-2. Open it on the caregiver's phone and add it to the calendar.
+2. For Google Calendar, import it on a computer into the same account used on the Android phone, then sync the phone. Follow [the Google Calendar acceptance steps](android-google-calendar.md). Other calendar apps may support direct phone import.
 3. Alarms follow the slot times on the chart (morning / afternoon / night).
 4. SOS / PRN medicines are listed as “when needed”, not as timed alarms.
 5. Reminder times are local wall-clock times in the importing calendar. Check the calendar's timezone, the first and last date, the dose/unit, and whether alarms are enabled. Imported files do not prove that a phone will display an alarm.

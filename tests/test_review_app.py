@@ -41,12 +41,14 @@ def test_chart_stock_is_blank_per_medicine_and_conflicts_stop_exports():
     med = MedLine(drug="Example", dose=Dose(morning=1))
     line = "Tab Example 1-0-0"
     draft = {"line": line, "gold": med.model_dump(), "confirmed": True}
-    at = AppTest.from_file(str(ROOT / "app/pages/3_Chart.py"))
+    # Chart imports can exceed Streamlit's three-second test default on Windows.
+    # Keep a bounded wait while still asserting actual widgets/export blockers.
+    at = AppTest.from_file(str(ROOT / "app/pages/3_Chart.py"), default_timeout=10)
     at.session_state["drafts"] = [draft]
     at.run()
     assert not at.exception
     assert len(at.number_input) == 1 and at.number_input[0].value is None
-    at = AppTest.from_file(str(ROOT / "app/pages/3_Chart.py"))
+    at = AppTest.from_file(str(ROOT / "app/pages/3_Chart.py"), default_timeout=10)
     changed = med.model_copy(update={"strength": "10 mg"})
     at.session_state["drafts"] = [draft, {**draft, "gold": changed.model_dump()}]
     at.run()

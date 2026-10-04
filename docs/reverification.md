@@ -64,6 +64,16 @@ the existing AI/development references no longer qualify. Running
 The published parser-only scores remain exploratory where their reference labels
 are unverified. No new clinical accuracy percentage is claimed here.
 
+A later offline diagnostic separates medicine-name presence from the earlier
+full-label check. Against the explicitly unverified AI references, Windows output
+contained 6/62 distinct known names and Gemma output contained 20/62. Matching uses
+contiguous case-insensitive ASCII letter/number tokens within a line on the same page, counts
+each known name once per page, and excludes 14 unknown-drug reference lines. It
+does not align orders or penalize extra names and cannot assess dose accuracy or
+clinical safety. Source hashes and counts are in
+[the diagnostic report](../eval/out/ocr_name_diagnostic.json). These are saved-output
+diagnostics, not new inference or an accuracy improvement claim.
+
 ## Fixes and local setup
 
 Photo extraction now requires a loopback Ollama host, ignores HTTP proxy
@@ -130,3 +140,17 @@ label the reserved pages before adjudication and CER scoring. An agent cannot
 supply those human observations by pretending to be a friend.
 
 Feature work stops 5 October at 10:00 IST; submission deadline is 12:29 IST.
+
+The user selected Android + Google Calendar for the physical-phone check.
+[Specific import, fresh notification-test and human-label steps](android-google-calendar.md)
+are prepared. Google Calendar requires computer import followed by phone sync.
+An authenticated Google Calendar session and the intended phone are unavailable
+to the agent, so this acceptance remains pending.
+The installed connector additionally refused calendar listing due to missing
+permissions/scopes and requested reauthentication. No Google Calendar events were
+created. The notification-file generator was run and its actual output parsed:
+one UTC event, a ten-minute delay, and one at-start display alarm were verified.
+The final full test run after adding the name diagnostic passed **203 tests**.
+One earlier run timed out during a Chart test's three-second Streamlit startup
+wait; the isolated retry passed. That test now allows a bounded ten-second startup
+wait while preserving its actual blank-stock and conflicting-export assertions.
