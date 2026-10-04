@@ -15,6 +15,11 @@
 > implementation and ordered acceptance plan. Monday 10:00 IST remains the feature stop.
 >
 > **Weekend overrides (source of truth over later sections):**
+> **4 October publication:** repository commits and synthetic demo are public.
+> The DEV submission is published with devchallenge/weekendchallenge/hf26challenge
+> and Fully Autonomous AI disclosure. Unauthenticated page/video checks passed.
+> See artifacts/acceptance/publication-verification.json for the exact URL.
+> Real caregiver, independent human gold and phone recurrence/sound remain TODO.
 > **4 October final V6 and acceptance check:** separately authorized V6 trained
 > all 615 steps but is rejected. Fresh matched FT2/V6 exact counts are SYNTH
 > 397/351 of 397, generated 99/59 of 102 and HMR 71/50 of 104; HMR danger

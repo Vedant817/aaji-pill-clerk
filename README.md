@@ -199,3 +199,5 @@ Third-party public sets (not redistributed as images in git):
 The full suite passed 232 tests. [Final browser exports](artifacts/acceptance/final/export-verification.json) preserve source/check provenance. [Native Google web ICS import](artifacts/acceptance/google-native-import-verification.json) passed for four series and 20 occurrences, including IST times, recurrence limits and popup settings; the separate test calendar was removed. Physical-phone recurrence/sound, real caregiver feedback and two independent human labeling rounds remain unverified.
 
 [85-second synthetic MVP demo](https://github.com/Vedant817/aaji-pill-clerk/blob/master/artifacts/acceptance/demo.mp4). The recording shows the earlier working MVP; final export evidence is recorded separately.
+
+[Published DEV challenge submission](https://dev.to/vedant817/aajis-pill-clerk-a-prescription-copy-that-asks-before-it-guesses-1ko9). Required tags and AI disclosure were verified on the public page; see [publication evidence](artifacts/acceptance/publication-verification.json).

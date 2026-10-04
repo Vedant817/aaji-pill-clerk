@@ -1,0 +1,21 @@
+{
+  "published_at_verification_utc": "2026-10-04T14:50:28.246580+00:00",
+  "dev_url": "https://dev.to/vedant817/aajis-pill-clerk-a-prescription-copy-that-asks-before-it-guesses-1ko9",
+  "http_status": 200,
+  "required_tags": [
+    "devchallenge",
+    "weekendchallenge",
+    "hf26challenge"
+  ],
+  "ai_disclosure": "Fully Autonomous",
+  "demo_url": "https://raw.githubusercontent.com/Vedant817/aaji-pill-clerk/master/artifacts/acceptance/demo.mp4",
+  "demo_bytes": 711179,
+  "demo_sha256": "78de159caf01d263e21b9f6c15c5f2b0c1f5f95e2f6085cd0240ed625efb859c",
+  "source_markdown": "docs/submission.md",
+  "source_sha256": "d516f7549bcda697cdd81c071be971d7f96e34e4391d4fcc80897acdf8fedccf",
+  "public_links_verified": true,
+  "caregiver_feedback": "not yet",
+  "independent_human_annotations": "pending",
+  "physical_phone_recurrence_and_sound": "unverified",
+  "new_training": "V6 rejected; FT2 retained"
+}

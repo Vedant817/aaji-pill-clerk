@@ -1,6 +1,6 @@
 # Aaji's Pill Clerk: copying a prescription into a confirmed chart
 
-**Submission draft, 4 October 2026. Not published.** Add publication links and genuine caregiver feedback before submitting. Family handover and independent human validation remain unverified. Do not invent a quote, age, medical history, consent, or outcome.
+**Published 4 October 2026.** The final template-based text is [submission.md](submission.md); [live DEV post](https://dev.to/vedant817/aajis-pill-clerk-a-prescription-copy-that-asks-before-it-guesses-1ko9). Family handover and independent human validation remain unverified.
 
 ## Who this is for
 
@@ -53,7 +53,7 @@ high synthetic scores should not hide uncertainty on a real slip. Community
 contributions can improve language support and accessibility while preserving
 human confirmation and the rule that the app never chooses a dose.
 
-## Before publication
+## Remaining real-world observations
 
 - Repository: [Vedant817/aaji-pill-clerk](https://github.com/Vedant817/aaji-pill-clerk). The repository includes the synthetic [85-second demo video](https://github.com/Vedant817/aaji-pill-clerk/blob/master/artifacts/acceptance/demo.mp4). It shows the recorded earlier MVP workflow; the final browser export recheck is recorded separately in [export evidence](https://github.com/Vedant817/aaji-pill-clerk/blob/master/artifacts/acceptance/final/export-verification.json).
 - Record actual caregiver use, their permission to share feedback, and their own words. **TODO: real handover.**
