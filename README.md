@@ -134,7 +134,7 @@ Invalid fields now require ASK while valid fields can survive schema recovery;
 model ASK flags and unresolved null doses survive source copying. Saved FT2 HMR
 raw-output replay is 71/104 exact with 17 unflagged danger cases (previously 75/104
 and 21), partly through abstention. This is offline replay, not fresh accuracy.
-The new 3,279/280-row synthetic candidate is prepared but untrained; FT2 stays active.
+The new 3,279/280-row candidate was subsequently trained as V6 and rejected. Fresh current-code FT2/V6 exact counts are SYNTH 397/351, generated notation 99/59 and HMR typed text 71/50. HMR unflagged danger rose from 17 to 22. FT2 stays active; [V6 report](docs/candidate-v6.md).
 
 The authorized FT5 candidate run is complete: **3,079 synthetic training / 249
 validation rows**, with corrected duration ASK labels and zero checked text
@@ -193,3 +193,9 @@ Third-party public sets (not redistributed as images in git):
 
 - HMR-100 — CC BY-ND 4.0, MIRAGE arXiv 2410.09729, Hugging Face `chaithanyakota/100-handwritten-medical-records`. Do not commit images or derivatives.
 - BD-200 — CC BY 4.0, Mendeley DOI [10.17632/k62rfd23kz](https://doi.org/10.17632/k62rfd23kz).
+
+## Final 4 October verification
+
+The full suite passed 232 tests. [Final browser exports](artifacts/acceptance/final/export-verification.json) preserve source/check provenance. [Native Google web ICS import](artifacts/acceptance/google-native-import-verification.json) passed for four series and 20 occurrences, including IST times, recurrence limits and popup settings; the separate test calendar was removed. Physical-phone recurrence/sound, real caregiver feedback and two independent human labeling rounds remain unverified.
+
+[85-second synthetic MVP demo](https://github.com/Vedant817/aaji-pill-clerk/blob/master/artifacts/acceptance/demo.mp4). The recording shows the earlier working MVP; final export evidence is recorded separately.
