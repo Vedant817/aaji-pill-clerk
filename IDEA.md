@@ -23,6 +23,14 @@
 > and the user confirmed its notification appeared on Android. The test event was
 > deleted with cancelled-status read-back. This verifies one user-reported
 > notification, not exported ICS import, recurrence end dates or caregiver use.
+> **4 October implementation completion:** the actual exported ICS was validated
+> into Google API payloads, and all four recurring series passed live create/read
+> checks for times, quantities, counts and alarms before verified cleanup. Native
+> Google web file import remains a separate acceptance check. Label Acceptance now
+> has blank structured fields; Acceptance Feedback records local, attributed real
+> observations and exports only consented aggregate counts. Full suite: 212 tests.
+> See `docs/implementation-completion.md`. No human labels/feedback were fabricated,
+> and no additional training or public deployment was performed.
 > Local Ollama 0.35.1 and `gemma4:e4b-it-qat` are installed outside source. Windows
 > OCR and Gemma each processed the 20 reserved public pages; transcription errors
 > remain. Each probe found 1/62 full published labels under a narrow exact-presence

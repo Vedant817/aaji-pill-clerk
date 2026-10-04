@@ -34,6 +34,8 @@ class Observation(BaseModel):
         self.observer_id = self.observer_id.strip()
         if not self.observer_id or not self.actual_observation_attested:
             raise ValueError("Enter an observer ID and attest an actual observation")
+        if all(getattr(self, field) == "not_checked" for field in ("workflow", "ask_understood", "source_compared", "ics_import", "recurrence", "notification", "sound")) and not self.feedback.strip():
+            raise ValueError("Record at least one actual check or feedback observation")
         if any(getattr(self, field) != "not_checked" for field in ("ics_import", "recurrence", "notification", "sound")) and not (self.device.strip() and self.calendar_app.strip() and self.timezone.strip()):
             raise ValueError("Phone observations require device, calendar app and timezone")
         return self

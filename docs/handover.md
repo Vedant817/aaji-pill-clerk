@@ -41,6 +41,12 @@ Use a separate test calendar and an explicitly synthetic source before entering 
 
 Then let the intended caregiver use Scan → Review → Chart themselves. Ask them to compare every line and explain an ASK field. Record their own feedback and permission before sharing it. No caregiver identity, quote, consent, independent label, or alarm delivery can be supplied by an AI pretending to be that person.
 
+Use **Acceptance Feedback** to save those actual observations locally. Select the
+actual evidence source and permission; leave anything unobserved as `not_checked`.
+The downloadable summary omits identities and private words and includes only
+explicitly consented counts. **Label Acceptance** has a separate blank-field form
+for the two independent annotation rounds.
+
 Current evidence is in [reverification.md](reverification.md). The user confirmed
 an Android Google Calendar notification for a directly created synthetic event;
 that event was removed afterward. Real caregiver handover, exported ICS import,

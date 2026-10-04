@@ -90,6 +90,10 @@ confirmed that a directly created Google Calendar test notification appeared on
 their Android phone; this does not verify the exported ICS import path.
 For the user's chosen Android + Google Calendar setup, follow the
 [import, notification and human acceptance checklist](docs/android-google-calendar.md).
+The [completed implementation report](docs/implementation-completion.md) covers
+the ICS-to-Google payload validator, structured independent-label form, and local
+caregiver/device observations with consented aggregate export. The full suite
+passes 212 tests. Both evidence-collection pages start unanswered.
 Calendar event times are floating local times (08:00 remains 08:00 in the
 importing calendar's timezone). Verify the intended phone's import and alarms.
 

@@ -75,9 +75,16 @@ def test_feedback_page_starts_unanswered_and_cannot_save_simulated_success(tmp_p
     next(w for w in at.selectbox if w.label == "Who observed it?").set_value("agent_test")
     next(w for w in at.selectbox if w.label == "Input used").set_value("synthetic_input")
     next(w for w in at.selectbox if w.label == "Permission to share aggregate results").set_value("Keep private")
+    at.selectbox(key="feedback_workflow").set_value("fail")
     at.checkbox[0].check()
     at.button[0].click().run()
     assert not at.exception and not at.error
     row = json.loads(path.read_text())
     assert row["source"] == "agent_test" and row["sharing_allowed"] is False
-    assert all(row[name] == "not_checked" for name in ("workflow", "ics_import", "notification"))
+    assert row["workflow"] == "fail"
+    assert all(row[name] == "not_checked" for name in ("ics_import", "notification"))
+
+
+def test_empty_unchecked_observation_cannot_inflate_acceptance_counts():
+    with pytest.raises(ValueError, match="at least one actual"):
+        observation(workflow="not_checked", feedback=" ")

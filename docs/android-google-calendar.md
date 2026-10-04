@@ -78,7 +78,7 @@ quotes, identity, consent, or success on their behalf.
 For independent labels, two distinct people use **Independent prescription labels**
 in the local app. Each selects their own ID and round A or B, transcribes every
 medicine line directly from each of the 20 original reserved images, explicitly
-fills the schema fields, and marks each page complete. Do not show them OCR output,
+fills the structured form (Advanced JSON remains available), and marks each page complete. All copied fields start blank. Do not show them OCR output,
 AI references, or the other round's answers. Disagreements must be resolved from
 the source by the actual annotators; do not force model answers to match.
 
@@ -94,3 +94,14 @@ and disagreements. Until then, CER stays null. These pages have now informed
 development diagnostics; human agreement can validate transcription but cannot
 make them a fresh untouched model test set. Future improvement claims need newly
 reserved, unseen pages and independent labels.
+
+Use **Acceptance Feedback** in the local app to record actual caregiver and phone
+observations. Fields start `not_checked`; choose the actual evidence source and
+sharing permission. Private records stay local, and downloads contain only
+consented aggregate counts. This does not create independent labels.
+
+The ICS-to-API path has now been exercised with four synthetic recurring series:
+all Google read-backs matched recurrence counts, units, local times and reminders,
+and all temporary series were removed. See [the implementation report](implementation-completion.md).
+Native Google web file import and recurrence inspection on the phone still need
+the steps above; they are separate from direct API verification.
