@@ -1,0 +1,81 @@
+{
+  "synthetic": true,
+  "human_acceptance": false,
+  "method": "Actual exported ICS -> validated Google Calendar payloads -> create -> read-back -> delete -> cancelled read-back",
+  "ics_sha256": "6b63fea31c1792a96c7ea3085d7612acd5e9dbc1a95477999a22bbf50b630da0",
+  "series_verified": [
+    {
+      "start": "2026-10-04T08:00:00+05:30",
+      "end": "2026-10-04T08:10:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=7;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "summary": "[Synthetic test] 💊 Doxy 100 mg: 1 tab (before)"
+    },
+    {
+      "start": "2026-10-04T21:00:00+05:30",
+      "end": "2026-10-04T21:10:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=7;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "summary": "[Synthetic test] 💊 Doxy 100 mg: ½ tab (before)"
+    },
+    {
+      "start": "2026-10-04T08:00:00+05:30",
+      "end": "2026-10-04T08:10:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "summary": "[Synthetic test] 💊 Ambrolite 30 mg/5 ml: 5 ml (any)"
+    },
+    {
+      "start": "2026-10-04T21:00:00+05:30",
+      "end": "2026-10-04T21:10:00+05:30",
+      "recurrence": [
+        "RRULE:FREQ=DAILY;COUNT=3;INTERVAL=1"
+      ],
+      "reminders": {
+        "use_default": false,
+        "overrides": [
+          {
+            "method": "popup",
+            "minutes": 0
+          }
+        ]
+      },
+      "summary": "[Synthetic test] 💊 Ambrolite 30 mg/5 ml: 5 ml (any)"
+    }
+  ],
+  "series_count": 4,
+  "cleanup_verified": true,
+  "native_google_web_ics_import_verified": false,
+  "physical_phone_recurrence_verified": false,
+  "limits": "Direct ICS-to-API verification. No native Google web import or physical-phone recurrence inspection. Separate user report confirmed a generic Android test notification."
+}
